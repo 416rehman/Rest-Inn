@@ -11,9 +11,10 @@ const router = require('express').Router();
 const user = require('../services/user.service');
 
 router.get('/', user.getAllUsers);
-
 router.get('/:username', user.getUserByUsername);
 
 router.post('/', user.createUser);
+
+router.put('/:username', user.updateUser);
 
 module.exports = router;

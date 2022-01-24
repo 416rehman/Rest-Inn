@@ -8,7 +8,7 @@
  *      Creation Date: 2022-01-24
  */
 const User = require('../models/user.model.js');
-const {userValidation, usernameValidation} = require('../helpers/user-validation');
+const {newUserValidation, existingUserValidation, usernameValidation} = require('../helpers/user-validation');
 
 
 /**
@@ -29,7 +29,7 @@ const getAllUsers = async function(req, res) {
  */
 const getUserByUsername = async function (req, res) {
     usernameValidation.validateAsync({username: req.params.username}).then(sanitized => {
-        User.getByUsername({username: sanitized.username}).then(user => {
+        User.getByUsername(sanitized.username).then(user => {
             if (user) {
                 res.status(200).json({
                     message: 'User Retrieved!',
@@ -42,7 +42,7 @@ const getUserByUsername = async function (req, res) {
             }
         }).catch(err => {
             res.status(500).json({
-                message: 'Internal Server Error!',
+                message: 'Failed to Get User!',
                 data: err
             });
         });
@@ -55,7 +55,7 @@ const getUserByUsername = async function (req, res) {
  * Creates a new user object.
  */
 const createUser = async function (req, res) {
-    userValidation.validateAsync(req.body).then(sanitized => {
+    newUserValidation.validateAsync(req.body).then(sanitized => {
         User.addUser(sanitized).then(user => {
             res.status(201).json({
                 message: 'User Created!',
@@ -63,9 +63,38 @@ const createUser = async function (req, res) {
             });
         }).catch(err => {
             res.status(500).json({
-                message: 'Internal Server Error!',
+                message: err.code === 11000 ? 'User already exists!' : 'Internal Server Error!',
                 data: err
             });
+        });
+    }).catch(err => {
+        res.status(400).send(err.message);
+    });
+}
+
+const updateUser = (req, res) => {
+    usernameValidation.validateAsync({username: req.params.username}).then(({username}) => {
+        existingUserValidation.validateAsync(req.body).then(sanitized => {
+            console.log(sanitized);
+            User.updateUser(username, sanitized).then(user => {
+                if (user) {
+                    res.status(200).json({
+                        message: 'User Updated!',
+                        data: user
+                    });
+                } else {
+                    res.status(404).json({
+                        message: 'User Not Found!'
+                    });
+                }
+            }).catch(err => {
+                res.status(500).json({
+                    message: 'Failed to Update User!',
+                    data: err
+                });
+            });
+        }).catch(err => {
+            res.status(400).send(err.message);
         });
     }).catch(err => {
         res.status(400).send(err.message);
@@ -75,5 +104,6 @@ const createUser = async function (req, res) {
 module.exports = {
     getAllUsers,
     getUserByUsername,
-    createUser
+    createUser,
+    updateUser
 };

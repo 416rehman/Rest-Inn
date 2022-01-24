@@ -7,7 +7,8 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-
+const jsonwebtoken = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     username: {
@@ -21,11 +22,12 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     refreshToken: {
         type: String,
-        // required: true
+        unique: true
     },
     firstName: {
         type: String,
@@ -35,10 +37,29 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phoneNumbers: {
-        type: [String],
-    }
+    phone:  [{
+        type: String,
+        unique: true
+    }],
 }, {timestamps: true});
+
+UserSchema.pre('save', async function (next) {
+    if (this.isModified("password")) {
+        // 1. Hash the password
+        this.password = await bcrypt.hash(this.password, 10);
+
+        // 2. Generate new refresh token
+        jsonwebtoken.sign({username: this.username}, process.env.SECRET, {}, (err, token) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            this.refreshToken = token;
+        });
+    }
+    next();
+});
+
 const userSchema = mongoose.model('User', UserSchema);
 
 module.exports.userSchema = userSchema;
@@ -55,11 +76,37 @@ module.exports.getAll = () => {
 };
 
 module.exports.getByUsername = (username) => {
-    return userSchema.findOne({username: username}).exec();
+    return userSchema.findOne({username: username},{
+        // Exclude sensitive information
+        password: 0,
+        phoneNumbers: 0,
+        refreshToken: 0,
+        email: 0,
+        updatedAt: 0,
+    }).exec();
 };
 
 module.exports.getByEmail = (email) => {
-    return userSchema.findOne({email: email}).exec();
+    return userSchema.findOne({email: email},{
+        // Exclude sensitive information
+        password: 0,
+        phoneNumbers: 0,
+        refreshToken: 0,
+        email: 0,
+        updatedAt: 0,
+    }).exec();
+};
+
+module.exports.updateUser = (username, user) => {
+    return userSchema.findOneAndUpdate({username: username}, user, {
+        new: true, // return the new user instead of the old one
+        projection: { // Exclude sensitive information
+            password: 0,
+            phoneNumbers: 0,
+            refreshToken: 0,
+            email: 0,
+            updatedAt: 0,
+        }}).exec();
 };
 
 module.exports.addUser = async (data) => {

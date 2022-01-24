@@ -28,7 +28,7 @@ app.use('/users', userRouter);
 
 
 /** Connect to MongoDB and start server */
-mongoose.connect('mongodb://localhost:27017/test').then(() => {
+mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log('Connected to MongoDB');
     app.listen(process.env.PORT, () => {
         console.log('Your app is listening on port ' + process.env.PORT + '.\nhttp://localhost:' + process.env.PORT);
