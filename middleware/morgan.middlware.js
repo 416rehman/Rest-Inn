@@ -1,11 +1,29 @@
+/*** I declare that this assignment is my own work in accordance with
+ * Seneca Academic Policy. No part of this assignment has been copied
+ * manually or electronically from any other source (including web sites)
+ * or distributed to other students. *
+ *
+ *      Name: Hayaturehman Ahmadzai
+ *      Student ID: hahmadzai3
+ *      Creation Date: 2022-01-24
+ */
 
 const morgan = require("morgan");
 const chalk = require("chalk");
 
 /** Colored morgan logger */
 module.exports = morgan(function (tokens, req, res) {
-    const statusColorHex = res.statusCode >= 500 ? "#ff4949" : res.statusCode >= 400 ? "#ff9b49" : res.statusCode >= 300 ? "#49eaff" : "#61ff49";
-    const methodColorHex = req.method === "GET" ? "#5b8fb9" : req.method === "POST" ? "#655bb9" : req.method === "PUT" ? "#975bb9" : req.method === "DELETE" ? "#b95b5b" : "#ff4949";
+    const statusColorHex =
+        res.statusCode >= 500 ?     "#ff4949" :     // 500+
+        res.statusCode >= 400 ?     "#ff9b49" :     // 400+
+        res.statusCode >= 300 ?     "#49eaff" :     // 300+
+                                    "#61ff49";      // 200+
+    const methodColorHex =
+        req.method === "GET" ?      "#5b8fb9" :
+        req.method === "POST" ?     "#655bb9" :
+        req.method === "PUT" ?      "#975bb9" :
+        req.method === "DELETE" ?   "#b95b5b" :
+                                    "#ff4949";
     return [
         chalk.hex(methodColorHex).bold(tokens.method(req, res)),
         chalk.hex('#bbbbbb').italic(tokens.url(req, res)),
