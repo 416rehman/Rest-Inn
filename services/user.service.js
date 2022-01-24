@@ -8,7 +8,7 @@
  *      Creation Date: 2022-01-24
  */
 const User = require('../models/user.model.js');
-const {newUserValidation, existingUserValidation, usernameValidation} = require('../helpers/user-validation');
+const {newUserValidation, existingUserValidation, usernameCondition} = require('../helpers/user-validation');
 
 
 /**
@@ -28,8 +28,9 @@ const getAllUsers = async function(req, res) {
  * Gets a user object with the given username.
  */
 const getUserByUsername = async function (req, res) {
-    usernameValidation.validateAsync({username: req.params.username}).then(sanitized => {
-        User.getByUsername(sanitized.username).then(user => {
+    usernameCondition.validateAsync(req.params.username).then(username => {
+        console.log(username);
+        User.getByUsername(username).then(user => {
             if (user) {
                 res.status(200).json({
                     message: 'User Retrieved!',
@@ -73,9 +74,8 @@ const createUser = async function (req, res) {
 }
 
 const updateUser = (req, res) => {
-    usernameValidation.validateAsync({username: req.params.username}).then(({username}) => {
+    usernameCondition.validateAsync(req.params.username).then(username => {
         existingUserValidation.validateAsync(req.body).then(sanitized => {
-            console.log(sanitized);
             User.updateUser(username, sanitized).then(user => {
                 if (user) {
                     res.status(200).json({
