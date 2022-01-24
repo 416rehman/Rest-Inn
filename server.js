@@ -13,17 +13,18 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index.routes');
+const userRouter = require('./routes/users.routes');
 
 const app = express();
 
 app.use(require("./middleware/morgan.middlware"));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
+app.use('/users', userRouter);
 
 
 /** Connect to MongoDB and start server */

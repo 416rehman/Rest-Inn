@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     },
     refreshToken: {
         type: String,
-        required: true
+        // required: true
     },
     firstName: {
         type: String,
@@ -37,8 +37,33 @@ const UserSchema = new mongoose.Schema({
     },
     phoneNumbers: {
         type: [String],
-        required: true
     }
 }, {timestamps: true});
+const userSchema = mongoose.model('User', UserSchema);
 
-mongoose.model('User', UserSchema);
+module.exports.userSchema = userSchema;
+
+module.exports.getAll = () => {
+    return userSchema.find({}, {
+        // Exclude sensitive information
+        password: 0,
+        phoneNumbers: 0,
+        refreshToken: 0,
+        email: 0,
+        updatedAt: 0,
+    }).exec();
+};
+
+module.exports.getByUsername = (username) => {
+    return userSchema.findOne({username: username}).exec();
+};
+
+module.exports.getByEmail = (email) => {
+    return userSchema.findOne({email: email}).exec();
+};
+
+module.exports.addUser = async (data) => {
+    const user = new userSchema(data);
+    await user.save();
+    return user;
+};
