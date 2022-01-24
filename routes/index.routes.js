@@ -11,7 +11,7 @@
 const router = require('express').Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.json({
     "status": "success",
     "message": "Welcome to the API"
