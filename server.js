@@ -14,7 +14,8 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index.routes');
-const userRouter = require('./routes/users.routes');
+const usersRouter = require('./routes/users.routes');
+const propertiesRouter = require('./routes/properties.routes');
 
 const app = express();
 
@@ -24,8 +25,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/users', userRouter);
-
+app.use('/users', usersRouter);
+app.use('/properties', propertiesRouter);
 
 /** Connect to MongoDB and start server */
 mongoose.connect(process.env.MONGO_URL).then(() => {

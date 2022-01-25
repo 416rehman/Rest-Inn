@@ -8,59 +8,59 @@
  *      Creation Date: 2022-01-24
  */
 
-module.exports.propertyTypes = ['House', 'Apartment', 'Condo', 'Townhouse', 'Duplex', 'Cabin', 'Villa', 'Farm', 'Beach House', 'Loft', 'Other']
+module.exports.propertyTypes = ['house', 'apartment', 'condo', 'townhouse', 'duplex', 'cabin', 'villa', 'farm', 'beach house', 'loft', 'other']
 module.exports.amenities = [
     //Atmosphere
-    'Patio or Balcony',
-    'Hot Tub',
-    'Garden',
-    'Pool',
+    'patio or balcony',
+    'hot tub',
+    'garden',
+    'pool',
 
-    //Bathroom
-    'Shower',
-    'Bathtub',
-    'Hair Dryer',
-    'Shampoo',
+    //bathroom
+    'shower',
+    'bathtub',
+    'hair dryer',
+    'shampoo',
 
-    //Laundry and Bedroom
-    'Iron',
-    'Laundry',
-    'Dryer',
-    'Hangers',
-    'Linens',
+    //laundry and bedroom
+    'iron',
+    'laundry',
+    'dryer',
+    'hangers',
+    'linens',
 
-    //Heating and Cooling
-    'Heating',
-    'Air Conditioning',
-    'Fireplace',
+    //heating and cooling
+    'heating',
+    'air conditioning',
+    'fireplace',
 
-    //Internet and Entertainment
-    'Wifi',
-    'TV',
+    //internet and entertainment
+    'wifi',
+    'tv',
 
-    //Safety
-    'Smoke Detector',
-    'Carbon Monoxide Detector',
-    'Carbon Dioxide Detector',
-    'First Aid Kit',
-    'Fire Extinguisher',
+    //safety
+    'smoke detector',
+    'carbon monoxide detector',
+    'carbon dioxide detector',
+    'first aid kit',
+    'fire extinguisher',
 
-    //Facilities
-    'Elevator',
+    //facilities
+    'elevator',
 
-    //Services
-    'Self Check-In',
-    'Keypad',
-    'Doorman',
+    //services
+    'self check-in',
+    'keypad',
+    'doorman',
 
-    //Kitchen and Dining
-    'Cooking Pots or Pans',
-    'Dishes and Silverware',
-    'Microwave',
-    'Refrigerator',
-    'Stove',
-    'Oven',
-    'Dishwasher',
-    'Toaster',
-    'Coffee Maker',
+    //kitchen and dining
+    'cooking pots or pans',
+    'dishes and silverware',
+    'microwave',
+    'refrigerator',
+    'stove',
+    'oven',
+    'dishwasher',
+    'toaster',
+    'coffee maker',
 ]

@@ -7,10 +7,10 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-const {propertyTypes, amenities} = require("./property.model");
+const {propertyTypes, amenities} = require("../constants/property.constants");
 const mongoose = require("mongoose");
 
-const locationSchema = new mongoose.Schema({
+const LocationSchema = new mongoose.Schema({
     unit: String,
     street: {
         type: String,
@@ -34,7 +34,7 @@ const locationSchema = new mongoose.Schema({
     },
 })
 
-const propertySchema = new mongoose.Schema({
+const PropertySchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -56,7 +56,7 @@ const propertySchema = new mongoose.Schema({
         required: true
     },
     location: {
-        type: locationSchema,
+        type: LocationSchema,
         required: true
     },
     best_seller: {
@@ -68,9 +68,83 @@ const propertySchema = new mongoose.Schema({
         type: String,
         default: 'https://placeimg.com/200/300/arch'
     },
-    photo: [String],
+    photos: [String],
 })
 
-const property = mongoose.model("property", propertySchema);
+const propertySchema = mongoose.model("property", PropertySchema);
 
-module.exports.property = property;
+module.exports.property = propertySchema;
+
+module.exports.getAll = function () {
+    return propertySchema.find({}).exec();
+}
+
+module.exports.getAllTypes = function () {
+    return propertySchema.aggregate([
+        {
+            $group: {
+                _id: "$property_type",
+                count: {$sum: 1}
+            }
+        }
+    ]).exec();
+}
+
+module.exports.getAllByType = function (type) {
+    return propertySchema.find({property_type: type}).exec();
+}
+
+//Get all location cities, provinces, and countries and their count
+module.exports.getAllLocations = function () {
+    return propertySchema.aggregate([
+        {
+            $group: {
+                _id: {
+                    city: "$location.city",
+                    province: "$location.province",
+                    country: "$location.country"
+                },
+                count: {$sum: 1}
+            }
+        }
+    ]).exec();
+}
+
+/** Get all properties by either city, province, or country */
+module.exports.getAllByLocation = function (location) {
+    return propertySchema.find({
+        $or: [
+            {
+                "location.city": location
+            },
+            {
+                "location.province": location
+            },
+            {
+                "location.country": location
+            }
+        ]
+    }).exec();
+}
+
+module.exports.getBestSellers = function () {
+    return propertySchema.find({best_seller: true}).exec();
+}
+
+module.exports.getById = function (id) {
+    return propertySchema.findById(id).exec();
+}
+
+module.exports.update = function (id, data) {
+    return propertySchema.findByIdAndUpdate(id, data, {new: true}).exec();
+}
+
+module.exports.delete = function (id) {
+    return propertySchema.findByIdAndDelete(id).exec();
+}
+
+module.exports.add = async function (data) {
+    const property = new propertySchema(data);
+    await property.save();
+    return property;
+}

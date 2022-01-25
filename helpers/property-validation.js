@@ -11,23 +11,26 @@ const Joi = require("joi");
 
 const {propertyTypes, amenities} = require("../constants/property.constants");
 
+// Mongo ObjectId validation
+const idCondition = Joi.string().regex(/^[a-f\d]{24}$/i)
+
 // Data Conditions
-const titleCondition = Joi.string().min(3).max(255).label('Title')
+const titleCondition = Joi.string().min(16).max(255).label('Title')
 const priceCondition = Joi.number().min(0).max(999999).label('Price')
 const descriptionCondition = Joi.string().min(3).max(2048).label('Description')
-const propertyTypeCondition = Joi.string().valid(propertyTypes).label('Property Type')
+const propertyTypeCondition = Joi.string().valid(...propertyTypes).label('Property Type').lowercase()
 const ruleCondition = Joi.string().min(3).max(255).label('Rule')
 const rulesCondition = Joi.array().items(ruleCondition).label('Rules')
-const amenityCondition = Joi.string().valid(amenities).label('Amenity')
+const amenityCondition = Joi.string().valid(...amenities).label('Amenity').lowercase()
 const amenitiesCondition = Joi.array().items(amenityCondition).label('Amenities')
 
 //Location Conditions
-const unitCondition = Joi.string().min(1).max(32).label('Unit');
-const streetCondition = Joi.string().min(1).max(255).label('Street');
-const cityCondition = Joi.string().min(1).max(255).label('City');
-const provinceCondition = Joi.string().min(1).max(255).label('Province');
-const countryCondition = Joi.string().min(1).max(255).label('Country');
-const postalCodeCondition = Joi.string().min(1).max(32).label('Postal Code')
+const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
+const streetCondition = Joi.string().min(1).max(255).label('Street').lowercase();
+const cityCondition = Joi.string().min(1).max(255).label('City').lowercase();
+const provinceCondition = Joi.string().min(1).max(255).label('Province').lowercase();
+const countryCondition = Joi.string().min(1).max(255).label('Country').lowercase();
+const postalCodeCondition = Joi.string().min(1).max(32).label('Postal Code').lowercase()
 const locationCondition = Joi.object().keys({
     unit: unitCondition,
     street: streetCondition,
@@ -45,11 +48,12 @@ const newPropertyValidation = Joi.object().keys({
     title: titleCondition.required(),
     price: priceCondition.required(),
     description: descriptionCondition,
-    propertyType: propertyTypeCondition.required(),
+    property_type: propertyTypeCondition.required(),
     rules: rulesCondition,
     amenities: amenitiesCondition.required(),
     location: locationCondition.required(),
-    bestSeller: bestSellerCondition.required(),
+    best_seller: bestSellerCondition.required(),
+    thumbnail: photoCondition,
     photos: photosCondition
 })
 
@@ -57,11 +61,12 @@ const existingPropertyValidation = Joi.object().keys({
     title: titleCondition,
     price: priceCondition,
     description: descriptionCondition,
-    propertyType: propertyTypeCondition,
+    property_type: propertyTypeCondition,
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition,
-    bestSeller: bestSellerCondition,
+    best_seller: bestSellerCondition,
+    thumbnail: photoCondition,
     photos: photosCondition
 })
 
@@ -85,5 +90,6 @@ module.exports = {
     locationCondition,
     bestSellerCondition,
     photoCondition,
-    photosCondition
+    photosCondition,
+    idCondition
 }
