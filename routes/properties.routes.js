@@ -48,21 +48,15 @@ router.delete('/:id', propertiesService.deleteById);
 module.exports.router = router;
 
 module.exports.endpoints = [
-    {url: '/properties', method: 'get', secured: false, description: "Get all properties"},
-    {url: '/properties/types', method: 'get', secured: false, description: "Get all property types"},
-    {url: '/properties/types/:type', method: 'get', secured: false, description: "Get all properties by type"},
-    {url: '/properties/locations', method: 'get', secured: false, description: "Get all locations"},
-    {
-        url: '/properties/locations/:location',
-        method: 'get',
-        secured: false,
-        description: "Get all properties by location"
-    },
-    {url: '/properties/bestselling', method: 'get', secured: false, description: "Get all best-selling properties"},
-    {url: '/properties/:id', method: 'get', secured: false, description: "Get a single property"},
-    {url: '/properties', method: 'post', secured: false, description: "Create a new property"},
-    {url: '/properties/:id', method: 'put', secured: false, description: "Update a property"},
-    {url: '/properties/:id', method: 'delete', secured: false, description: "Delete a property"}
-
+    {method: 'get', url: '/properties', secured: false, description: "Get all properties"},
+    {method: 'get', url: '/properties/types', secured: false, description: "Get all property types"},
+    {method: 'get', url: '/properties/types/:type', secured: false, description: "Get all properties by type"},
+    {method: 'get', url: '/properties/locations', secured: false, description: "Get all locations"},
+    {method: 'get', url: '/properties/locations/:location', secured: false, description: "Get all properties by location"},
+    {method: 'get', url: '/properties/bestselling', secured: false, description: "Get all best-selling properties"},
+    {method: 'get', url: '/properties/:id', secured: false, description: "Get a single property"},
+    {method: 'post', url: '/properties', secured: false, description: "Create a new property"},
+    {method: 'put', url: '/properties/:id', secured: false, description: "Update a property"},
+    {method: 'delete', url: '/properties/:id', secured: false, description: "Delete a property"}
 ];
 

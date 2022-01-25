@@ -8,8 +8,7 @@
  *      Creation Date: 2022-01-24
  */
 
-const users_endpoints = require('./users.routes').endpoints;
-const properties_endpoints = require('./properties.routes').endpoints;
+const endpoints = require('../endpoints');
 const router = require('express').Router();
 
 /* GET home page. */
@@ -18,10 +17,7 @@ router.get('/', function (req, res) {
     res.json({
         "status": "Ready",
         "message": "Welcome to the Rest-Inn API by Hayaturehman Ahmadzai",
-        "Endpoints": [
-            ...users_endpoints,
-            ...properties_endpoints
-        ]
+        "Endpoints": endpoints
     });
 });
 
