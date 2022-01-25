@@ -12,7 +12,7 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-
+const endpoints = require('./endpoints');
 const indexRouter = require('./routes/index.routes');
 const usersRouter = require('./routes/users.routes').router;
 const propertiesRouter = require('./routes/properties.routes').router;
@@ -28,6 +28,13 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/properties', propertiesRouter);
 
+//404 error handler
+app.use((req, res) => {
+    res.status(404).json({
+        message: 'Not Found',
+        valid_endpoints: endpoints
+    });
+});
 /** Connect to MongoDB and start server */
 mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log('Connected to MongoDB');
