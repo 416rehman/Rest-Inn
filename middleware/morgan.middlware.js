@@ -19,9 +19,9 @@ module.exports = morgan(function (tokens, req, res) {
         res.statusCode >= 300 ?     "#49eaff" :     // 300+
                                     "#61ff49";      // 200+
     const methodColorHex =
-        req.method === "GET" ?      "#5b8fb9" :
-        req.method === "POST" ?     "#655bb9" :
-        req.method === "PUT" ?      "#975bb9" :
+        req.method === "GET" ?      "#5bb95d" :
+        req.method === "POST" ?     "#b9935b" :
+        req.method === "PUT" ?      "#5b68b9" :
         req.method === "DELETE" ?   "#b95b5b" :
                                     "#ff4949";
     return [
