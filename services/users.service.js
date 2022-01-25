@@ -17,9 +17,12 @@ const {newUserValidation, existingUserValidation, usernameCondition} = require('
 const getAllUsers = async function(req, res) {
     try {
         const users = await User.getAll();
-        res.status(200).json(users);
+        res.json(users);
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({
+            message: "Error getting users",
+            error: err
+        });
     }
 };
 
@@ -44,11 +47,14 @@ const getUserByUsername = async function (req, res) {
         }).catch(err => {
             res.status(500).json({
                 message: 'Failed to Get User!',
-                data: err
+                error: err
             });
         });
     }).catch(err => {
-        res.status(400).send(err);
+        res.status(400).json({
+            message: 'Invalid Username!',
+            error: err
+        });
     });
 };
 
@@ -65,11 +71,14 @@ const createUser = async function (req, res) {
         }).catch(err => {
             res.status(500).json({
                 message: err.code === 11000 ? 'User already exists!' : 'Internal Server Error!',
-                data: err
+                error: err
             });
         });
     }).catch(err => {
-        res.status(400).send(err.message);
+        res.status(400).json({
+            message: 'Invalid Username!',
+            error: err
+        });
     });
 }
 
@@ -90,14 +99,20 @@ const updateUser = (req, res) => {
             }).catch(err => {
                 res.status(500).json({
                     message: 'Failed to Update User!',
-                    data: err
+                    error: err
                 });
             });
         }).catch(err => {
-            res.status(400).send(err.message);
+            res.status(400).send({
+                message: "Invalid User Data!",
+                error: err
+            });
         });
     }).catch(err => {
-        res.status(400).send(err.message);
+        res.status(400).send({
+            message: "Invalid Username",
+            error: err
+        });
     });
 }
 

@@ -64,49 +64,32 @@ const userSchema = mongoose.model('User', UserSchema);
 
 module.exports.userSchema = userSchema;
 
+// Sensitive fields
+const PROJECTION = {
+    password: 0,
+    phoneNumbers: 0,
+    refreshToken: 0,
+    email: 0,
+    updatedAt: 0,
+}
+
 module.exports.getAll = () => {
-    return userSchema.find({}, {
-        // Exclude sensitive information
-        password: 0,
-        phoneNumbers: 0,
-        refreshToken: 0,
-        email: 0,
-        updatedAt: 0,
-    }).exec();
+    return userSchema.find({}, PROJECTION).exec();
 };
 
 module.exports.getByUsername = (username) => {
-    return userSchema.findOne({username: username},{
-        // Exclude sensitive information
-        password: 0,
-        phoneNumbers: 0,
-        refreshToken: 0,
-        email: 0,
-        updatedAt: 0,
-    }).exec();
+    return userSchema.findOne({username: username},).exec();
 };
 
 module.exports.getByEmail = (email) => {
-    return userSchema.findOne({email: email},{
-        // Exclude sensitive information
-        password: 0,
-        phoneNumbers: 0,
-        refreshToken: 0,
-        email: 0,
-        updatedAt: 0,
-    }).exec();
+    return userSchema.findOne({email: email},PROJECTION).exec();
 };
 
 module.exports.updateUser = (username, user) => {
     return userSchema.findOneAndUpdate({username: username}, user, {
         new: true, // return the new user instead of the old one
-        projection: { // Exclude sensitive information
-            password: 0,
-            phoneNumbers: 0,
-            refreshToken: 0,
-            email: 0,
-            updatedAt: 0,
-        }}).exec();
+        projection: PROJECTION
+    }).exec();
 };
 
 module.exports.addUser = async (data) => {

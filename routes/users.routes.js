@@ -8,7 +8,7 @@
  *      Creation Date: 2022-01-24
  */
 const router = require('express').Router();
-const user = require('../services/user.service');
+const user = require('../services/users.service');
 
 router.get('/', user.getAllUsers);
 router.get('/:username', user.getUserByUsername);
