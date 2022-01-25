@@ -7,11 +7,11 @@ This is the documentation for the Rest-Inn API. Currently, the API is in a very 
 - Update the `.env` file with your MongoURL and a secret for JWTs.
 - Run `npm install`
 - Run `npm start`
-- Open the browser and go to `http://localhost:8080/` to see the API endpoints.
+- Open the browser and go to the root path to see the API endpoints. Live version: `https://rest-inn.herokuapp.com/`
 
 
 ## Endpoints
-**This list may not be complete. Use the root path of the API `http://localhost:8080/` for a more recent list.**
+**This list may not be complete. Use the root path of the API `https://rest-inn.herokuapp.com/` for a more recent list.**
 ```
 | method | url                             | secured | description                     |
 |--------|---------------------------------|---------|---------------------------------|
