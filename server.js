@@ -14,8 +14,8 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index.routes');
-const usersRouter = require('./routes/users.routes');
-const propertiesRouter = require('./routes/properties.routes');
+const usersRouter = require('./routes/users.routes').router;
+const propertiesRouter = require('./routes/properties.routes').router;
 
 const app = express();
 
