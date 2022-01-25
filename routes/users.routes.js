@@ -27,8 +27,8 @@ module.exports.router = router;
 
 /** Used for documentation purposes only */
 module.exports.endpoints = [
-    {url: '/users', method: 'get', secured: false, description: "Get all users"},
-    {url: '/users/:username', method: 'get', secured: false, description: "Get user by id"},
-    {url: '/users', method: 'post', secured: false, description: "Create a new user"},
-    {url: '/users/:username', method: 'put', secured: false, description: "Update user by id"}
+    {method: 'get', url: '/users', secured: false, description: "Get all users"},
+    {method: 'get', url: '/users/:username', secured: false, description: "Get user by id"},
+    {method: 'post', url: '/users', secured: false, description: "Create a new user"},
+    {method: 'put', url: '/users/:username', secured: false, description: "Update user by id"}
 ];
