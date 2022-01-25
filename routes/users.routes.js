@@ -10,11 +10,25 @@
 const router = require('express').Router();
 const user = require('../services/users.service');
 
+
+/** Get all users */
 router.get('/', user.getAllUsers);
+
+/** Get user by id */
 router.get('/:username', user.getUserByUsername);
 
+/** Create a new user */
 router.post('/', user.createUser);
 
+/** Update user by id */
 router.put('/:username', user.updateUser);
 
-module.exports = router;
+module.exports.router = router;
+
+/** Used for documentation purposes only */
+module.exports.endpoints = [
+    {url: '/users', method: 'get', secured: false, description: "Get all users"},
+    {url: '/users/:username', method: 'get', secured: false, description: "Get user by id"},
+    {url: '/users', method: 'post', secured: false, description: "Create a new user"},
+    {url: '/users/:username', method: 'put', secured: false, description: "Update user by id"}
+];

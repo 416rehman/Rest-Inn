@@ -7,8 +7,8 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
- const router = require('express').Router();
- const propertiesService = require('../services/properties.service')
+const router = require('express').Router();
+const propertiesService = require('../services/properties.service')
 
 /** Retrieves all the properties in the database */
 router.get('/', propertiesService.getAll);
@@ -34,16 +34,35 @@ router.get('/locations/:location', propertiesService.getAllByLocation);
 router.get('/bestselling', propertiesService.getAllBestSellers);
 
 /** Retrieves a single property from the database */
- router.get('/:id', propertiesService.getOneById);
+router.get('/:id', propertiesService.getOneById);
 
- /** Creates a new property in the database */
- router.post('/', propertiesService.add);
+/** Creates a new property in the database */
+router.post('/', propertiesService.add);
 
- /** Updates a property in the database */
- router.put('/:id', propertiesService.updateById);
+/** Updates a property in the database */
+router.put('/:id', propertiesService.updateById);
 
- /** Deletes a property from the database */
- router.delete('/:id', propertiesService.deleteById);
+/** Deletes a property from the database */
+router.delete('/:id', propertiesService.deleteById);
 
-module.exports = router;
+module.exports.router = router;
+
+module.exports.endpoints = [
+    {url: '/properties', method: 'get', secured: false, description: "Get all properties"},
+    {url: '/properties/types', method: 'get', secured: false, description: "Get all property types"},
+    {url: '/properties/types/:type', method: 'get', secured: false, description: "Get all properties by type"},
+    {url: '/properties/locations', method: 'get', secured: false, description: "Get all locations"},
+    {
+        url: '/properties/locations/:location',
+        method: 'get',
+        secured: false,
+        description: "Get all properties by location"
+    },
+    {url: '/properties/bestselling', method: 'get', secured: false, description: "Get all best-selling properties"},
+    {url: '/properties/:id', method: 'get', secured: false, description: "Get a single property"},
+    {url: '/properties', method: 'post', secured: false, description: "Create a new property"},
+    {url: '/properties/:id', method: 'put', secured: false, description: "Update a property"},
+    {url: '/properties/:id', method: 'delete', secured: false, description: "Delete a property"}
+
+];
 
