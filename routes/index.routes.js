@@ -7,18 +7,11 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-
 const endpoints = require('../endpoints');
 const router = require('express').Router();
+const swaggerDocs = require('../helpers/swaggerDocs');
+const swaggerUi = require('swagger-ui-express');
 
-/* GET home page. */
-router.get('/', function (req, res) {
-  //pretty print the endpoints
-    res.json({
-        "status": "Ready",
-        "message": "Welcome to the Rest-Inn API by Hayaturehman Ahmadzai",
-        "Endpoints": endpoints
-    });
-});
+router.get('/', swaggerUi.setup(swaggerDocs));
 
 module.exports = router;

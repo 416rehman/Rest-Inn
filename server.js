@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const endpoints = require('./endpoints');
 const indexRouter = require('./routes/index.routes');
+const swaggerUi = require("swagger-ui-express");
 const usersRouter = require('./routes/users.routes').router;
 const propertiesRouter = require('./routes/properties.routes').router;
 
@@ -24,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
+app.use('/', swaggerUi.serve, indexRouter);
 app.use('/users', usersRouter);
 app.use('/properties', propertiesRouter);
 
