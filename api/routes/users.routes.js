@@ -23,12 +23,4 @@ router.post('/', user.createUser);
 /** Update user by id */
 router.put('/:username', user.updateUser);
 
-module.exports.router = router;
-
-/** Used for documentation purposes only */
-module.exports.endpoints = [
-    {method: 'get', url: '/users', secured: false, description: "Get all users"},
-    {method: 'get', url: '/users/:username', secured: false, description: "Get user by id"},
-    {method: 'post', url: '/users', secured: false, description: "Create a new user"},
-    {method: 'put', url: '/users/:username', secured: false, description: "Update user by id"}
-];
+module.exports = router;
