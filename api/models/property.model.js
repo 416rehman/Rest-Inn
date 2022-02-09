@@ -44,10 +44,20 @@ const PropertySchema = new mongoose.Schema({
         required: true
     },
     description: String,
-    property_type: {
+    type: {
         type: String,
         enum: propertyTypes,
         required: true
+    },
+    beds: {
+        type: Number,
+        required: true,
+        default: 1
+    },
+    baths: {
+        type: Number,
+        required: true,
+        default: 1
     },
     rules: [String],
     amenities: {
@@ -75,8 +85,8 @@ const propertySchema = mongoose.model("property", PropertySchema);
 
 module.exports.property = propertySchema;
 
-module.exports.getAll = function () {
-    return propertySchema.find({}).exec();
+module.exports.getAll = function (filter={}) {
+    return propertySchema.find(filter).exec();
 }
 
 module.exports.getAllTypes = function () {

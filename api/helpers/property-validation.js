@@ -14,15 +14,17 @@ const {propertyTypes, amenities} = require("../constants/property.constants");
 // Mongo ObjectId validation
 const idCondition = Joi.string().regex(/^[a-f\d]{24}$/i)
 
-// Data Conditions
+// Property Conditions
 const titleCondition = Joi.string().min(16).max(255).label('Title')
 const priceCondition = Joi.number().min(0).max(999999).label('Price')
 const descriptionCondition = Joi.string().min(3).max(2048).label('Description')
 const propertyTypeCondition = Joi.string().valid(...propertyTypes).label('Property Type').lowercase()
-const ruleCondition = Joi.string().min(3).max(255).label('Rule')
+const ruleCondition = Joi.string().min(3).max(255).label('Rule').lowercase()
 const rulesCondition = Joi.array().items(ruleCondition).label('Rules')
 const amenityCondition = Joi.string().valid(...amenities).label('Amenity').lowercase()
 const amenitiesCondition = Joi.array().items(amenityCondition).label('Amenities')
+const bedCondition = Joi.number().min(0).max(10).label('Beds')
+const bathCondition = Joi.number().min(0).max(10).label('Baths')
 
 //Location Conditions
 const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
@@ -44,11 +46,14 @@ const bestSellerCondition = Joi.boolean().label('Best Seller')
 const photoCondition = Joi.string().min(1).max(512).label('Photo')
 const photosCondition = Joi.array().items(photoCondition).label('Photos')
 
+// Use this to validate a property in POST
 const newPropertyValidation = Joi.object().keys({
     title: titleCondition.required(),
     price: priceCondition.required(),
     description: descriptionCondition,
-    property_type: propertyTypeCondition.required(),
+    type: propertyTypeCondition.required(),
+    beds: bedCondition.required(),
+    baths: bathCondition.required(),
     rules: rulesCondition,
     amenities: amenitiesCondition.required(),
     location: locationCondition.required(),
@@ -57,11 +62,14 @@ const newPropertyValidation = Joi.object().keys({
     photos: photosCondition
 })
 
+// use this to validate a property in PUT
 const existingPropertyValidation = Joi.object().keys({
     title: titleCondition,
     price: priceCondition,
     description: descriptionCondition,
-    property_type: propertyTypeCondition,
+    type: propertyTypeCondition,
+    beds: bedCondition,
+    baths: bathCondition,
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition,
@@ -77,6 +85,8 @@ module.exports = {
     priceCondition,
     descriptionCondition,
     propertyTypeCondition,
+    bedCondition,
+    bathCondition,
     ruleCondition,
     rulesCondition,
     amenityCondition,
