@@ -12,11 +12,10 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const endpoints = require('./endpoints');
 const indexRouter = require('./routes/index.routes');
 const swaggerUi = require("swagger-ui-express");
-const usersRouter = require('./routes/users.routes').router;
-const propertiesRouter = require('./routes/properties.routes').router;
+const usersRouter = require('./routes/users.routes');
+const propertiesRouter = require('./routes/properties.routes');
 
 const app = express();
 
@@ -33,7 +32,6 @@ app.use('/properties', propertiesRouter);
 app.use((req, res) => {
     res.status(404).json({
         message: 'Not Found',
-        valid_endpoints: endpoints
     });
 });
 /** Connect to MongoDB and start server */
