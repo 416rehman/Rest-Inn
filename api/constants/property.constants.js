@@ -8,7 +8,20 @@
  *      Creation Date: 2022-01-24
  */
 
-module.exports.propertyTypes = ['house', 'apartment', 'condo', 'townhouse', 'duplex', 'cabin', 'villa', 'farm', 'beach house', 'loft', 'other']
+module.exports.propertyTypes = [
+    'house',
+    'apartment',
+    'condo',
+    'townhouse',
+    'duplex',
+    'cabin',
+    'villa',
+    'farm',
+    'beach house',
+    'loft',
+    'other'
+];
+
 module.exports.amenities = [
     //Atmosphere
     'patio or balcony',
