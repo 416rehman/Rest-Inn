@@ -7,9 +7,8 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-const endpoints = require('../endpoints');
 const router = require('express').Router();
-const swaggerDocs = require('../helpers/swaggerDocs');
+const swaggerDocs = require('../documentation/swaggerDocs');
 const swaggerUi = require('swagger-ui-express');
 
 router.get('/', swaggerUi.setup(swaggerDocs));
