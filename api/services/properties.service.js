@@ -10,9 +10,12 @@
 
 const property = require('../models/property.model');
 const {idCondition, existingPropertyValidation, propertyTypeCondition} = require('../helpers/property-validation');
+const {buildPropertyFilter} = require("../helpers/filters");
 
 module.exports.getAll = (req, res) => {
-    property.getAll().then(properties => {
+
+    const filter = buildPropertyFilter(req.query);
+    property.getAll(filter).then(properties => {
         res.json({
             message: 'Retrieved all properties',
             data: properties
@@ -54,7 +57,7 @@ module.exports.getAllByType = (req, res) => {
         });
     }).catch(err => {
         res.status(400).json({
-            message: 'Error when getting all properties of type ' + type,
+            message: 'Error when getting all properties of type ' + req.params.type,
             error: err
         });
     });
@@ -62,10 +65,17 @@ module.exports.getAllByType = (req, res) => {
 
 module.exports.getAllLocations = (req, res) => {
     property.getAllLocations().then(locations => {
-        res.json({
-            message: 'Retrieved all locations',
-            data: locations
-        })
+        if (locations.length === 0) {
+            res.status(404).json({
+                message: 'No locations found',
+                data: locations
+            });
+        } else {
+            res.json({
+                message: 'Retrieved all locations',
+                data: locations
+            })
+        }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all locations',
@@ -75,8 +85,7 @@ module.exports.getAllLocations = (req, res) => {
 }
 
 module.exports.getAllByLocation = (req, res) => {
-    const formattedLocation = req.params.location.replace(/-/g, ' ');
-    property.getAllByLocation(formattedLocation.toLowerCase()).then(properties => {
+    property.getAllByLocation(req.params.location.toLowerCase()).then(properties => {
         res.json({
             message: 'Retrieved properties by location',
             data: properties
