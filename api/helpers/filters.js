@@ -17,13 +17,13 @@ const propertyTypes = require('../constants/property.constants').propertyTypes;
 module.exports.buildPropertyFilter = (query) => {
     let filter = {};
 
-    if (query.price_min || query.price_max) {
+    if (query.priceMin || query.priceMax) {
         filter.price = {};
-        if (query.price_min) {
-            filter.price.$gte = query.price_min;
+        if (query.priceMin) {
+            filter.price.$gte = query.priceMin;
         }
-        if (query.price_max) {
-            filter.price.$lte = query.price_max;
+        if (query.priceMax) {
+            filter.price.$lte = query.priceMax;
         }
     }
 
@@ -31,13 +31,13 @@ module.exports.buildPropertyFilter = (query) => {
         filter.type = query.type;
     }
 
-    if (query.min_beds || query.max_beds) {
+    if (query.bedsMin || query.bedsMax) {
         filter.beds = {};
-        if (query.min_beds) {
-            filter.beds.$gte = query.min_beds;
+        if (query.bedsMin) {
+            filter.beds.$gte = query.bedsMin;
         }
-        if (query.max_beds) {
-            filter.beds.$lte = query.max_beds;
+        if (query.bedsMax) {
+            filter.beds.$lte = query.bedsMax;
         }
     }
 
@@ -81,15 +81,16 @@ module.exports.buildPropertyFilter = (query) => {
     return filter;
 };
 
+/** Email and phone number filtering is not supported from this endpoint since they are sensitive data. **/
 module.exports.buildUserFilter = (query) => {
     let filter = {};
 
-    if (query.username) {
-        filter.username = query.username;
+    if (query.id) {
+        filter._id = query.id;
     }
 
-    if (query.email) {
-        filter.email = query.email;
+    if (query.username) {
+        filter.username = query.username;
     }
 
     if (query.firstName) {
@@ -98,11 +99,6 @@ module.exports.buildUserFilter = (query) => {
 
     if (query.lastName) {
         filter.lastName = query.lastName;
-    }
-
-    if (query.phone) {
-        filter.phone = {};
-        filter.phone.$in = Array.isArray(query.phone) ? query.phone : [query.phone];
     }
 
     return filter;
