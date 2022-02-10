@@ -5,8 +5,8 @@ const options = {
         openapi: '3.0.0',
         info: {
             title: 'Rest-Inn API',
-            version: '1.0.0',
-            description: 'Swagger documentation for Rest-Inn API',
+            version: '1.0.1',
+            description: 'OpenAPI based documentation for Rest-Inn API - Web422 by Rehman Ahmadzai',
         },
     },
     apis: [
