@@ -9,21 +9,31 @@
  */
 const User = require('../models/user.model.js');
 const {newUserValidation, existingUserValidation, usernameCondition} = require('../helpers/user-validation');
+const {buildUserFilter} = require("../helpers/filters");
 
 
 /**
  * Get all users
  */
-const getAllUsers = async function(req, res) {
-    try {
-        const users = await User.getAll();
-        res.json(users);
-    } catch (err) {
+const getAllUsers = async function (req, res) {
+    const filter = buildUserFilter(req.query);
+    User.getAll(filter).then(users => {
+        if (users.length > 0) {
+            res.json({
+                message: 'Users retrieved successfully',
+                data: users
+            });
+        } else {
+            res.status(404).json({
+                message: 'No users found',
+            });
+        }
+    }).catch(err => {
         res.status(500).json({
-            message: "Error getting users",
+            message: 'Error retrieving users',
             error: err
         });
-    }
+    });
 };
 
 
@@ -32,10 +42,9 @@ const getAllUsers = async function(req, res) {
  */
 const getUserByUsername = async function (req, res) {
     usernameCondition.validateAsync(req.params.username).then(username => {
-        console.log(username);
         User.getByUsername(username).then(user => {
             if (user) {
-                res.status(200).json({
+                res.json({
                     message: 'User Retrieved!',
                     data: user
                 });
@@ -52,7 +61,7 @@ const getUserByUsername = async function (req, res) {
         });
     }).catch(err => {
         res.status(400).json({
-            message: 'Invalid Username!',
+            message: 'Validation Error while getting user!',
             error: err
         });
     });
@@ -93,7 +102,7 @@ const updateUser = (req, res) => {
                     });
                 } else {
                     res.status(404).json({
-                        message: 'User Not Found!'
+                        message: 'User Not Found!',
                     });
                 }
             }).catch(err => {
@@ -110,7 +119,7 @@ const updateUser = (req, res) => {
         });
     }).catch(err => {
         res.status(400).send({
-            message: "Invalid Username",
+            message: "Validation Error in Username!",
             error: err
         });
     });

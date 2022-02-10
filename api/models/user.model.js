@@ -73,12 +73,12 @@ const PROJECTION = {
     updatedAt: 0,
 }
 
-module.exports.getAll = () => {
-    return userSchema.find({}, PROJECTION).exec();
+module.exports.getAll = (filter={}) => {
+    return userSchema.find(filter, PROJECTION).exec();
 };
 
 module.exports.getByUsername = (username) => {
-    return userSchema.findOne({username: username},).exec();
+    return userSchema.findOne({username: username}, PROJECTION).exec();
 };
 
 module.exports.getByEmail = (email) => {
