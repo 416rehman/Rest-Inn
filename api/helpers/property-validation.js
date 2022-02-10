@@ -34,12 +34,12 @@ const provinceCondition = Joi.string().min(1).max(255).label('Province').lowerca
 const countryCondition = Joi.string().min(1).max(255).label('Country').lowercase();
 const postalCodeCondition = Joi.string().min(1).max(32).label('Postal Code').lowercase()
 const locationCondition = Joi.object().keys({
-    unit: unitCondition,
-    street: streetCondition,
-    city: cityCondition,
-    province: provinceCondition,
-    country: countryCondition,
-    postalCode: postalCodeCondition
+    unit: unitCondition.required(),
+    street: streetCondition.required(),
+    city: cityCondition.required(),
+    province: provinceCondition.required(),
+    country: countryCondition.required(),
+    postalCode: postalCodeCondition.required()
 })
 
 const bestSellerCondition = Joi.boolean().label('Best Seller')
@@ -57,7 +57,7 @@ const newPropertyValidation = Joi.object().keys({
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition.required(),
-    best_seller: bestSellerCondition,
+    bestSeller: bestSellerCondition,
     thumbnail: photoCondition,
     photos: photosCondition
 })
@@ -73,7 +73,7 @@ const existingPropertyValidation = Joi.object().keys({
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition,
-    best_seller: bestSellerCondition,
+    bestSeller: bestSellerCondition,
     thumbnail: photoCondition,
     photos: photosCondition
 })
