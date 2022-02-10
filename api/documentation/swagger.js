@@ -10,10 +10,9 @@ const options = {
         },
     },
     apis: [
-        'documentation/swaggerDefinitions.js',  // Contains the definitions for the objects in the API
+        'constants/property.constants.js',  // Contains the enums for the constants
+        'documentation/*.swagger.js',  // Contains the definitions for the objects in the API
         'routes/*.routes.js'], // files containing annotations as above
 };
 
-const openapiSpecification = SwaggerJSDoc(options);
-
-module.exports = openapiSpecification;
+module.exports = SwaggerJSDoc(options);
