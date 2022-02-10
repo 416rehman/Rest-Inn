@@ -16,10 +16,16 @@ module.exports.getAll = (req, res) => {
 
     const filter = buildPropertyFilter(req.query);
     property.getAll(filter).then(properties => {
-        res.json({
-            message: 'Retrieved all properties',
-            data: properties
-        })
+        if (properties.length === 0) {
+            res.status(404).send({
+                message: 'No properties found',
+            });
+        } else {
+            res.json({
+                message: 'Retrieved all properties',
+                data: properties
+            })
+        }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all properties',
@@ -30,10 +36,16 @@ module.exports.getAll = (req, res) => {
 
 module.exports.getAllPropertyTypes = (req, res) => {
     property.getAllTypes().then(propertyTypes => {
-        res.json({
-            message: 'Retrieved all property types',
-            data: propertyTypes
-        })
+        if (propertyTypes.length === 0) {
+            res.status(404).send({
+                message: 'No property types found',
+            });
+        } else {
+            res.json({
+                message: 'Retrieved all property types',
+                data: propertyTypes
+            })
+        }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all property types',
@@ -45,10 +57,16 @@ module.exports.getAllPropertyTypes = (req, res) => {
 module.exports.getAllByType = (req, res) => {
     propertyTypeCondition.validateAsync(req.params.type).then(type=>{
         property.getAllByType(type).then(properties => {
-            res.json({
-                message: 'Retrieved all properties of type ' + type,
-                data: properties
-            })
+            if (properties.length === 0) {
+                res.status(404).send({
+                    message: 'No properties found of type ' + type,
+                });
+            } else {
+                res.json({
+                    message: 'Retrieved all properties of type ' + type,
+                    data: properties
+                })
+            }
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when getting all properties of type ' + type,
@@ -57,7 +75,7 @@ module.exports.getAllByType = (req, res) => {
         });
     }).catch(err => {
         res.status(400).json({
-            message: 'Error when getting all properties of type ' + req.params.type,
+            message: 'Validation Error when getting all properties of type ' + req.params.type,
             error: err
         });
     });
@@ -68,7 +86,6 @@ module.exports.getAllLocations = (req, res) => {
         if (locations.length === 0) {
             res.status(404).json({
                 message: 'No locations found',
-                data: locations
             });
         } else {
             res.json({
@@ -86,10 +103,16 @@ module.exports.getAllLocations = (req, res) => {
 
 module.exports.getAllByLocation = (req, res) => {
     property.getAllByLocation(req.params.location.toLowerCase()).then(properties => {
-        res.json({
-            message: 'Retrieved properties by location',
-            data: properties
-        })
+        if (properties.length === 0) {
+            res.status(404).send({
+                message: 'No properties found at location ' + req.params.location,
+            });
+        } else {
+            res.json({
+                message: 'Retrieved all properties at location ' + req.params.location,
+                data: properties
+            })
+        }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all properties by location',
@@ -100,10 +123,16 @@ module.exports.getAllByLocation = (req, res) => {
 
 module.exports.getAllBestSellers = (req, res) => {
     property.getBestSellers().then(properties => {
-        res.json({
-            message: 'Retrieved best seller properties',
-            data: properties
-        })
+        if (properties.length === 0) {
+            res.status(404).send({
+                message: 'No properties found with best_seller set to ' + req.params.best_seller,
+            });
+        } else {
+            res.json({
+                message: 'Retrieved all best sellers with best_seller set to ' + req.params.best_seller,
+                data: properties
+            })
+        }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting best seller properties',
@@ -115,10 +144,16 @@ module.exports.getAllBestSellers = (req, res) => {
 module.exports.getOneById = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id=>{
         property.getById(id).then(property => {
-            res.json({
-                message: 'Retrieved property by id',
-                data: property
-            })
+            if (!property) {
+                res.status(404).send({
+                    message: 'No property found with id ' + id,
+                });
+            } else {
+                res.json({
+                    message: 'Retrieved property with id ' + id,
+                    data: property
+                })
+            }
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when getting property by id',
@@ -127,7 +162,7 @@ module.exports.getOneById = (req, res) => {
         });
     }).catch(err => {
         res.status(400).json({
-            message: 'Invalid id',
+            message: 'Validation Error when getting property by id',
             error: err
         });
     });
@@ -148,7 +183,7 @@ module.exports.add = (req, res) => {
         });
     }).catch(err => {
         res.status(400).json({
-            message: 'Invalid property',
+            message: 'Validation Error when adding property',
             error: err
         });
     });
@@ -169,7 +204,6 @@ module.exports.updateById = (req, res) => {
                 });
             });
         }).catch(err => {
-            console.log(err);
             res.status(400).json({
                 message: 'Invalid property data',
                 error: err
