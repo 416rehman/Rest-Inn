@@ -27,7 +27,7 @@ module.exports.buildPropertyFilter = (query) => {
         }
     }
 
-    if (query.type && propertyTypes.has(query.type)) {
+    if (query.type && propertyTypes.includes(query.type)) {
         filter.type = query.type;
     }
 
@@ -80,3 +80,30 @@ module.exports.buildPropertyFilter = (query) => {
 
     return filter;
 };
+
+module.exports.buildUserFilter = (query) => {
+    let filter = {};
+
+    if (query.username) {
+        filter.username = query.username;
+    }
+
+    if (query.email) {
+        filter.email = query.email;
+    }
+
+    if (query.firstName) {
+        filter.firstName = query.firstName;
+    }
+
+    if (query.lastName) {
+        filter.lastName = query.lastName;
+    }
+
+    if (query.phone) {
+        filter.phone = {};
+        filter.phone.$in = Array.isArray(query.phone) ? query.phone : [query.phone];
+    }
+
+    return filter;
+}
