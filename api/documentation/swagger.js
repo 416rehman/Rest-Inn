@@ -1,6 +1,12 @@
 const SwaggerJSDoc = require('swagger-jsdoc');
 
-const options = {
+module.exports.options = {
+    customCssUrl: '/static/swagger-dark.css',
+    customSiteTitle: "Rest-Inn API",
+    customfavIcon: "/static/favicon.ico"
+};
+
+module.exports.swaggerDocs = SwaggerJSDoc({
     definition: {
         openapi: '3.0.0',
         info: {
@@ -13,6 +19,4 @@ const options = {
         'constants/*.constants.js',  // Contains the enums for the constants
         'documentation/*/*.swagger.js',  // Contains the definitions for the objects in the API
         'routes/*.routes.js'], // files containing annotations as above
-};
-
-module.exports = SwaggerJSDoc(options);
+});

@@ -8,9 +8,9 @@
  *      Creation Date: 2022-01-24
  */
 const router = require('express').Router();
-const swaggerDocs = require('../documentation/swagger');
+const {swaggerDocs, options} = require('../documentation/swagger');
 const swaggerUi = require('swagger-ui-express');
 
-router.get('/', swaggerUi.setup(swaggerDocs));
+router.get('/', swaggerUi.setup(swaggerDocs, options));
 
 module.exports = router;
