@@ -10,8 +10,8 @@ const options = {
         },
     },
     apis: [
-        'constants/property.constants.js',  // Contains the enums for the constants
-        'documentation/*.swagger.js',  // Contains the definitions for the objects in the API
+        'constants/*.constants.js',  // Contains the enums for the constants
+        'documentation/*/*.swagger.js',  // Contains the definitions for the objects in the API
         'routes/*.routes.js'], // files containing annotations as above
 };
 
