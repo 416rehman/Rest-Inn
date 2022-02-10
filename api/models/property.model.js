@@ -47,7 +47,9 @@ const PropertySchema = new mongoose.Schema({
     type: {
         type: String,
         enum: propertyTypes,
-        required: true
+        required: true,
+        minlength: 3,
+        default: propertyTypes[0] || "Apartment"
     },
     beds: {
         type: Number,
@@ -63,7 +65,8 @@ const PropertySchema = new mongoose.Schema({
     amenities: {
         type: [String],
         enum: amenities,
-        required: true
+        required: true,
+        default: []
     },
     location: {
         type: LocationSchema,
@@ -93,7 +96,7 @@ module.exports.getAllTypes = function () {
     return propertySchema.aggregate([
         {
             $group: {
-                _id: "$property_type",
+                _id: "$type",
                 count: {$sum: 1}
             }
         }
@@ -101,7 +104,7 @@ module.exports.getAllTypes = function () {
 }
 
 module.exports.getAllByType = function (type) {
-    return propertySchema.find({property_type: type}).exec();
+    return propertySchema.find({type}).exec();
 }
 
 //Get all location cities, provinces, and countries and their count
