@@ -70,11 +70,11 @@ module.exports.buildPropertyFilter = (query) => {
         filter.amenities.$all = Array.isArray(query.amenities) ? query.amenities : [query.amenities];
     }
 
-    if (query.best_seller) {
-        if (query.best_seller === 'true') {
-            filter.best_seller = true;
-        } else if (query.best_seller === 'false') {
-            filter.best_seller = false;
+    if (query.bestSeller) {
+        if (query.bestSeller?.toLowerCase() === 'true'|| query.bestSeller === true) {
+            filter.bestSeller = true;
+        } else if (query.bestSeller?.toLowerCase() === 'false'|| query.bestSeller === false) {
+            filter.bestSeller = false;
         }
     }
 
