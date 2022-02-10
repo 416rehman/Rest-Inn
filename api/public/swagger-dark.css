@@ -2,6 +2,7 @@
     I did not create this CSS file, though I did heavily modify it.
     Source: https://news.knowledia.com/US/en/articles/turn-swagger-theme-to-the-dark-mode-ff47c44e6a99620be2dc8eb70518a48f00665715
  */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 a {
     color: #8c8cfa;
 }
@@ -46,7 +47,9 @@ font, html {
 .swagger-ui, .swagger-ui section h3 {
     color: #b5bac9;
 }
-
+.swagger-ui * {
+    font-family: 'Poppins', sans-serif !important;
+}
 .swagger-ui a {
     background-color: transparent;
 }
@@ -386,7 +389,22 @@ tr.response[data-code="500"] .response-col_status { color: #D25E5EFF; }
     padding-left: 150px;
     background-size: cover;
 }
-
+.swagger-ui .opblock .opblock-summary-description{
+    /*direction: rtl;*/
+    padding-right: 25px;
+    font-weight: 500;
+}
+.swagger-ui .opblock .opblock-summary-description:before {
+    content: "";
+    width: 100px;
+    border: 2px solid #6e6e6e21;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    margin-right: 10px;
+}
+.swagger-ui .opblock .opblock-summary-path {
+    font-weight: 500;
+}
 @media screen and (min-width: 30em) {
     .swagger-ui .shadow-1-ns {
         box-shadow: rgba(0, 0, 0, .2) 0 0 4px 2px;
