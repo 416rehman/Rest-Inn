@@ -22,6 +22,25 @@ module.exports.propertyTypes = [
     'other'
 ];
 
+/**
+ * @swagger
+ *   components:
+ *     enums:
+ *       propertyTypesEnum :
+ *         enum:
+ *            - 'house'
+ *            - 'apartment'
+ *            - 'condo'
+ *            - 'townhouse'
+ *            - 'duplex'
+ *            - 'cabin'
+ *            - 'villa'
+ *            - 'farm'
+ *            - 'beach house'
+ *            - 'loft'
+ *            - 'other'
+ */
+
 module.exports.amenities = [
     //Atmosphere
     'patio or balcony',
@@ -77,3 +96,56 @@ module.exports.amenities = [
     'toaster',
     'coffee maker',
 ]
+
+/**
+ * @swagger
+ * components:
+ *   enums:
+ *     amenitiesEnum:
+ *        enum:
+ *          - 'elevator'
+ *          - 'patio or balcony'
+ *          - 'hot tub'
+ *          - 'garden'
+ *          - 'pool'
+ *
+ *          - 'shower'
+ *          - 'bathtub'
+ *          - 'hair dryer'
+ *          - 'shampoo'
+ *
+ *          - 'iron'
+ *          - 'laundry'
+ *          - 'dryer'
+ *          - 'hangers'
+ *          - 'linens'
+ *
+ *          - 'heating'
+ *          - 'air conditioning'
+ *          - 'fireplace'
+ *
+ *          - 'wifi'
+ *          - 'tv'
+ *
+ *          - 'smoke detector'
+ *          - 'carbon monoxide detector'
+ *          - 'carbon dioxide detector'
+ *          - 'first aid kit'
+ *          - 'fire extinguisher'
+ *
+ *          - 'elevator'
+ *
+ *          - 'self check-in'
+ *          - 'keypad'
+ *          - 'doorman'
+ *
+ *          - 'cooking pots or pans'
+ *          - 'dishes and silverware'
+ *          - 'microwave'
+ *          - 'refrigerator'
+ *          - 'stove'
+ *          - 'oven'
+ *          - 'dishwasher'
+ *          - 'toaster'
+ *          - 'coffee maker'
+ */
