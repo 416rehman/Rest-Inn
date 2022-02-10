@@ -10,6 +10,9 @@
 const jsonwebtoken = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const {roles} = require("../constants/user.constants");
+const {getAllDialCodes} = require("../constants/countries.constants");
+
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -37,10 +40,26 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone:  [{
+    countryCode: {
         type: String,
-        unique: true
-    }],
+        default: '+1',
+        enum: getAllDialCodes()
+    },
+    phone:  {
+        type: String,
+    },
+    extension: {
+        type: String,
+    },
+    role: {
+        type: String,
+        enum: roles,
+        default: 'user'
+    },
+    activated: {
+        type: Boolean,
+        default: false
+    }
 }, {timestamps: true});
 
 UserSchema.pre('save', async function (next) {
@@ -70,6 +89,9 @@ const PROJECTION = {
     phoneNumbers: 0,
     refreshToken: 0,
     email: 0,
+    countryCode: 0,
+    extension: 0,
+    role: 0,
     updatedAt: 0,
 }
 
