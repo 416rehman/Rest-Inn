@@ -55,9 +55,9 @@ const newPropertyValidation = Joi.object().keys({
     beds: bedCondition.required(),
     baths: bathCondition.required(),
     rules: rulesCondition,
-    amenities: amenitiesCondition.required(),
+    amenities: amenitiesCondition,
     location: locationCondition.required(),
-    best_seller: bestSellerCondition.required(),
+    best_seller: bestSellerCondition,
     thumbnail: photoCondition,
     photos: photosCondition
 })
