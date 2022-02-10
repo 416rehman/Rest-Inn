@@ -125,11 +125,11 @@ module.exports.getAllBestSellers = (req, res) => {
     property.getBestSellers().then(properties => {
         if (properties.length === 0) {
             res.status(404).send({
-                message: 'No properties found with best_seller set to ' + req.params.best_seller,
+                message: 'No properties found with bestSeller set to ' + req.params.bestSeller,
             });
         } else {
             res.json({
-                message: 'Retrieved all best sellers with best_seller set to ' + req.params.best_seller,
+                message: 'Retrieved all best sellers with bestSeller set to ' + req.params.bestSeller,
                 data: properties
             })
         }
@@ -171,7 +171,7 @@ module.exports.getOneById = (req, res) => {
 module.exports.add = (req, res) => {
     existingPropertyValidation.validateAsync(req.body).then(sanitized => {
         property.add(sanitized).then(property => {
-            res.json({
+            res.status(201).json({
                 message: 'Added property',
                 data: property
             })

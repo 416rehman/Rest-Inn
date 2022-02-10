@@ -72,7 +72,7 @@ const PropertySchema = new mongoose.Schema({
         type: LocationSchema,
         required: true
     },
-    best_seller: {
+    bestSeller: {
         type: Boolean,
         default: false,
         required: true
@@ -141,7 +141,7 @@ module.exports.getAllByLocation = function (location) {
 }
 
 module.exports.getBestSellers = function () {
-    return propertySchema.find({best_seller: true}).exec();
+    return propertySchema.find({bestSeller: true}).exec();
 }
 
 module.exports.getById = function (id) {
