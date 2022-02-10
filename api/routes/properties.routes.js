@@ -20,19 +20,19 @@ const propertiesService = require('../services/properties.service')
  *      summary: Retrieves all properties
  *      description: Retrieves all the properties in the database with an optional filter through query parameters
  *      parameters:
- *          - $ref: '#/components/queryParameters/price_min'
- *          - $ref: '#/components/queryParameters/price_max'
- *          - $ref: '#/components/queryParameters/beds_min'
- *          - $ref: '#/components/queryParameters/beds_max'
- *          - $ref: '#/components/queryParameters/baths_min'
- *          - $ref: '#/components/queryParameters/baths_max'
- *          - $ref: '#/components/queryParameters/type'
- *          - $ref: '#/components/queryParameters/city'
- *          - $ref: '#/components/queryParameters/province'
- *          - $ref: '#/components/queryParameters/country'
- *          - $ref: '#/components/queryParameters/postal_code'
- *          - $ref: '#/components/queryParameters/amenities'
- *          - $ref: '#/components/queryParameters/best_seller'
+ *          - $ref: '#/components/propertyQueryParameters/priceMin'
+ *          - $ref: '#/components/propertyQueryParameters/priceMax'
+ *          - $ref: '#/components/propertyQueryParameters/bedsMin'
+ *          - $ref: '#/components/propertyQueryParameters/bedsMax'
+ *          - $ref: '#/components/propertyQueryParameters/bathsMin'
+ *          - $ref: '#/components/propertyQueryParameters/bathsMax'
+ *          - $ref: '#/components/propertyQueryParameters/type'
+ *          - $ref: '#/components/propertyQueryParameters/city'
+ *          - $ref: '#/components/propertyQueryParameters/province'
+ *          - $ref: '#/components/propertyQueryParameters/country'
+ *          - $ref: '#/components/propertyQueryParameters/postalCode'
+ *          - $ref: '#/components/propertyQueryParameters/amenities'
+ *          - $ref: '#/components/propertyQueryParameters/bestSeller'
  *
  *      responses:
  *          '200':
@@ -50,7 +50,7 @@ const propertiesService = require('../services/properties.service')
  *                            type: array
  *                            description: The properties in the database
  *                            items:
- *                                $ref: '#/components/schemas/Property'
+ *                                $ref: '#/definitions/Property'
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -84,7 +84,7 @@ router.get('/', propertiesService.getAll);
  *                           type: array
  *                           description: The property types in the database
  *                           items:
- *                             $ref: '#/components/schemas/PropertyType'
+ *                             $ref: '#/definitions/PropertyType'
  *         '404':
  *             $ref: '#/components/responses/NotFound'
  *         '500':
@@ -103,15 +103,16 @@ router.get('/types', propertiesService.getAllPropertyTypes);
  *      summary: Retrieves all the properties by type in the database
  *      description: Retrieves all the properties by type in the database
  *      parameters:
- *          - name: type
- *            in: path
+ *          - allOf:
+ *              - $ref: '#/components/propertyPathParameters/type'
+ *              - required: true
  *      responses:
  *          '200':
  *            description: A successful response
  *            content:
  *              application/json:
  *                  schema:
- *                     $ref: '#/components/schemas/Property'
+ *                     $ref: '#/definitions/Property'
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -148,7 +149,7 @@ router.get('/types/:type', propertiesService.getAllByType);
  *                 type: array
  *                 description: The locations in the database
  *                 items:
- *                   $ref: '#/components/schemas/Location'
+ *                   $ref: '#/definitions/Location'
  *     '404':
  *       $ref: '#/components/responses/NotFound'
  *     '500':
@@ -170,7 +171,9 @@ router.get('/locations', propertiesService.getAllLocations);
  *      summary: Retrieves all the properties in the database by location
  *      description: Searches the location query string in the city, province, and country fields using an or operator
  *      parameters:
- *          - $ref: '#/components/pathParameters/location'
+ *          - allOf:
+ *              - $ref: '#/components/propertyPathParameters/location'
+ *              - required: true
  *      responses:
  *          '200':
  *              description: A successful response
@@ -187,7 +190,7 @@ router.get('/locations', propertiesService.getAllLocations);
  *                             type: array
  *                             description: The properties in the database
  *                             items:
- *                               $ref: '#/components/schemas/Property'
+ *                               $ref: '#/definitions/Property'
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -221,7 +224,7 @@ router.get('/locations/:location', propertiesService.getAllByLocation);
  *                  type: array
  *                  description: The best-selling properties in the database
  *                  items:
- *                    $ref: '#/components/schemas/Property'
+ *                    $ref: '#/definitions/Property'
  *      '404':
  *        $ref: '#/components/responses/NotFound'
  *      '500':
@@ -243,7 +246,7 @@ router.get('/bestselling', propertiesService.getAllBestSellers);
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Property'
+ *            $ref: '#/definitions/Property'
  *    responses:
  *      '201':
  *        description: A successful response
@@ -259,7 +262,7 @@ router.get('/bestselling', propertiesService.getAllBestSellers);
  *                data:
  *                  type: object
  *                  description: The property that was created
- *                  $ref: '#/components/schemas/Property'
+ *                  $ref: '#/definitions/Property'
  *      '400':
  *        $ref: '#/components/responses/BadRequest'
  *      '500':
@@ -277,13 +280,15 @@ router.post('/', propertiesService.add);
  *    summary: Updates a property in the database
  *    description: Updates a property in the database using the body of the request
  *    parameters:
- *      - $ref: '#/components/pathParameters/id'
+ *      - allOf:
+ *          - $ref: '#/components/propertyPathParameters/id'
+ *          - required: true
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Property'
+ *            $ref: '#/definitions/Property'
  *    responses:
  *      '200':
  *        description: A successful response
@@ -299,7 +304,7 @@ router.post('/', propertiesService.add);
  *                data:
  *                  type: object
  *                  description: The property that was updated with the new values
- *                  $ref: '#/components/schemas/Property'
+ *                  $ref: '#/definitions/Property'
  *
  *      '400':
  *        $ref: '#/components/responses/BadRequest'
@@ -320,7 +325,7 @@ router.put('/:id', propertiesService.updateById);
  *    summary: Deletes a property from the database
  *    description: Deletes a property from the database
  *    parameters:
- *      - $ref: '#/components/pathParameters/id'
+ *      - $ref: '#/components/propertyPathParameters/id'
  *    responses:
  *      '200':
  *         description: A successful response
@@ -353,7 +358,7 @@ router.delete('/:id', propertiesService.deleteById);
  *    summary: Retrieves a single property from the database
  *    description: Retrieves a single property from the database by its id
  *    parameters:
- *      - $ref: '#/components/pathParameters/id'
+ *      - $ref: '#/components/propertyPathParameters/id'
  *    responses:
  *      '200':
  *        description: A successful response
@@ -368,7 +373,7 @@ router.delete('/:id', propertiesService.deleteById);
  *                  example: "Retrieved property"
  *                data:
  *                  description: The retrieved property
- *                  $ref: '#/components/schemas/Property'
+ *                  $ref: '#/definitions/Property'
  *      '404':
  *        $ref: '#/components/responses/NotFound'
  *      '500':
