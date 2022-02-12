@@ -278,7 +278,7 @@ router.post('/', propertiesService.add);
  *    tags:
  *      - Properties
  *    summary: Updates a property in the database
- *    description: Updates a property in the database using the body of the request
+ *    description: Updates a property in the database using the body of the request. If changing any location attributes, an entire location object must be provided to avoid replacing the entire location.
  *    parameters:
  *      - allOf:
  *          - $ref: '#/components/propertyPathParameters/id'
