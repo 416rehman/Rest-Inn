@@ -1,0 +1,27 @@
+
+.Select {
+  display: inline-flex;
+  flex-direction: column;
+
+  .select-input {
+    caret-color: rgba(0,0,0,0);
+    &:focus-visible, &:focus{
+      outline: none;
+    }
+  }
+  .open {
+    display: flex !important;
+  }
+  .select-list {
+    margin: 0;
+    display: none;
+    list-style: none;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border: rgba(79, 79, 79, 0.34) 1px solid;
+  }
+}

@@ -1,28 +1,52 @@
-/*** I declare that this assignment is my own work in accordance with
- * Seneca Academic Policy. No part of this assignment has been copied
- * manually or electronically from any other source (including web sites)
- * or distributed to other students. *
- *
- *      Name: Hayaturehman Ahmadzai
- *      Student ID: hahmadzai3
- *      Creation Date: 2022-02-11
- */
-
-import React from 'react';
-import Input from '../formElements/Input/Input';
+import React, {useState} from 'react';
 import "./searchbar.scss"
+import {TextField} from "@mui/material";
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+
 
 interface IProps {
+    className?: string;
+
     [x: string]: any;
 }
 
-function SearchBar(props: IProps) {
+function SearchBar({className, ...props}: IProps) {
+    const [checkIn, setCheckIn] = useState<any>(null);
+    const [checkOut, setCheckOut] = useState<any>(null);
+
     return (
-        <form action="/search" className={'search-bar' + (props.className || '')} {...props}>
-            <Input label={'Location'} id={'location'} name={'location'} type={"text"} placeholder={"Where are you going"}/>
-            <Input label={'Check In'} id={'check-in'} name={'check-in'} type={"date"} placeholder={"Add Dates"}/>
-            <Input label={'Check Out'} id={'check-out'} name={'check-out'} type={"date"} placeholder={"Add Dates"}/>
-            <Input label={'Guests'} id={'guests'} name={'guests'} type={"number"} placeholder={"Add Guests"}/>
+        <form action="/search" className={'search-bar' + (className || '')} {...props}>
+            <TextField
+                id="destination"
+                name={'destination'}
+                label="Where are you going?"
+                type="search"
+                variant="outlined"
+                size="medium"
+                fullWidth
+                InputProps={{
+                    className: 'search-bar__input'
+                }}/>
+            <LocalizationProvider dateAdapter={DateAdapter}>
+                <DatePicker
+                    label="Check In"
+                    value={checkIn}
+                    onChange={(newValue) => {
+                        setCheckIn(newValue);
+                    }}
+                    renderInput={(params) => <TextField name={'check-in'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}} />}
+                />
+                <DatePicker
+                    label="Check Out"
+                    value={checkOut}
+                    onChange={(newValue) => {
+                        setCheckOut(newValue);
+                    }}
+                    renderInput={(params) => <TextField name={'check-out'} size={'medium'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}}  />}
+                />
+            </LocalizationProvider>
+            <TextField inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}} label={"Guests"} sx={{ display: { xs: 'none', md: 'flex',  }}} />
         </form>
     );
 }
