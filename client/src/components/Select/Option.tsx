@@ -1,4 +1,4 @@
-import React, {MouseEventHandler} from 'react';
+import React from 'react';
 import './option.scss'
 
 interface IProps {
@@ -16,6 +16,6 @@ function Option({value, selected, children, className, showValue, ...rest}: IPro
             {showValue && <span className="Option__value">{value} | </span>}{children}
         </div>
     );
-};
+}
 
 export default Option;
