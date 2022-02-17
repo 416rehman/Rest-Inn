@@ -23,8 +23,14 @@ function SearchBar({className, ...props}: IProps) {
                 label="Where are you going?"
                 type="search"
                 variant="outlined"
-                size="medium"
+                size="small"
                 fullWidth
+                sx={{
+                    flexBasis: {
+                        xs: '100%',
+                        md: '80%'
+                    }
+                }}
                 InputProps={{
                     className: 'search-bar__input'
                 }}/>
@@ -35,7 +41,7 @@ function SearchBar({className, ...props}: IProps) {
                     onChange={(newValue) => {
                         setCheckIn(newValue);
                     }}
-                    renderInput={(params) => <TextField name={'check-in'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}} />}
+                    renderInput={(params) => <TextField name={'check-in'} size="small" {...params} sx={{ display: { xs: 'none', md: 'flex',  }}} />}
                 />
                 <DatePicker
                     label="Check Out"
@@ -43,10 +49,10 @@ function SearchBar({className, ...props}: IProps) {
                     onChange={(newValue) => {
                         setCheckOut(newValue);
                     }}
-                    renderInput={(params) => <TextField name={'check-out'} size={'medium'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}}  />}
+                    renderInput={(params) => <TextField name={'check-out'} size={'small'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}}  />}
                 />
             </LocalizationProvider>
-            <TextField inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}} label={"Guests"} sx={{ display: { xs: 'none', md: 'flex',  }}} />
+            <TextField inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}} size="small" label={"Guests"} sx={{ display: { xs: 'none', md: 'flex',  }}} />
         </form>
     );
 }

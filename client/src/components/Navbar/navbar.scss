@@ -1,16 +1,11 @@
-$logo-height: 50px;
+$navbar-height: 60px;
+
 nav {
   display: flex;
   width: 100%;
-  height: 100%;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  justify-content: space-between;
-
-  > * {
-    padding: 10px 0;
-  }
+  height: $navbar-height;
+  position: sticky;
+  z-index: 2000;
 }
 
 nav #logo {
@@ -19,7 +14,8 @@ nav #logo {
 }
 
 nav #logo img {
-  height: $logo-height;
+  padding: 5px;
+  height: 100%;
   object-fit: contain;
 }
 

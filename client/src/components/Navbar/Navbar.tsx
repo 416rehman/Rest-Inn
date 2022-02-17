@@ -52,7 +52,10 @@ function Navbar() {
     };
 
     return (
-        <nav>
+        <nav style={{
+            backgroundColor: theme.palette.background.paper,
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        }}>
             <div id={"logo"}>
                 <Link to={"/"}>
                     <img src={isSmallScreen ? '/logo/icon.svg' : 'logo/logo.svg'} alt={"logo"}/>
@@ -60,7 +63,9 @@ function Navbar() {
             </div>
 
             <SearchBar style={{
-                flexGrow: isSmallScreen ? 1 : 0,
+                flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: 'auto'
             }}/>
 
             <Tooltip title="Account settings">
