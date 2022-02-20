@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const {roles} = require("../constants/user.constants");
 const {getAllDialCodes} = require("../constants/countries.constants");
+const {obfuscate} = require("../helpers/mongooseFunctions");
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -26,7 +27,8 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        get: obfuscate
     },
     refreshToken: {
         type: String,
@@ -84,11 +86,10 @@ const userSchema = mongoose.model('User', UserSchema);
 module.exports.userSchema = userSchema;
 
 // Sensitive fields
-const PROJECTION = {
+const ommited_fields = {
     password: 0,
     phoneNumbers: 0,
     refreshToken: 0,
-    email: 0,
     countryCode: 0,
     extension: 0,
     role: 0,
@@ -96,21 +97,21 @@ const PROJECTION = {
 }
 
 module.exports.getAll = (filter={}) => {
-    return userSchema.find(filter, PROJECTION).exec();
+    return userSchema.find(filter, ommited_fields).exec();
 };
 
 module.exports.getByUsername = (username) => {
-    return userSchema.findOne({username: username}, PROJECTION).exec();
+    return userSchema.findOne({username: username}, ommited_fields).exec();
 };
 
 module.exports.getByEmail = (email) => {
-    return userSchema.findOne({email: email},PROJECTION).exec();
+    return userSchema.findOne({email: email},ommited_fields).exec();
 };
 
 module.exports.updateUser = (username, user) => {
     return userSchema.findOneAndUpdate({username: username}, user, {
         new: true, // return the new user instead of the old one
-        projection: PROJECTION
+        projection: ommited_fields
     }).exec();
 };
 

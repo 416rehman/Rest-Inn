@@ -22,6 +22,8 @@
  *         $ref: '#/components/userParameters/firstName'
  *       lastName:
  *         $ref: '#/components/userParameters/lastName'
+ *       lastName:
+ *         $ref: '#/components/userParameters/email'
  *       createdAt:
  *         $ref: '#/components/userParameters/createdAt'
  *
