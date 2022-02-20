@@ -149,3 +149,17 @@ module.exports.amenities = [
  *          - 'toaster'
  *          - 'coffee maker'
  */
+
+module.exports.listingTypes = ['entire place', 'hotel room' ,'private room', 'shared room'];
+
+/**
+ * @swagger
+ *  components:
+ *      enums:
+ *          listingTypesEnum:
+ *              enum:
+ *                  - 'entire place'
+ *                  - 'hotel room'
+ *                  - 'private room'
+ *                  - 'shared room'
+ */

@@ -7,7 +7,7 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-const {propertyTypes, amenities} = require("../constants/property.constants");
+const {propertyTypes, amenities, listingTypes} = require("../constants/property.constants");
 const mongoose = require("mongoose");
 
 const LocationSchema = new mongoose.Schema({
@@ -82,6 +82,11 @@ const PropertySchema = new mongoose.Schema({
         default: 'https://placeimg.com/200/300/arch'
     },
     photos: [String],
+    listingType: {
+        type: String,
+        enum: listingTypes,
+        default: listingTypes[0]
+    }
 })
 
 const propertySchema = mongoose.model("property", PropertySchema);

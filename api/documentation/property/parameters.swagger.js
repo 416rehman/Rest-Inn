@@ -112,6 +112,15 @@
  *                - type: string
  *                - $ref: '#/components/enums/amenitiesEnum'
  *
+ *      listingType:
+ *          name: listingType
+ *          description: The listing type of the property
+ *          schema:
+ *              allOf:
+ *                - type: string
+ *                - $ref: '#/components/enums/listingTypesEnum'
+ *
+ *
  *      bestSeller:
  *        name: bestSeller
  *        description: Whether the property is best seller or not
