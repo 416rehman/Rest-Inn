@@ -38,7 +38,14 @@
  *            allOf:
  *              - $ref: '#/definitions/Property/properties/type'
  *              - required: true
- *
+ *         listingType:
+ *            allOf:
+ *              - $ref: '#/definitions/Property/properties/listingType'
+ *              - required: true
+ *         bedrooms:
+ *            allOf:
+ *              - $ref: '#/definitions/Property/properties/bedrooms'
+ *              - required: true
  *         beds:
  *            allOf:
  *              - $ref: '#/definitions/Property/properties/beds'

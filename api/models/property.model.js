@@ -51,6 +51,11 @@ const PropertySchema = new mongoose.Schema({
         minlength: 3,
         default: propertyTypes[0] || "Apartment"
     },
+    bedrooms: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     beds: {
         type: Number,
         required: true,
@@ -86,8 +91,14 @@ const PropertySchema = new mongoose.Schema({
         type: String,
         enum: listingTypes,
         default: listingTypes[0]
-    }
-})
+    },
+    ratings: {
+        type: [Number],
+        default: [0, 0, 0, 0, 0]
+    },
+}, {
+    timestamps: true,
+});
 
 const propertySchema = mongoose.model("property", PropertySchema);
 

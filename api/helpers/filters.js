@@ -30,6 +30,15 @@ module.exports.buildPropertyFilter = (query) => {
     if (query.type && propertyTypes.includes(query.type)) {
         filter.type = query.type;
     }
+    if (query.bedroomsMin || query.bedroomsMax) {
+        filter.bedrooms = {};
+        if (query.bedroomsMin) {
+            filter.bedrooms.$gte = query.bedroomsMin;
+        }
+        if (query.bedroomsMax) {
+            filter.bedrooms.$lte = query.bedroomsMax;
+        }
+    }
 
     if (query.bedsMin || query.bedsMax) {
         filter.beds = {};

@@ -35,18 +35,24 @@
  *          minimum: 0
  *          maximum: 100
  *
- *      beds:
- *        name: bedsMin
- *        description: The minimum number of beds in the property
+ *      bedrooms:
+ *        description: The number of beds in the property
  *        schema:
  *          type: number
- *          format: double
+ *          format: integer
+ *          minimum: 0
+ *          maximum: 10
+ *
+ *      beds:
+ *        description: The number of beds in the property
+ *        schema:
+ *          type: number
+ *          format: integer
  *          minimum: 1
  *          maximum: 10
  *
  *      baths:
- *        name: bathsMin
- *        description: The minimum number of baths in the property
+ *        description: The number of baths in the property
  *        schema:
  *          type: number
  *          format: integer
@@ -171,10 +177,6 @@
  *              - in: query
  *              - name: priceMax
  *              - description: The maximum price of the property
- *      beds:
- *          allOf:
- *              - $ref: '#/components/propertyParameters/beds'
- *              - in: query
  *      bedsMin:
  *          allOf:
  *              - $ref: '#/components/propertyParameters/beds'
@@ -187,10 +189,6 @@
  *              - in: query
  *              - name: bedsMax
  *              - description: The maximum number of beds in the property
- *      baths:
- *          allOf:
- *              - $ref: '#/components/propertyParameters/baths'
- *              - in: query
  *      bathsMin:
  *          allOf:
  *              - $ref: '#/components/propertyParameters/baths'
@@ -203,6 +201,18 @@
  *              - in: query
  *              - name: bathsMax
  *              - description: The maximum number of baths in the property
+ *      bedroomsMin:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/bedrooms'
+ *              - in: query
+ *              - name: bedroomsMin
+ *              - description: The minimum number of bedrooms in the property
+ *      bedroomsMax:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/bedrooms'
+ *              - in: query
+ *              - name: bedroomsMax
+ *              - description: The maximum number of bedrooms in the property
  *      type:
  *          allOf:
  *              - $ref: '#/components/propertyParameters/type'
@@ -210,6 +220,10 @@
  *      unit:
  *          allOf:
  *              - $ref: '#/components/propertyParameters/unit'
+ *              - in: query
+ *      listingType:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/listingType'
  *              - in: query
  *      street:
  *          allOf:
