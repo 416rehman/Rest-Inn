@@ -12,7 +12,7 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const {roles} = require("../constants/user.constants");
 const {getAllDialCodes} = require("../constants/countries.constants");
-const {obfuscate} = require("../helpers/mongooseFunctions");
+const {obfuscate} = require("../helpers/mongooseGetters");
 
 const UserSchema = new mongoose.Schema({
     username: {

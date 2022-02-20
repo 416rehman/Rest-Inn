@@ -98,6 +98,9 @@
  *         photos:
  *           $ref: '#/components/propertyParameters/photos'
  *
+ *         rating:
+ *           $ref: '#/components/propertyParameters/rating'
+ *
  *   PropertyType:
  *     type: object
  *     properties:

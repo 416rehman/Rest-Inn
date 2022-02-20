@@ -12,3 +12,16 @@ module.exports.obfuscate = (email) => {
         email.slice(2, separatorIndex).replace(/./g, '*') +
         email.slice(separatorIndex);
 }
+
+/** Weighted rating calculation **/
+module.exports.calculateRating = (ratings) => {
+    if (!ratings || ratings.length === 0) {
+        return 0;
+    }
+    let weightedSum = 0;
+    ratings.forEach((r, i) => {
+        weightedSum += r * (i + 1);
+    });
+
+    return weightedSum / ratings.length;
+}

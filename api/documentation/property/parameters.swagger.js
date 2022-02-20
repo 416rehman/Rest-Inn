@@ -9,6 +9,7 @@
  *        schema:
  *          type: string
  *          format: string
+ *        readOnly: true
  *
  *      title:
  *        name: title
@@ -151,6 +152,16 @@
  *              format: url
  *              example: "https://www.example.com/photo.jpg"
  *
+ *      rating:
+ *        name: rating
+ *        description: The rating of the property
+ *        schema:
+ *          type: number
+ *          format: double
+ *          minimum: 0
+ *          maximum: 5
+ *        readOnly: true
+ *
  */
 
 /**
@@ -253,6 +264,14 @@
  *          allOf:
  *              - $ref: '#/components/propertyParameters/bestSeller'
  *              - in: query
+ *      ratingMin:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/rating'
+ *              - in: query
+ *      ratingMax:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/rating'
+ *              - in: query
  */
 
 /**
@@ -329,4 +348,16 @@
  *            description: The city, province, or country of the property (case insensitive)
  *            schema:
  *              type: string
+ *      ratingMin:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/rating'
+ *              - in: path
+ *              - name: ratingMin
+ *              - description: The minimum rating of the property
+ *      ratingMax:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/rating'
+ *              - in: path
+ *              - name: ratingMax
+ *              - description: The maximum rating of the property
  */

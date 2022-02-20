@@ -9,6 +9,7 @@
  */
 const {propertyTypes, amenities, listingTypes} = require("../constants/property.constants");
 const mongoose = require("mongoose");
+const {calculateRating} = require("../helpers/mongooseGetters");
 
 const LocationSchema = new mongoose.Schema({
     unit: String,
@@ -92,9 +93,10 @@ const PropertySchema = new mongoose.Schema({
         enum: listingTypes,
         default: listingTypes[0]
     },
-    ratings: {
+    rating: {
         type: [Number],
-        default: [0, 0, 0, 0, 0]
+        default: [0, 0, 0, 0, 0],
+        get: calculateRating
     },
 }, {
     timestamps: true,
