@@ -27,6 +27,7 @@ const user = require('../services/users.service');
  *       - $ref: '#/components/userQueryParameters/username'
  *       - $ref: '#/components/userQueryParameters/firstName'
  *       - $ref: '#/components/userQueryParameters/lastName'
+ *       - $ref: '#/components/userQueryParameters/email'
  *     responses:
  *       200:
  *         description: An array of users
