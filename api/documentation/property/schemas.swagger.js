@@ -62,8 +62,6 @@
  *         amenities:
  *           $ref: '#/components/propertyParameters/amenities'
  *
- *         listingType: $ref:'#/components/propertyParameters/listingType'
- *
  *         location:
  *           type: object
  *           description: The location of the property
