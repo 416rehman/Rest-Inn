@@ -36,6 +36,8 @@ const propertiesService = require('../services/properties.service')
  *          - $ref: '#/components/propertyQueryParameters/bestSeller'
  *          - $ref: '#/components/propertyQueryParameters/bedroomsMin'
  *          - $ref: '#/components/propertyQueryParameters/bedroomsMax'
+ *          - $ref: '#/components/paginationParameters/page'
+ *          - $ref: '#/components/paginationParameters/limit'
  *
  *      responses:
  *          '200':
@@ -112,6 +114,8 @@ router.get('/types', propertiesService.getAllPropertyTypes);
  *          - allOf:
  *              - $ref: '#/components/propertyPathParameters/type'
  *              - required: true
+ *          - $ref: '#/components/paginationParameters/page'
+ *          - $ref: '#/components/paginationParameters/limit'
  *      responses:
  *          '200':
  *            description: A successful response
@@ -192,6 +196,8 @@ router.get('/locations', propertiesService.getAllLocations);
  *          - allOf:
  *              - $ref: '#/components/propertyPathParameters/location'
  *              - required: true
+ *          - $ref: '#/components/paginationParameters/page'
+ *          - $ref: '#/components/paginationParameters/limit'
  *      responses:
  *          '200':
  *              description: A successful response
@@ -228,6 +234,9 @@ router.get('/locations/:location', propertiesService.getAllByLocation);
  *      - Property Best Selling
  *    summary: Retrieves all best-selling properties in the database
  *    description: Retrieves all best-selling properties in the database
+ *    parameters:
+ *      - $ref: '#/components/paginationParameters/page'
+ *      - $ref: '#/components/paginationParameters/limit'
  *    responses:
  *      '200':
  *        description: A successful response
