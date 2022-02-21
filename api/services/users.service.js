@@ -31,7 +31,7 @@ const getAllUsers = async function (req, res) {
     }).catch(err => {
         res.status(500).json({
             message: 'Error retrieving users',
-            error: err
+            error: err.message
         });
     });
 };
@@ -56,13 +56,13 @@ const getUserByUsername = async function (req, res) {
         }).catch(err => {
             res.status(500).json({
                 message: 'Failed to Get User!',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Validation Error while getting user!',
-            error: err
+            error: err.message
         });
     });
 };
@@ -80,13 +80,13 @@ const createUser = async function (req, res) {
         }).catch(err => {
             res.status(500).json({
                 message: err.code === 11000 ? 'User already exists!' : 'Internal Server Error!',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Invalid Username!',
-            error: err
+            error: err.message
         });
     });
 }
@@ -108,19 +108,19 @@ const updateUser = (req, res) => {
             }).catch(err => {
                 res.status(500).json({
                     message: 'Failed to Update User!',
-                    error: err
+                    error: err.message
                 });
             });
         }).catch(err => {
             res.status(400).send({
                 message: "Invalid User Data!",
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).send({
             message: "Validation Error in Username!",
-            error: err
+            error: err.message
         });
     });
 }

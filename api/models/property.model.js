@@ -102,6 +102,11 @@ const PropertySchema = new mongoose.Schema({
     timestamps: true,
     toJSON:{
         getters: true,
+    },
+    // Allows case-insensitive searching
+    collation: {
+        locale: 'en_US',
+        strength: 2
     }
 });
 
@@ -109,8 +114,15 @@ const propertySchema = mongoose.model("property", PropertySchema);
 
 module.exports.property = propertySchema;
 
-module.exports.getAll = function (filter={}) {
-    return propertySchema.find(filter).exec();
+module.exports.getAll = function (filter={}, limit=10, page=0, sort={}) {
+    limit = Math.min(limit, 100);
+    page = page <= 0 ? 1 : page;
+
+    return propertySchema.find(filter).limit(limit).skip((page - 1) * limit).sort(sort).exec()
+}
+
+module.exports.count = function (filter={}) {
+    return propertySchema.countDocuments(filter).exec()
 }
 
 module.exports.getAllTypes = function () {
@@ -124,8 +136,10 @@ module.exports.getAllTypes = function () {
     ]).exec();
 }
 
-module.exports.getAllByType = function (type) {
-    return propertySchema.find({type}).exec();
+module.exports.getAllByType = function (type, limit=10, page=1, sort={}) {
+    limit = Math.min(limit, 100);
+    page = page <= 0 ? 1 : page;
+    return propertySchema.find({type}).limit(limit).skip(page * limit).sort(sort).exec();
 }
 
 //Get all location cities, provinces, and countries and their count
@@ -145,24 +159,26 @@ module.exports.getAllLocations = function () {
 }
 
 /** Get all properties by either city, province, or country */
-module.exports.getAllByLocation = function (location) {
+module.exports.getAllByLocation = function (location,limit=10, page=0, sort={}) {
+    limit = Math.min(limit, 100);
+    page = page <= 0 ? 1 : page;
     return propertySchema.find({
         $or: [
             {
                 "location.city": location
-            },
-            {
+            }, {
                 "location.province": location
-            },
-            {
+            }, {
                 "location.country": location
             }
         ]
-    }).exec();
+    }).limit(limit).skip(page * limit).sort(sort).exec();
 }
 
-module.exports.getBestSellers = function () {
-    return propertySchema.find({bestSeller: true}).exec();
+module.exports.getBestSellers = function (limit=10, page=0, sort={}) {
+    limit = Math.min(limit, 100);
+    page = page <= 0 ? 1 : page;
+    return propertySchema.find({bestSeller: true}).limit(limit).skip(page * limit).sort(sort).exec();
 }
 
 module.exports.getById = function (id) {

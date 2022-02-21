@@ -54,6 +54,9 @@ const propertiesService = require('../services/properties.service')
  *                            description: The properties in the database
  *                            items:
  *                                $ref: '#/definitions/Property'
+ *                          pagination:
+ *                            $ref: '#/definitions/Pagination'
+ *
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -115,7 +118,19 @@ router.get('/types', propertiesService.getAllPropertyTypes);
  *            content:
  *              application/json:
  *                  schema:
- *                     $ref: '#/definitions/Property'
+ *                      type: object
+ *                      properties:
+ *                        message:
+ *                          type: string
+ *                          description: The message of the response
+ *                          example: Successfully retrieved all properties by type
+ *                        data:
+ *                          type: array
+ *                          description: The properties in the database
+ *                          items:
+ *                            $ref: '#/definitions/Property'
+ *                        pagination:
+ *                          $ref: '#/definitions/Pagination'
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -189,11 +204,13 @@ router.get('/locations', propertiesService.getAllLocations);
  *                           type: string
  *                           description: The message of the response
  *                           example: Successfully retrieved all properties by location
- *                           data:
- *                             type: array
- *                             description: The properties in the database
- *                             items:
- *                               $ref: '#/definitions/Property'
+ *                         data:
+ *                           type: array
+ *                           description: The properties in the database
+ *                           items:
+ *                             $ref: '#/definitions/Property'
+ *                         pagination:
+ *                           $ref: '#/definitions/Pagination'
  *          '404':
  *              $ref: '#/components/responses/NotFound'
  *          '500':
@@ -228,6 +245,8 @@ router.get('/locations/:location', propertiesService.getAllByLocation);
  *                  description: The best-selling properties in the database
  *                  items:
  *                    $ref: '#/definitions/Property'
+ *                pagination:
+ *                  $ref: '#/definitions/Pagination'
  *      '404':
  *        $ref: '#/components/responses/NotFound'
  *      '500':

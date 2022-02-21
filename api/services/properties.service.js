@@ -10,26 +10,37 @@
 
 const property = require('../models/property.model');
 const {idCondition, existingPropertyValidation, propertyTypeCondition} = require('../helpers/property-validation');
-const {propertyFilter} = require("../helpers/filters");
+const {propertyFilter, sortFilter} = require("../helpers/filters");
 
 module.exports.getAll = (req, res) => {
 
+    const {page, limit} = req.query;
+    const sort = sortFilter(req.query)
     const filter = propertyFilter(req.query);
-    property.getAll(filter).then(properties => {
+
+    property.getAll(filter,limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({
                 message: 'No properties found',
             });
         } else {
+            const count = await property.count(filter);
             res.json({
                 message: 'Retrieved all properties',
-                data: properties
+                data: properties,
+                pagination: {
+                    page: req.query.page || 1,
+                    limit: req.query.limit || 100,
+                    totalPages: Math.ceil(count /  (req.query.limit || 100)),
+                    count: count
+                }
             })
         }
     }).catch(err => {
+        console.log(err);
         res.status(500).json({
             message: 'Error when getting all properties',
-            error: err
+            error: err.message
         });
     });
 }
@@ -49,34 +60,44 @@ module.exports.getAllPropertyTypes = (req, res) => {
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all property types',
-            error: err
+            error: err.message
         });
     });
 }
 
 module.exports.getAllByType = (req, res) => {
     propertyTypeCondition.validateAsync(req.params.type).then(type=>{
-        property.getAllByType(type).then(properties => {
+        const {page, limit} = req.query;
+        const sort = sortFilter(req.query)
+
+        property.getAllByType(type, limit, page, sort).then(async properties => {
             if (properties.length === 0) {
                 res.status(404).send({
                     message: 'No properties found of type ' + type,
                 });
             } else {
+                const count = await property.count({type});
                 res.json({
                     message: 'Retrieved all properties of type ' + type,
-                    data: properties
+                    data: properties,
+                    pagination: {
+                        page: req.query.page || 1,
+                        limit: req.query.limit || 100,
+                        totalPages: Math.ceil(count /  (req.query.limit || 100)),
+                        count: count
+                    }
                 })
             }
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when getting all properties of type ' + type,
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Validation Error when getting all properties of type ' + req.params.type,
-            error: err
+            error: err.message
         });
     });
 }
@@ -96,47 +117,66 @@ module.exports.getAllLocations = (req, res) => {
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all locations',
-            error: err
+            error: err.message
         });
     });
 }
 
 module.exports.getAllByLocation = (req, res) => {
-    property.getAllByLocation(req.params.location.toLowerCase()).then(properties => {
+    const {page, limit} = req.query;
+    const sort = sortFilter(req.query)
+
+    property.getAllByLocation(req.params.location, limit, page, sort).then(properties => {
         if (properties.length === 0) {
             res.status(404).send({
                 message: 'No properties found at location ' + req.params.location,
             });
         } else {
+            const count = property.count({location: req.params.location});
             res.json({
                 message: 'Retrieved all properties at location ' + req.params.location,
-                data: properties
+                data: properties,
+                pagination: {
+                    page: req.query.page || 1,
+                    limit: req.query.limit || 100,
+                    totalPages: Math.ceil(count / (req.query.limit || 100)),
+                    count: count
+                }
             })
         }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting all properties by location',
-            error: err
+            error: err.message
         });
     });
 }
 
 module.exports.getAllBestSellers = (req, res) => {
-    property.getBestSellers().then(properties => {
+    const {page, limit} = req.query;
+    const sort = sortFilter(req.query)
+    property.getBestSellers(limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({
                 message: 'No properties found with bestSeller set to ' + req.params.bestSeller,
             });
         } else {
+            const count = await property.count({bestSeller: true});
             res.json({
                 message: 'Retrieved all best sellers with bestSeller set to ' + req.params.bestSeller,
-                data: properties
+                data: properties,
+                pagination: {
+                    page: req.query.page || 1,
+                    limit: req.query.limit || 100,
+                    totalPages: Math.ceil(count / (req.query.limit || 100)),
+                    count: count
+                }
             })
         }
     }).catch(err => {
         res.status(500).json({
             message: 'Error when getting best seller properties',
-            error: err
+            error: err.message
         });
     });
 }
@@ -151,19 +191,19 @@ module.exports.getOneById = (req, res) => {
             } else {
                 res.json({
                     message: 'Retrieved property with id ' + id,
-                    data: property
+                    data: property,
                 })
             }
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when getting property by id',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Validation Error when getting property by id',
-            error: err
+            error: err.message
         });
     });
 }
@@ -178,13 +218,13 @@ module.exports.add = (req, res) => {
         }).catch(err => {
             res.status(500).json({
                 message: err.code === 11000 ? 'Property already exists' : 'Error when adding property',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Validation Error when adding property',
-            error: err
+            error: err.message
         });
     });
 }
@@ -200,19 +240,19 @@ module.exports.updateById = (req, res) => {
             }).catch(err => {
                 res.status(500).json({
                     message: 'Error when updating property by id',
-                    error: err
+                    error: err.message
                 });
             });
         }).catch(err => {
             res.status(400).json({
                 message: 'Invalid property data',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Invalid id',
-            error: err
+            error: err.message
         });
     });
 }
@@ -226,13 +266,13 @@ module.exports.deleteById = (req, res) => {
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when deleting property by id',
-                error: err
+                error: err.message
             });
         });
     }).catch(err => {
         res.status(400).json({
             message: 'Invalid id',
-            error: err
+            error: err.message
         });
     });
 }

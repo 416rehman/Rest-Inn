@@ -9,6 +9,13 @@
  */
 const propertyTypes = require('../constants/property.constants').propertyTypes;
 
+module.exports.sortFilter = (query) => {
+    const sort = {};
+    if (query.sortBy) {
+        sort[query.sortBy] = query.sortOrder || 1;
+    }
+    return sort;
+}
 /**
  * This function creates a filter object for the given property type
  * which can be used to filter the properties in the database.
@@ -59,7 +66,15 @@ module.exports.propertyFilter = (query) => {
             filter.baths.$lte = query.max_baths;
         }
     }
-
+    if (query.location) {
+        filter.$or = [{
+            "location.city": query.location
+        }, {
+            "location.province": query.location
+        }, {
+            "location.country": query.location
+        }];
+    }
     if (query.city || query.province || query.country) {
         filter.location = {};
         if (query.city) {
