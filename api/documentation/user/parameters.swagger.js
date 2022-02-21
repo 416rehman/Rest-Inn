@@ -42,7 +42,7 @@
  *
  *      email:
  *        name: email
- *        description: The obfuscated email of the user
+ *        description: The email of the user
  *        schema:
  *          type: string
  *          format: string
