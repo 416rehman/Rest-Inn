@@ -10,11 +10,11 @@
 
 const property = require('../models/property.model');
 const {idCondition, existingPropertyValidation, propertyTypeCondition} = require('../helpers/property-validation');
-const {buildPropertyFilter} = require("../helpers/filters");
+const {propertyFilter} = require("../helpers/filters");
 
 module.exports.getAll = (req, res) => {
 
-    const filter = buildPropertyFilter(req.query);
+    const filter = propertyFilter(req.query);
     property.getAll(filter).then(properties => {
         if (properties.length === 0) {
             res.status(404).send({
