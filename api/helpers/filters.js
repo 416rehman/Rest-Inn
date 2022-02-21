@@ -14,7 +14,7 @@ const propertyTypes = require('../constants/property.constants').propertyTypes;
  * which can be used to filter the properties in the database.
  * @returns {object} filter object
  */
-module.exports.buildPropertyFilter = (query) => {
+module.exports.propertyFilter = (query) => {
     let filter = {};
 
     if (query.priceMin || query.priceMax) {
@@ -87,11 +87,15 @@ module.exports.buildPropertyFilter = (query) => {
         }
     }
 
+    if (query.listingType) {
+        filter.listingType = query.listingType;
+    }
+
     return filter;
 };
 
 /** Email and phone number filtering is not supported from this endpoint since they are sensitive data. **/
-module.exports.buildUserFilter = (query) => {
+module.exports.userFilter = (query) => {
     let filter = {};
 
     if (query.id) {
@@ -108,6 +112,10 @@ module.exports.buildUserFilter = (query) => {
 
     if (query.lastName) {
         filter.lastName = query.lastName;
+    }
+
+    if (query.email) {
+        filter.email = query.email;
     }
 
     return filter;
