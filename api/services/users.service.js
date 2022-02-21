@@ -9,14 +9,14 @@
  */
 const User = require('../models/user.model.js');
 const {newUserValidation, existingUserValidation, usernameCondition} = require('../helpers/user-validation');
-const {buildUserFilter} = require("../helpers/filters");
+const {userFilter} = require("../helpers/filters");
 
 
 /**
  * Get all users
  */
 const getAllUsers = async function (req, res) {
-    const filter = buildUserFilter(req.query);
+    const filter = userFilter(req.query);
     User.getAll(filter).then(users => {
         if (users.length > 0) {
             res.json({
