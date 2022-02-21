@@ -20,6 +20,7 @@ const propertiesService = require('../services/properties.service')
  *      summary: Retrieves all properties
  *      description: Retrieves all the properties in the database with an optional filter through query parameters
  *      parameters:
+ *          - $ref: '#/components/propertyQueryParameters/listingType'
  *          - $ref: '#/components/propertyQueryParameters/priceMin'
  *          - $ref: '#/components/propertyQueryParameters/priceMax'
  *          - $ref: '#/components/propertyQueryParameters/bedsMin'
@@ -33,6 +34,8 @@ const propertiesService = require('../services/properties.service')
  *          - $ref: '#/components/propertyQueryParameters/postalCode'
  *          - $ref: '#/components/propertyQueryParameters/amenities'
  *          - $ref: '#/components/propertyQueryParameters/bestSeller'
+ *          - $ref: '#/components/propertyQueryParameters/bedroomsMin'
+ *          - $ref: '#/components/propertyQueryParameters/bedroomsMax'
  *
  *      responses:
  *          '200':
