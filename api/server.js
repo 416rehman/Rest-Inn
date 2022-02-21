@@ -12,6 +12,8 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const cors = require("cors");
+
 const indexRouter = require('./routes/index.routes');
 const swaggerUi = require("swagger-ui-express");
 const usersRouter = require('./routes/users.routes');
@@ -19,6 +21,8 @@ const propertiesRouter = require('./routes/properties.routes');
 
 const app = express();
 
+
+app.use(cors());
 app.use(require("./middleware/morgan.middlware"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
