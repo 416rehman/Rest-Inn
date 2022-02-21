@@ -100,6 +100,9 @@ const PropertySchema = new mongoose.Schema({
     },
 }, {
     timestamps: true,
+    toJSON:{
+        getters: true,
+    }
 });
 
 const propertySchema = mongoose.model("property", PropertySchema);
