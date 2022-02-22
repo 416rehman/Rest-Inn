@@ -1,0 +1,31 @@
+.property-type-section {
+  text-align: center;
+  margin: -8rem 1rem 0 1rem !important;
+  z-index: 2;
+  position: relative;
+  background-color: inherit;
+  border-radius: 20px;
+  padding: 2rem 0 0 0 !important;
+
+  .swiper {
+    padding: 1rem;
+  }
+
+  h2 {
+    margin-top: 0;
+  }
+
+  .swiper-slide {
+    width: auto;
+  }
+}
+
+@media screen and (max-width: 600px){
+  .property-type-section {
+    margin: -8rem 0 0 0 !important;
+    h2 {
+      padding: 0 1rem;
+      margin: 0;
+    }
+  }
+}

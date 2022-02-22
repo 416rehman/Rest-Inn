@@ -1,28 +1,33 @@
 $navbar-height: 60px;
 
-nav {
+nav.navbar {
   display: flex;
   width: 100%;
   height: $navbar-height;
-  position: sticky;
+  position: fixed;
   z-index: 2000;
-}
+  justify-content: center;
 
-nav #logo {
-  margin-left: 20px;
-  margin-right: 20px;
-}
+  #logo {
+    margin-left: 20px;
+    margin-right: 20px;
 
-nav #logo img {
-  padding: 5px;
-  height: 100%;
-  object-fit: contain;
-}
+    img {
+      padding: 5px;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
 
-.MuiMenu-list {
-  a {
-    &:hover, &:focus, &:active, &:visited{
+  .MuiList-root {
+    a {
+      flex-grow: 1;
+      padding: 0.5rem;
       text-decoration: none;
+
+      &:hover, &:focus, &:active, &:visited {
+        text-decoration: none;
+      }
     }
   }
 }

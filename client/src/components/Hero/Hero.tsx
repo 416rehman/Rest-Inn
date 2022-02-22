@@ -32,10 +32,10 @@ export default ({children, className, style, ...rest}: IProps) => {
                 nextSlideMessage: 'Next slide',
             }}
             parallax={true}
-            autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-            }}
+            // autoplay={{
+            //     delay: 5000,
+            //     disableOnInteraction: false,
+            // }}
             loop={true}
             pagination={true}
             className={'hero-swiper ' + (className || '')}

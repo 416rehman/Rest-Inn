@@ -7,7 +7,9 @@ import {
 import Layout from "./layout/Layout";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
-import Home from "./routes/home/Home";
+import HomePage from "./pages/home/HomePage";
+import InvalidPage from "./pages/404/404Page";
+import ListingsPage from "./pages/listings/ListingsPage";
 
 function App() {
     return (
@@ -15,8 +17,15 @@ function App() {
             <div className="App">
                 <Routes>
                     <Route path={'/'} element={<Layout/>}>
-                        <Route index={true} element={<Home/>}/>
-                        <Route path={"listings"} element={<h1>This is the listing page</h1>}/>
+                        <Route index={true} element={<HomePage/>}/>
+                        <Route path={"listings"} element={<ListingsPage/>}/>
+
+                        <Route path={'auth'}>
+                            <Route index={true} element={<h1>This is the AUTH route</h1>}/>
+
+                        </Route>
+
+                        <Route path={'*'} element={<InvalidPage/>}/>
                     </Route>
                 </Routes>
             </div>

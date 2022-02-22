@@ -156,6 +156,7 @@ module.exports.getAllByLocation = (req, res) => {
 module.exports.getAllBestSellers = (req, res) => {
     const {page, limit} = req.query;
     const sort = sortFilter(req.query)
+    console.log(limit)
     property.getBestSellers(limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({

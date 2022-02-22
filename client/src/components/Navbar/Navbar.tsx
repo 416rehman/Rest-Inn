@@ -24,7 +24,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import {Logout, Settings} from "@mui/icons-material";
+import {AccountCircleOutlined, Login, Logout, SettingsOutlined} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 
 const MenuItemStyled = styled(MenuItem)({
@@ -52,13 +52,14 @@ function Navbar() {
     };
 
     return (
-        <nav style={{
+        <nav className={'navbar'}
+            style={{
             backgroundColor: theme.palette.background.paper,
             borderBottom: `1px solid ${theme.palette.divider}`,
         }}>
             <div id={"logo"}>
                 <Link to={"/"}>
-                    <img src={isSmallScreen ? '/logo/icon.svg' : 'logo/logo.svg'} alt={"logo"}/>
+                    <img src={isSmallScreen ? '/logo/icon.svg' : '/logo/logo.svg'} alt={"logo"}/>
                 </Link>
             </div>
 
@@ -123,23 +124,31 @@ function Navbar() {
                 </MenuItem>
                 <Divider/>
                 <MenuItemStyled>
-                    <Link to={'listings'} style={{
-                        flexGrow: 1,
-                        padding: '0.5rem',
-                        textDecoration: 'none'
-                    }}>
+                    <Link to={'listings'}>
                         <ListItemIconStyled>
-                            <Settings fontSize="small"/>
+                            <SettingsOutlined fontSize="small"/>
                             Settings
                         </ListItemIconStyled>
                     </Link>
                 </MenuItemStyled>
                 <MenuItemStyled>
-                    <Link to={'listings'} style={{
-                        flexGrow: 1,
-                        padding: '0.5rem',
-                        textDecoration: 'none'
-                    }}>
+                    <Link to={'listings'}>
+                        <ListItemIconStyled>
+                            <AccountCircleOutlined fontSize="small"/>
+                            Sign Up
+                        </ListItemIconStyled>
+                    </Link>
+                </MenuItemStyled>
+                <MenuItemStyled>
+                    <Link to={'listings'}>
+                        <ListItemIconStyled>
+                            <Login fontSize="small"/>
+                            Log In
+                        </ListItemIconStyled>
+                    </Link>
+                </MenuItemStyled>
+                <MenuItemStyled>
+                    <Link to={'listings'}>
                         <ListItemIconStyled>
                             <Logout fontSize="small"/>
                             Logout

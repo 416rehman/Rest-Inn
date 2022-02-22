@@ -1,0 +1,16 @@
+.best-sellers-section {
+  text-align: center;
+  width: 100%;
+  .swiper-slide {
+    width: initial;
+  }
+  .best-sellers-section__content {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
