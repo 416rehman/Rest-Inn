@@ -159,12 +159,12 @@ module.exports.getAllBestSellers = (req, res) => {
     property.getBestSellers(limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({
-                message: 'No properties found with bestSeller set to ' + req.params.bestSeller,
+                message: 'No Best Sellers found',
             });
         } else {
             const count = await property.count({bestSeller: true});
             res.json({
-                message: 'Retrieved all best sellers with bestSeller set to ' + req.params.bestSeller,
+                message: 'Retrieved all best sellers with bestSeller',
                 data: properties,
                 pagination: {
                     page: req.query.page || 1,

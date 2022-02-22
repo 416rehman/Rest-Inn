@@ -139,7 +139,7 @@ module.exports.getAllTypes = function () {
 module.exports.getAllByType = function (type, limit=10, page=1, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
-    return propertySchema.find({type}).limit(limit).skip(page * limit).sort(sort).exec();
+    return propertySchema.find({type}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 }
 
 //Get all location cities, provinces, and countries and their count
@@ -172,13 +172,13 @@ module.exports.getAllByLocation = function (location,limit=10, page=0, sort={}) 
                 "location.country": location
             }
         ]
-    }).limit(limit).skip(page * limit).sort(sort).exec();
+    }).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 }
 
 module.exports.getBestSellers = function (limit=10, page=0, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
-    return propertySchema.find({bestSeller: true}).limit(limit).skip(page * limit).sort(sort).exec();
+    return propertySchema.find({bestSeller: true}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 }
 
 module.exports.getById = function (id) {
