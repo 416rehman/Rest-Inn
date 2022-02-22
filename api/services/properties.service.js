@@ -25,6 +25,7 @@ module.exports.getAll = (req, res) => {
             });
         } else {
             const count = await property.count(filter);
+
             res.json({
                 message: 'Retrieved all properties',
                 data: properties,

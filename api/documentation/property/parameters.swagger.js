@@ -30,11 +30,10 @@
  *      price:
  *        name: price
  *        description: The price of the property
- *        schema:
- *          type: number
- *          format: double
- *          minimum: 0
- *          maximum: 100
+ *        type: integer
+ *        format: double
+ *        minimum: 0
+ *        maximum: 100
  *
  *      bedrooms:
  *        description: The number of beds in the property
@@ -47,18 +46,17 @@
  *      beds:
  *        description: The number of beds in the property
  *        schema:
- *          type: number
- *          format: integer
- *          minimum: 1
- *          maximum: 10
+ *        type: number
+ *        format: integer
+ *        minimum: 1
+ *        maximum: 10
  *
  *      baths:
  *        description: The number of baths in the property
- *        schema:
- *          type: number
- *          format: integer
- *          minimum: 1
- *          maximum: 10
+ *        type: number
+ *        format: integer
+ *        minimum: 1
+ *        maximum: 10
  *
  *      type:
  *        name: type
@@ -112,54 +110,48 @@
  *      amenities:
  *        name: amenities
  *        description: The amenities of the property
- *        schema:
- *          type: array
- *          items:
- *              allOf:
- *                - type: string
- *                - $ref: '#/components/enums/amenitiesEnum'
+ *        type: array
+ *        items:
+ *           type: string
+ *           $ref: '#/components/enums/amenitiesEnum'
  *
  *      listingType:
- *          name: listingType
- *          description: The listing type of the property
- *          schema:
- *              allOf:
- *                - type: string
- *                - $ref: '#/components/enums/listingTypesEnum'
+ *        name: listingType
+ *        description: The listing type of the property
+ *        schema:
+ *          allOf:
+ *            - type: string
+ *            - $ref: '#/components/enums/listingTypesEnum'
  *
  *
  *      bestSeller:
  *        name: bestSeller
  *        description: Whether the property is best seller or not
- *        schema:
- *          type: boolean
+ *        type: boolean
  *
  *      thumbnail:
  *        name: thumbnail
  *        description: The thumbnail of the property
- *        schema:
- *          type: string
- *          format: url
- *          example: "https://www.example.com/thumbnail.jpg"
+ *        type: string
+ *        format: url
+ *        example: "https://www.example.com/thumbnail.jpg"
  *
  *      photos:
  *        name: photos
  *        description: The photos of the property
- *        schema:
- *          type: array
- *          items:
- *              type: string
- *              format: url
- *              example: "https://www.example.com/photo.jpg"
+ *        type: array
+ *        items:
+ *            type: string
+ *            format: url
+ *            example: "https://www.example.com/photo.jpg"
  *
  *      rating:
  *        name: rating
  *        description: The rating of the property
- *        schema:
- *          type: number
- *          format: double
- *          minimum: 0
- *          maximum: 5
+ *        type: number
+ *        format: double
+ *        minimum: 0
+ *        maximum: 5
  *        readOnly: true
  *
  */

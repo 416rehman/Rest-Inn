@@ -9,7 +9,7 @@ const Joi = require("joi");
  *      Creation Date: 2022-01-24
  */
 
-const {propertyTypes, amenities} = require("../constants/property.constants");
+const {propertyTypes, amenities, listingTypes} = require("../constants/property.constants");
 
 // Mongo ObjectId validation
 const idCondition = Joi.string().regex(/^[a-f\d]{24}$/i)
@@ -24,7 +24,9 @@ const rulesCondition = Joi.array().items(ruleCondition).label('Rules')
 const amenityCondition = Joi.string().valid(...amenities).label('Amenity').lowercase()
 const amenitiesCondition = Joi.array().items(amenityCondition).label('Amenities')
 const bedCondition = Joi.number().min(0).max(10).label('Beds')
+const bedroomCondition = Joi.number().min(0).max(10).label('Bedrooms')
 const bathCondition = Joi.number().min(0).max(10).label('Baths')
+const listingTypeCondition = Joi.string().valid(...listingTypes).label('Listing Type').lowercase()
 
 //Location Conditions
 const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
@@ -53,13 +55,15 @@ const newPropertyValidation = Joi.object().keys({
     description: descriptionCondition,
     type: propertyTypeCondition.required(),
     beds: bedCondition.required(),
+    bedrooms: bedroomCondition.required(),
     baths: bathCondition.required(),
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition.required(),
     bestSeller: bestSellerCondition,
     thumbnail: photoCondition,
-    photos: photosCondition
+    photos: photosCondition,
+    listingType: listingTypeCondition
 })
 
 // use this to validate a property in PUT
@@ -69,13 +73,15 @@ const existingPropertyValidation = Joi.object().keys({
     description: descriptionCondition,
     type: propertyTypeCondition,
     beds: bedCondition,
+    bedrooms: bedroomCondition,
     baths: bathCondition,
     rules: rulesCondition,
     amenities: amenitiesCondition,
     location: locationCondition,
     bestSeller: bestSellerCondition,
     thumbnail: photoCondition,
-    photos: photosCondition
+    photos: photosCondition,
+    listingType: listingTypeCondition,
 })
 
 module.exports = {

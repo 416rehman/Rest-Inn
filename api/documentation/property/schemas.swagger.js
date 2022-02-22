@@ -30,6 +30,7 @@
  *           allOf:
  *             - $ref: '#/definitions/Property/properties/price'
  *             - required: true
+ *             - type: number
  *
  *         description:
  *           $ref: '#/components/propertyParameters/description'
@@ -46,15 +47,18 @@
  *            allOf:
  *              - $ref: '#/definitions/Property/properties/bedrooms'
  *              - required: true
+ *              - type: integer
  *         beds:
  *            allOf:
  *              - $ref: '#/definitions/Property/properties/beds'
  *              - required: true
+ *              - type: integer
  *
  *         baths:
  *            allOf:
  *              - $ref: '#/definitions/Property/properties/baths'
  *              - required: true
+ *              - type: integer
  *
  *         rules:
  *           $ref: '#/components/propertyParameters/rules'
@@ -89,6 +93,7 @@
  *           allOf:
  *               - $ref: '#/components/propertyParameters/bestSeller'
  *               - readOnly: true
+ *               - type: boolean
  *
  *         thumbnail:
  *           $ref: '#/components/propertyParameters/thumbnail'
@@ -97,7 +102,10 @@
  *           $ref: '#/components/propertyParameters/photos'
  *
  *         rating:
- *           $ref: '#/components/propertyParameters/rating'
+ *           allOf:
+ *             - $ref: '#/components/propertyParameters/rating'
+ *             - readOnly: true
+ *             - type: number
  *
  *   PropertyType:
  *     type: object
