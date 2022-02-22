@@ -52,6 +52,43 @@ const user = require('../services/users.service');
  */
 router.get('/', user.getAllUsers);
 
+/** Get user's favorites */
+/**
+ * @swagger
+ * /users/{username}/favorites:
+ *  get:
+ *    tags:
+ *      - Users
+ *      - Favorites
+ *    summary: Get user's favorites
+ *    description: Gets a user's favorites
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - $ref: '#/components/userPathParameters/username'
+ *    responses:
+ *      200:
+ *        description: A user's favorites are returned
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                    type: string
+ *                    example: Favorites returned
+ *                    description: A message to indicate the status of the request
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      $ref: '#/definitions/Favorite'
+ *      404:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServerError'
+ */
+router.get('/:username/favorites', user.getFavorites);
+
 /** Get user by username */
 /**
  * @swagger
@@ -128,6 +165,49 @@ router.get('/:username', user.getUserByUsername);
  */
 router.post('/', user.createUser);
 
+/** Add to user's favorites */
+/**
+ * @swagger
+ * /users/{username}/favorites/{listingId}:
+ *  post:
+ *    tags:
+ *      - Favorites
+ *    summary: Add to user's favorites
+ *    description: Adds a favorite to a user's favorites
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - $ref: '#/components/userPathParameters/username'
+ *      - allOf:
+ *        - $ref: '#/components/propertyPathParameters/id'
+ *        - name: listingId
+ *    responses:
+ *      200:
+ *        description: A favorite is added to a user's favorites
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                    type: string
+ *                    example: Favorite added to favorites
+ *                    description: A message to indicate the status of the request
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        example: 5e9f8f8f-f8f8-f8f8-f8f8-f8f8f8f8f8f8
+ *                        description: The id of the property added to favorites
+ *                        format: uuid
+ *      404:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServerError'
+ */
+router.post('/:username/favorites/:listingId', user.addFavorite);
+
 /** Update user by username */
 /**
  * @swagger
@@ -165,5 +245,82 @@ router.post('/', user.createUser);
  *        $ref: '#/components/responses/BadRequest'
  */
 router.put('/:username', user.updateUser);
+
+/** Remove from user's favorites */
+/**
+ * @swagger
+ * /users/{username}/favorites/{listingId}:
+ *  delete:
+ *    tags:
+ *      - Favorites
+ *    summary: Remove a favorite from a user's favorites
+ *    description: Remove a favorite from a user's favorites
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - $ref: '#/components/userPathParameters/username'
+ *      - allOf:
+ *        - $ref: '#/components/propertyPathParameters/id'
+ *        - name: listingId
+ *    responses:
+ *      200:
+ *        description: A favorite is removed from a user's favorites
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                    type: string
+ *                    example: Favorite removed from favorites
+ *                    description: A message to indicate the status of the request
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        description: The id of the listing of the deleted favorite
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServerError'
+ */
+router.delete('/:username/favorites/:listingId', user.removeFavorite);
+
+/** Delete user by username */
+/**
+ * @swagger
+ * /users/{username}:
+ *  delete:
+ *    tags:
+ *      - Users
+ *    summary: Delete user by username
+ *    description: Deletes a user by username
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - $ref: '#/components/userPathParameters/username'
+ *    responses:
+ *      200:
+ *        description: A user is deleted
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                    type: string
+ *                    example: User deleted
+ *                    description: A message to indicate the status of the request
+ *                  data:
+ *                    $ref: '#/definitions/CompleteUser'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServerError'
+ */
+router.delete('/:username', user.deleteUser);
 
 module.exports = router;

@@ -17,95 +17,87 @@
  *      properties:
  *
  *         _id:
- *           allOf:
- *             - $ref: '#/definitions/Property/properties/_id'
- *             - readOnly: true
+ *           $ref: '#/components/propertyParameters/id/schema'
  *
  *         title:
  *           allOf:
- *             - $ref: '#/definitions/Property/properties/title'
+ *             - $ref: '#/components/propertyParameters/title/schema'
  *             - required: true
  *
  *         price:
  *           allOf:
- *             - $ref: '#/definitions/Property/properties/price'
+ *             - $ref: '#/components/propertyParameters/price/schema'
  *             - required: true
- *             - type: number
  *
  *         description:
- *           $ref: '#/components/propertyParameters/description'
+ *           $ref: '#/components/propertyParameters/description/schema'
  *
  *         type:
  *            allOf:
- *              - $ref: '#/definitions/Property/properties/type'
+ *              - $ref: '#/components/propertyParameters/type/schema'
  *              - required: true
  *         listingType:
  *            allOf:
- *              - $ref: '#/definitions/Property/properties/listingType'
+ *              - $ref: '#/components/propertyParameters/listingType/schema'
  *              - required: true
  *         bedrooms:
  *            allOf:
- *              - $ref: '#/definitions/Property/properties/bedrooms'
+ *              - $ref: '#/components/propertyParameters/bedrooms/schema'
  *              - required: true
- *              - type: integer
  *         beds:
  *            allOf:
- *              - $ref: '#/definitions/Property/properties/beds'
+ *              - $ref: '#/components/propertyParameters/beds/schema'
  *              - required: true
- *              - type: integer
  *
  *         baths:
  *            allOf:
- *              - $ref: '#/definitions/Property/properties/baths'
+ *              - $ref: '#/components/propertyParameters/baths/schema'
  *              - required: true
- *              - type: integer
  *
  *         rules:
- *           $ref: '#/components/propertyParameters/rules'
+ *           $ref: '#/components/propertyParameters/rules/schema'
  *
  *         amenities:
- *           $ref: '#/components/propertyParameters/amenities'
+ *           $ref: '#/components/propertyParameters/amenities/schema'
  *
  *         location:
  *           type: object
  *           description: The location of the property
  *           properties:
  *               unit:
- *                   $ref: '#/components/propertyParameters/unit'
+ *                   $ref: '#/components/propertyParameters/unit/schema'
  *               street:
- *                   $ref: '#/components/propertyParameters/street'
+ *                   $ref: '#/components/propertyParameters/street/schema'
  *               city:
- *                   $ref: '#/components/propertyParameters/city'
+ *                   $ref: '#/components/propertyParameters/city/schema'
  *               province:
- *                   $ref: '#/components/propertyParameters/province'
+ *                   $ref: '#/components/propertyParameters/province/schema'
  *               country:
- *                   $ref: '#/components/propertyParameters/country'
+ *                   $ref: '#/components/propertyParameters/country/schema'
  *               postalCode:
- *                   $ref: '#/components/propertyParameters/postalCode'
+ *                   $ref: '#/components/propertyParameters/postalCode/schema'
  *               _id:
  *                   allOf:
- *                       - $ref: '#/components/propertyParameters/id'
+ *                       - $ref: '#/components/propertyParameters/id/schema'
  *                       - description: The id of the location
  *                       - readOnly: true
  *           required: true
  *
  *         bestSeller:
  *           allOf:
- *               - $ref: '#/components/propertyParameters/bestSeller'
+ *               - $ref: '#/components/propertyParameters/bestSeller/schema'
  *               - readOnly: true
- *               - type: boolean
  *
  *         thumbnail:
- *           $ref: '#/components/propertyParameters/thumbnail'
+ *           $ref: '#/components/propertyParameters/thumbnail/schema'
  *
  *         photos:
- *           $ref: '#/components/propertyParameters/photos'
+ *           $ref: '#/components/propertyParameters/photos/schema'
  *
  *         rating:
  *           allOf:
- *             - $ref: '#/components/propertyParameters/rating'
+ *             - $ref: '#/components/propertyParameters/rating/schema'
  *             - readOnly: true
- *             - type: number
  *
  *   PropertyType:
  *     type: object
@@ -125,17 +117,11 @@
  *          type: object
  *          properties:
  *               city:
- *                   type: string
- *                   description: The city of the location
- *                   example: Toronto
+ *                   $ref: '#/components/propertyParameters/city/schema'
  *               province:
- *                   type: string
- *                   description: The province of the location
- *                   example: Ontario
+ *                   $ref: '#/components/propertyParameters/province/schema'
  *               country:
- *                   type: string
- *                   description: The country of the location
- *                   example: Canada
+ *                   $ref: '#/components/propertyParameters/country/schema'
  *        count:
  *           type: number
  *           description: The number of properties in this location

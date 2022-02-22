@@ -5,63 +5,63 @@
  *   userParameters:
  *      id:
  *        name: id
- *        in: path
- *        readOnly: true
- *        description: The id of the object
  *        schema:
+ *          readOnly: true
+ *          description: The id of the user object
  *          type: string
  *          format: string
  *
  *      username:
  *        name: username
- *        description: The username of the object
  *        schema:
+ *          description: The username of the object
  *          type: string
+ *          format: username
  *          minLength: 3
  *          maxLength: 30
  *
  *      firstName:
  *        name: firstName
- *        description: The first name of the user
  *        schema:
+ *          description: The first name of the user
  *          type: string
- *          format: string
+ *          format: name
  *          minLength: 3
  *          maxLength: 255
  *          pattern: ^[a-z A-Z\-.]+$
  *
  *      lastName:
  *        name: lastName
- *        description: The last name of the user
  *        schema:
+ *          description: The last name of the user
  *          type: string
- *          format: string
+ *          format: name
  *          minLength: 3
  *          maxLength: 255
  *          pattern: ^[a-z A-Z\-.]+$
  *
  *      email:
  *        name: email
- *        description: The email of the user
  *        schema:
+ *          description: The email of the user
  *          type: string
- *          format: string
+ *          format: email
  *          minLength: 3
  *          maxLength: 255
  *
  *      password:
  *        name: password
- *        description: The password of the user
  *        schema:
+ *          description: The password of the user
  *          type: string
- *          format: string
+ *          format: password
  *          minLength: 8
  *          maxLength: 255
  *
  *      refreshToken:
  *        name: refreshToken
- *        description: The refresh token of the user
  *        schema:
+ *          description: The refresh token of the user
  *          type: string
  *          format: string
  *          minLength: 8
@@ -70,61 +70,85 @@
  *
  *      countryCode:
  *        name: countryCode
- *        description: The country code of the user's phone number
  *        schema:
+ *          description: The country code of the user
  *          type: string
  *          format: string
  *          $ref: "#/components/enums/countryCodesEnum"
  *
  *      phone:
  *        name: phone
- *        description: The phone of the user
  *        schema:
+ *          description: The phone of the user
  *          type: string
- *          format: string
+ *          format: phone
  *          minLength: 10
  *          maxLength: 10
  *
  *      extension:
  *        name: extension
- *        description: The extension of the user's phone number
  *        schema:
+ *          description: The extension of the user
  *          type: string
- *          format: string
+ *          format: phone
  *          minLength: 1
  *          maxLength: 5
  *
  *      role:
  *        name: role
- *        description: The role of the user
  *        schema:
+ *          description: The role of the user
  *          type: string
  *          format: string
  *          $ref: "#/components/enums/rolesEnum"
  *
  *      createdAt:
  *        name: createdAt
- *        description: The date of creation of the user
  *        schema:
+ *          description: The date of creation of the user
  *          type: string
  *          format: date-time
  *          readOnly: true
  *
  *      updatedAt:
  *        name: createdAt
- *        description: The date of update of the user
  *        schema:
+ *          description: The date of update of the user
  *          type: string
  *          format: date-time
  *          readOnly: true
  *
  *      activated:
  *        name: activated
- *        description: The activation status of the user
  *        schema:
+ *          description: The activation status of the user
  *          type: boolean
  *          format: boolean
  *          readOnly: true
+ *
+ *      favorites:
+ *        name: favorites
+ *        schema:
+ *          description: The favorites of the user
+ *          type: array
+ *          items:
+ *            type: object
+ *            properties:
+ *              id:
+ *                type: string
+ *                format: string
+ *                readOnly: true
+ *                description: The id of the listing
+ *              date:
+ *                type: string
+ *                format: date-time
+ *                readOnly: true
+ *                description: The date when the listing was added to favorites
+ *              _id:
+ *                type: string
+ *                format: string
+ *                readOnly: true
+ *                description: The unique id of the favorite object
  *
  */
 

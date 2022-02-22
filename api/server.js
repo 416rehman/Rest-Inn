@@ -37,7 +37,7 @@ app.use('/properties', propertiesRouter);
 //404 error handler
 app.use((req, res) => {
     res.status(404).json({
-        message: 'Not Found',
+        message: '404 - Not Found',
     });
 });
 /** Connect to MongoDB and start server */

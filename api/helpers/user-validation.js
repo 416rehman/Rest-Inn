@@ -9,6 +9,9 @@
  */
 const Joi = require('joi');
 
+// Mongo ObjectId validation
+const idCondition = Joi.string().regex(/^[a-f\d]{24}$/i)
+
 const usernameCondition = Joi.string().min(3).max(30).pattern(/^[a-zA-Z_\-.]+$/).label('Username')
 const passwordCondition = Joi.string().min(8).max(255).label('Password')
 const emailCondition = Joi.string().email().label('Email')
@@ -16,7 +19,6 @@ const firstNameCondition = Joi.string().min(3).pattern(/^[a-z A-Z\-.]+$/).max(25
 const lastNameCondition = Joi.string().min(3).pattern(/^[a-z A-Z\-.]+$/).max(255).label('Last Name')
 const phoneCondition = Joi.string().length(10).pattern(/^[0-9]+$/).label('Phone Number')
 const phonesCondition = Joi.array().items(phoneCondition).label('Phone Numbers')
-
 
 const newUserValidation = Joi.object({
     email: emailCondition.required(),
@@ -36,6 +38,8 @@ const existingUserValidation = Joi.object({
     phone: phonesCondition
 })
 
+const favoriteValidation = idCondition.required();
+
 module.exports = {
     usernameCondition,
     passwordCondition,
@@ -45,5 +49,6 @@ module.exports = {
     phoneCondition,
     phonesCondition,
     newUserValidation,
-    existingUserValidation
+    existingUserValidation,
+    favoriteValidation
 }

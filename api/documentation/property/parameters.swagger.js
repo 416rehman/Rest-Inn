@@ -5,154 +5,172 @@
  *   propertyParameters:
  *      id:
  *        name: id
- *        description: The id of the object
  *        schema:
+ *          description: The id of the property object
  *          type: string
- *          format: string
- *        readOnly: true
+ *          format: uuid
+ *          readOnly: true
  *
  *      title:
  *        name: title
- *        description: The title of the object
  *        schema:
+ *          description: The title of the property object
  *          type: string
  *          format: string
  *          example: "My title for this property"
  *
  *      description:
  *        name: description
- *        description: The description of the object
  *        schema:
+ *          description: The description of the property object
  *          type: string
  *          format: string
  *          example: "My description for this property"
  *
  *      price:
  *        name: price
- *        description: The price of the property
- *        type: integer
- *        format: double
- *        minimum: 0
- *        maximum: 100
+ *        schema:
+ *          description: The price of the property
+ *          type: integer
+ *          format: double
+ *          minimum: 0
+ *          maximum: 100
  *
  *      bedrooms:
- *        description: The number of beds in the property
+ *        name: bedrooms
  *        schema:
+ *          description: The number of bedrooms in the property
  *          type: number
  *          format: integer
  *          minimum: 0
  *          maximum: 10
  *
  *      beds:
- *        description: The number of beds in the property
+ *        name: beds
  *        schema:
- *        type: number
- *        format: integer
- *        minimum: 1
- *        maximum: 10
+ *          description: The number of beds in the property
+ *          type: number
+ *          format: integer
+ *          minimum: 1
+ *          maximum: 10
  *
  *      baths:
- *        description: The number of baths in the property
- *        type: number
- *        format: integer
- *        minimum: 1
- *        maximum: 10
+ *        name: baths
+ *        schema:
+ *          description: The number of baths in the property
+ *          type: number
+ *          format: integer
+ *          minimum: 1
+ *          maximum: 10
  *
  *      type:
  *        name: type
- *        description: The type of the property
  *        schema:
+ *          description: The type of the property
  *          allOf:
  *            - type: string
  *            - $ref: '#/components/enums/propertyTypesEnum'
  *
  *      unit:
+ *        name: unit
+ *        schema:
  *          type: string
  *          description: The unit of the property
  *          example: A
  *          
  *      street:
+ *        name: street
+ *        schema:
  *          type: string
  *          description: The street of the property
  *          example: 123 Main St
  *          
  *      city:
  *        name: city
- *        description: The city of the property (case insensitive) - part of the location sub-object
  *        schema:
+ *          description: The city of the property (case insensitive) - part of the location sub-object
  *          type: string
  *
  *      province:
  *        name: province
- *        description: The province of the property (case insensitive) - part of the location sub-object
  *        schema:
+ *          description: The province of the property (case insensitive) - part of the location sub-object
  *          type: string
  *
  *      country:
  *        name: country
- *        description: The country of the property (case insensitive) - part of the location sub-object
  *        schema:
+ *          description: The country of the property (case insensitive) - part of the location sub-object
  *          type: string
  *
  *      postalCode:
  *        name: postalCode
- *        description: The postal code or ZIP code of the property (case insensitive) - part of the location sub-object
  *        schema:
+ *          description: The postal code of the property (case insensitive) - part of the location sub-object
  *          type: string
  *          
  *      rules:
- *         type: array
- *         description: The rules of the property
- *         items:
- *             type: string
- *             description: The rule of the property
+ *        name: rules
+ *        schema:
+ *          description: The rules of the property
+ *          type: array
+ *          items:
+ *              type: string
+ *              description: The rule of the property
  *             
  *      amenities:
  *        name: amenities
- *        description: The amenities of the property
- *        type: array
- *        items:
- *           type: string
- *           $ref: '#/components/enums/amenitiesEnum'
+ *        schema:
+ *          description: The amenities of the property
+ *          type: array
+ *          items:
+ *             type: string
+ *             $ref: '#/components/enums/amenitiesEnum'
  *
  *      listingType:
  *        name: listingType
- *        description: The listing type of the property
  *        schema:
- *          allOf:
- *            - type: string
- *            - $ref: '#/components/enums/listingTypesEnum'
+ *          description: The listing type of the property
+ *          schema:
+ *            allOf:
+ *              - type: string
+ *              - $ref: '#/components/enums/listingTypesEnum'
  *
  *
  *      bestSeller:
  *        name: bestSeller
- *        description: Whether the property is best seller or not
- *        type: boolean
+ *        schema:
+ *          description: Whether the property is best seller or not
+ *          type: boolean
+ *          readOnly: true
  *
  *      thumbnail:
  *        name: thumbnail
- *        description: The thumbnail of the property
- *        type: string
- *        format: url
- *        example: "https://www.example.com/thumbnail.jpg"
+ *        schema:
+ *          description: The thumbnail of the property
+ *          type: string
+ *          format: url
+ *          example: "https://www.example.com/thumbnail.jpg"
  *
  *      photos:
  *        name: photos
- *        description: The photos of the property
- *        type: array
- *        items:
+ *        schema:
+ *          description: The photos of the property
+ *          type: array
+ *          items:
  *            type: string
  *            format: url
  *            example: "https://www.example.com/photo.jpg"
  *
  *      rating:
  *        name: rating
- *        description: The rating of the property
- *        type: number
- *        format: double
- *        minimum: 0
- *        maximum: 5
- *        readOnly: true
+ *        schema:
+ *          description: The rating of the property
+ *          type: number
+ *          format: double
+ *          minimum: 0
+ *          maximum: 5
+ *          readOnly: true
  *
  */
 

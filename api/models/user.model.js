@@ -61,7 +61,11 @@ const UserSchema = new mongoose.Schema({
     activated: {
         type: Boolean,
         default: false
-    }
+    },
+    favorites: {
+        type: [{id: String, date: Date}],
+        default: []
+    },
 }, {
     timestamps: true,
     toJSON: {
@@ -124,8 +128,48 @@ module.exports.updateUser = (username, user) => {
     }).exec();
 };
 
+module.exports.addFavorite = (username, id) => {
+    return userSchema.findOneAndUpdate({username: username}, {
+        $push: {
+            favorites: {
+                id: id,
+                date: new Date()
+            }
+        }
+    }, {
+        new: true, // return the new user instead of the old one
+        projection: {email: 0, ...ommited_fields}
+    }).exec();
+};
+
+module.exports.removeFavorite = (username, id) => {
+    return userSchema.findOneAndUpdate({username: username}, {
+        $pull: {
+            favorites: {
+                id: id
+            }
+        }
+    }, {
+        new: true, // return the new user instead of the old one
+        projection: {email: 0, ...ommited_fields}
+    }).exec();
+};
+
+module.exports.getFavorites = (username) => {
+    return userSchema.findOne({username: username}, {
+        favorites: 1
+    }).exec();
+};
+
 module.exports.addUser = async (data) => {
     const user = new userSchema(data);
     await user.save();
     return user;
+};
+
+module.exports.deleteUser = (username) => {
+    return userSchema.findOneAndDelete({username: username}, {
+        projection: ommited_fields,
+        new: true
+    }).exec();
 };

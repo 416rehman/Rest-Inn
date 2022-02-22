@@ -7,10 +7,11 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-01-24
  */
-const User = require('../models/user.model.js');
-const {newUserValidation, existingUserValidation, usernameCondition} = require('../helpers/user-validation');
-const {userFilter} = require("../helpers/filters");
 
+const User = require('../models/user.model.js');
+const Property = require('../models/property.model.js');
+const {newUserValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
+const {userFilter} = require("../helpers/filters");
 
 /**
  * Get all users
@@ -91,6 +92,9 @@ const createUser = async function (req, res) {
     });
 }
 
+/**
+ * Updates a user object with the given username.
+ */
 const updateUser = (req, res) => {
     usernameCondition.validateAsync(req.params.username).then(username => {
         existingUserValidation.validateAsync(req.body).then(sanitized => {
@@ -125,9 +129,156 @@ const updateUser = (req, res) => {
     });
 }
 
+/**
+ * Gets users favorite properties.
+ */
+function getFavorites(req, res) {
+    usernameCondition.validateAsync(req.params.username).then(username => {
+        User.getFavorites(username).then(({favorites}) => {
+            if (favorites?.length > 0) {
+                res.json({
+                    message: 'Favorites retrieved successfully',
+                    data: favorites
+                });
+            } else {
+                res.status(404).json({
+                    message: 'No favorites found',
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                message: 'Error retrieving favorites',
+                error: err.message
+            });
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'Validation Error while getting favorites!',
+            error: err.message
+        });
+    });
+}
+
+/**
+ * Adds a property to the user's favorites.
+ */
+function addFavorite(req, res) {
+    usernameCondition.validateAsync(req.params.username).then(username => {
+        favoriteValidation.validateAsync(req.params.listingId).then(id => {
+            Property.getById(id).then( () => {
+                User.getFavorites(username).then(({favorites}) => {
+                    if (favorites.find(fav => fav.id === id)) {
+                        res.status(400).json({
+                            message: 'Listing already in favorites',
+                        });
+                    } else {
+                        User.addFavorite(username, id).then(() => {
+                            res.status(201).json({
+                                message: 'Listing added to favorites',
+                                data: {
+                                    id: id
+                                }
+                            });
+                        }).catch(err => {
+                            res.status(500).json({
+                                message: 'Error adding listing to favorites',
+                                error: err.message
+                            });
+                        });
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        message: 'Error retrieving favorites',
+                        error: err.message
+                    });
+                });
+            }).catch(err => {
+                res.status(500).json({
+                    message: 'Failed to retrieve listing',
+                    error: err.message
+                });
+            });
+        }).catch(err => {
+            res.status(400).json({
+                message: 'Validation Error while adding favorite!',
+                error: err
+            });
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'Validation Error while adding favorite!',
+            error: err.message
+        });
+    });
+}
+
+/**
+ * Removes a property from the user's favorites.
+ */
+function removeFavorite(req, res) {
+    usernameCondition.validateAsync(req.params.username).then(username => {
+        favoriteValidation.validateAsync(req.params.listingId).then(id => {
+            User.removeFavorite(username, id).then(() => {
+                res.status(200).json({
+                    message: 'Listing removed from favorites',
+                    data: {
+                        id: id
+                    }
+                });
+            }).catch(err => {
+                res.status(500).json({
+                    message: 'Error removing listing from favorites',
+                    error: err.message
+                });
+            });
+        }).catch(err => {
+            res.status(400).json({
+                message: 'Validation Error while removing favorite!',
+                error: err
+            });
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'Validation Error while removing favorite!',
+            error: err.message
+        });
+    });
+}
+
+function deleteUser(req, res) {
+    usernameCondition.validateAsync(req.params.username).then(username => {
+        User.deleteUser(username).then((deleted_user) => {
+            if (deleted_user) {
+                res.status(200).json({
+                    message: 'User deleted',
+                    data: deleted_user
+                });
+            } else {
+                res.status(404).json({
+                    message: 'User not found',
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                message: 'Error deleting user',
+                error: err.message
+            });
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'Validation Error while deleting user!',
+            error: err.message
+        });
+    });
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
     createUser,
-    updateUser
+    updateUser,
+    getFavorites,
+    addFavorite,
+    removeFavorite,
+    deleteUser
 };
