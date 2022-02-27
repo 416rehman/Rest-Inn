@@ -73,18 +73,30 @@ $shadow: 2px 2px 0.2rem #0000000a;
     justify-content: space-between;
     box-shadow: $shadow;
 
-    .listing-card-info-top p {
-      font-weight: 500;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      margin: 0;
+    .listing-card-info-top {
+      .listing-card-info-rating {
+        display: flex;
+        justify-content: space-between;
+        color: #0000009c;
+      }
+
+      p {
+        font-weight: 500;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 0;
+      }
     }
 
     .listing-card-info-mid {
       font-size: 0.8rem;
       font-weight: 500;
       color: #0000009c;
+      line-height: 20px;
+      height: 40px;
+      white-space: normal;
+      overflow: hidden;
 
       div {
         white-space: nowrap;
@@ -102,12 +114,24 @@ $shadow: 2px 2px 0.2rem #0000000a;
       justify-content: space-between;
       align-items: center;
 
-      div:first-child {
-        display: flex;
-        flex-direction: column;
+      .listing-card-info-data {
+        //display: flex;
+        //flex-direction: row;
+        //align-items: center;
+        //gap: 0.25rem;
         color: #0000009c;
+
+        .listing-card-info-icons {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          span {
+            display: flex;
+            align-items: flex-end;
+          }
+        }
       }
-      div:last-child {
+      .listing-card-info-price {
         font-size: 1.5rem;
         font-weight: 700;
         color: unset;
@@ -125,13 +149,12 @@ $shadow: 2px 2px 0.2rem #0000000a;
     flex-direction: column;
 
     .listing-card-images {
-      height: 80%;
+      height: 72.5%;
       width: 100%;
-      padding: $listing-card-padding;
+      padding: 0;
       border-radius: 1rem 1rem 0 0;
     }
     .listing-card-info {
-      flex-direction: row;
       padding: $listing-card-padding;
       border-radius: 0 0 1rem 1rem;
       .listing-card-info-top {
@@ -143,6 +166,7 @@ $shadow: 2px 2px 0.2rem #0000000a;
       .listing-card-info-mid {
         display: none;
         visibility: hidden;
+        white-space: pre-wrap;
       }
       .listing-card-info-bottom {
         gap: 1em;

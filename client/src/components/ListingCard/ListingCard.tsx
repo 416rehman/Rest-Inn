@@ -5,6 +5,7 @@ import {A11y, Pagination} from "swiper";
 import {CardActionArea, Rating, Tooltip} from "@mui/material";
 import {titleCase} from '../../helpers/utils';
 import {Link} from "react-router-dom";
+import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
 
 interface Listing {
     title: string;
@@ -55,22 +56,37 @@ function ListingCard({listing, className, ...rest}: IProps) {
                             <p style={{fontWeight: 500}}>{listing.title}</p>
                             <div className="listing-card-info-rating">
                                 <Tooltip title={'Rating: ' + listing.rating}>
-                            <span>
-                                <Rating name="read-only" value={listing.rating} precision={0.5} readOnly size={'small'}/>
-                            </span>
+                                    <span>
+                                        <Rating name="read-only" value={listing.rating} precision={0.5} readOnly size={'small'}/>
+                                    </span>
                                 </Tooltip>
+                                <b>{`${titleCase(listing.listingType)}`}</b>
                             </div>
                         </div>
                         <div className="listing-card-info-mid">
-                            {`${listing.beds * 2} guests · ${listing.bedrooms} bedrooms · ${listing.baths} baths`}
-                            <div>{`${listing.amenities.join(', ')}`}</div>
+                            {`${listing.beds * 2} guests · ${listing.bedrooms} bedrooms · ${listing.amenities.join(' · ')}`}
                         </div>
                         <div className="listing-card-info-bottom">
-                            <div>
-                                {`One night in `}
-                                <b>{`${titleCase(listing.listingType)}`}</b>
+                            <div className={"listing-card-info-data"}>
+                                <div className={'listing-card-info-icons'}>
+                                    {listing.beds ?
+                                        <Tooltip title={'Number of Beds: ' + listing.beds}>
+                                    <span>
+                                        <BedroomParentOutlined/>
+                                        {listing.beds}
+                                    </span>
+                                        </Tooltip> : null}
+
+                                    {listing.baths ?
+                                        <Tooltip title={'Number of Bathrooms: ' + listing.baths}>
+                                    <span>
+                                        <BathroomOutlined/>
+                                        {listing.baths}
+                                    </span>
+                                        </Tooltip> : null}
+                                </div>
                             </div>
-                            <div>${`${listing.price}`}</div>
+                            <div className={"listing-card-info-price"}>${`${listing.price}`}</div>
                         </div>
                     </div>
                 </CardActionArea>

@@ -44,15 +44,21 @@ function CardSwiper({children, className, title, price, beds, baths, url, ...res
                     <div>
                         <div className={'info-details'}>
 
-                            {beds ? <Tooltip title={'Number of Beds'}><span>
-                            <BedroomParentOutlined/>
-                                {beds}
-                        </span></Tooltip> : null}
+                            {beds ?
+                                <Tooltip title={'Number of Beds'}>
+                                    <span>
+                                        <BedroomParentOutlined/>
+                                        {beds}
+                                    </span>
+                                </Tooltip> : null}
 
-                            {baths ? <Tooltip title={'Number of Bathrooms'}><span>
-                            <BathroomOutlined/>
-                                {baths}
-                        </span></Tooltip> : null}
+                            {baths ?
+                                <Tooltip title={'Number of Bathrooms'}>
+                                    <span>
+                                        <BathroomOutlined/>
+                                        {baths}
+                                    </span>
+                                </Tooltip> : null}
 
                         </div>
                         {price ? <h1 className={'price'}>{price}</h1> : null}
