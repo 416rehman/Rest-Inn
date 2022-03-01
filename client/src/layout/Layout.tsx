@@ -11,7 +11,6 @@ function Layout() {
                 <Outlet/>
             </div>
             <Footer/>
-
         </React.Fragment>
     );
 }
