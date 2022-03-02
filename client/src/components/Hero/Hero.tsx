@@ -20,10 +20,12 @@ import './Hero.scss'
 interface IProps {
     children: React.ReactNode | React.ReactNode[];
     className?: string;
+    height?: string;
+    loop?: boolean;
     [x:string]: any;
 }
 
-export default ({children, className, style, ...rest}: IProps) => {
+export default ({children, className, style, height, loop, ...rest}: IProps) => {
     return (
         <Swiper
             modules={[Pagination, A11y, Autoplay, Parallax]}
@@ -32,11 +34,7 @@ export default ({children, className, style, ...rest}: IProps) => {
                 nextSlideMessage: 'Next slide',
             }}
             parallax={true}
-            // autoplay={{
-            //     delay: 5000,
-            //     disableOnInteraction: false,
-            // }}
-            loop={true}
+            loop={loop}
             pagination={true}
             className={'hero-swiper ' + (className || '')}
             {...rest}
