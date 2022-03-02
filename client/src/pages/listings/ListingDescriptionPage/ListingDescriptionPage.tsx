@@ -11,6 +11,7 @@ import {
     ShareOutlined
 } from "@mui/icons-material";
 import VerticalButton from "../../../components/VerticalButton/VerticalButton";
+import ProfileCard from "../../../components/ProfileCard/ProfileCard";
 
 function ListingDescriptionPage() {
     const {listingId} = useParams();
@@ -55,17 +56,41 @@ function ListingDescriptionPage() {
                             return <img key={index} src={photo} alt={`${listing.title} Photo ${index + 1}`}/>
                         })}
                     </Hero>
-                    <div className={'border-bottom'}>
-                        <Typography variant={'h6'}>
-                            {titleCase(listing.listingType)} in a {titleCase(listing.type)} in {titleCase(listing.location.city)}
-                        </Typography>
-                        <Typography variant={'body2'} color={'dimgray'}>6 guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.baths} bath</Typography>
+                    <div className={'listing-subheader border-bottom'}>
+                        <div>
+                            <Typography variant={'h6'}>
+                                {titleCase(listing.listingType)} in a {titleCase(listing.type)} in {titleCase(listing.location.city)}
+                            </Typography>
+                            <Typography variant={'body2'} color={'dimgray'}>6 guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.baths} bath</Typography>
+                        </div>
+                        <div>
+                            <ProfileCard user={{
+                                name: 'John Doe',
+                                avatar: 'https://picsum.photos/200/300',
+                                username: 'johnd0e'
+                            }}/>
+                        </div>
                     </div>
-                    <div className={'listing-description border-bottom'}>
+                    <div id={'mobile-listing-nav'}>
+                        <a href={`#amenities`}>
+                            <Button variant={'outlined'} color={'primary'}>
+                                TO-DO: Add react-scroll
+                            </Button>
+                        </a>
+                    </div>
+                    <div id={'description'} className={'listing-description border-bottom'}>
                         <Typography variant={'h6'}>Description</Typography>
                         <Typography variant={'body1'}>{listing.description}</Typography>
                     </div>
-                    <div className={'listing-reviews border-bottom'}>
+                    <div id={'amenities'} className={'listing-amenities border-bottom'}>
+                        <Typography variant={'h6'}>Amenities</Typography>
+                        <div className={'amenities-list'}>
+                            {listing.amenities.map((amenity:string, index:number) => {
+                                return <Typography key={index} variant={'body1'}>{amenity}</Typography>
+                            })}
+                        </div>
+                    </div>
+                    <div id={'reviews'} className={'listing-reviews border-bottom'}>
                         <Typography variant={'h6'}>Reviews</Typography>
                         <Typography variant={'body1'}>15 Reviews</Typography>
                     </div>

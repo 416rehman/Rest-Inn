@@ -50,6 +50,12 @@
     }
   }
 
+  .listing-subheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .listing-description {
   }
 
