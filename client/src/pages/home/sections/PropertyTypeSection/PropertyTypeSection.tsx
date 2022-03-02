@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import PortraitCard from "../../../../components/PortraitCard/PortraitCard";
-import {titleCase} from '../../../../helpers/utils';
 import {Swiper, SwiperSlide} from "swiper/react";
 import './PropertyTypeSection.scss'
 import {Box, LinearProgress} from "@mui/material";

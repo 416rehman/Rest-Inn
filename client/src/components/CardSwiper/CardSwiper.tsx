@@ -5,7 +5,6 @@ import {A11y, Pagination} from "swiper";
 import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
 import {Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
-import {titleCase} from "../../helpers/utils";
 
 interface IProps {
     children?: React.ReactNode | React.ReactNode[];

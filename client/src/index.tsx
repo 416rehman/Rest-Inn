@@ -5,10 +5,7 @@ import './stylesheets/stylesheet.scss';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {CssBaseline} from "@mui/material";
-const prodAPI = 'https://rest-inn.herokuapp.com';
-const devAPI = 'http://localhost:8080';
-global.api = prodAPI;
-global.apiURL = (path: string, query?:string) => `${global.api}${path||''}?${query||''}`
+import "./helpers/utils";
 
 ReactDOM.render(
     <React.StrictMode>

@@ -3,7 +3,6 @@ import './ListingCard.scss'
 import {Swiper, SwiperSlide} from "swiper/react";
 import {A11y, Pagination} from "swiper";
 import {CardActionArea, Rating, Tooltip} from "@mui/material";
-import {titleCase} from '../../helpers/utils';
 import {Link} from "react-router-dom";
 import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
 
