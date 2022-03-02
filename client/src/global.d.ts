@@ -1,8 +1,9 @@
 declare global {
     var api:string
     function apiURL(path:string, query?:string):string
-
+    function titleCase(str:string):string
     interface ListingPartial {
+        type:string
         title: string;
         rating: number;
         photos: string[];
@@ -11,7 +12,7 @@ declare global {
         beds: number;
         amenities: string[];
         baths: number;
-        listingType: string;
+        listingType: 'entire place' | 'hotel room' | 'private room' | 'shared room';
         _id: string;
     }
 
