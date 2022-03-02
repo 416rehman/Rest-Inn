@@ -7,21 +7,8 @@ import {titleCase} from '../../helpers/utils';
 import {Link} from "react-router-dom";
 import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
 
-interface Listing {
-    title: string;
-    rating: number;
-    photos: string[];
-    price: number;
-    bedrooms: number;
-    beds: number;
-    amenities: string[];
-    baths: number;
-    listingType: string;
-    _id: string;
-}
-
 interface IProps {
-    listing: Listing;
+    listing: ListingPartial;
     className?: string;
     [x: string]: any;
 }

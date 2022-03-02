@@ -8,7 +8,7 @@ import {Pagination, Skeleton} from "@mui/material";
 
 function ListingsPage() {
     const [searchParams] = useSearchParams();
-    const [listings, setListings] = React.useState<Listing[]>([]);
+    const [listings, setListings] = React.useState<ListingPartial[]>([]);
     const [totalPages, setTotalPages] = React.useState(0);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [loading, setLoading] = React.useState(true);
