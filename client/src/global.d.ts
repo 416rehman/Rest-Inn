@@ -2,6 +2,7 @@ declare global {
     var api:string
     function apiURL(path:string, query?:string):string
     function titleCase(str:string):string
+    function randomHexColor():string
     interface ListingPartial {
         type:string
         title: string;
