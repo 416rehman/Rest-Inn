@@ -2,7 +2,7 @@ declare global {
     var api:string
     function apiURL(path:string, query?:string):string
 
-    interface Listing {
+    interface ListingPartial {
         title: string;
         rating: number;
         photos: string[];
@@ -13,6 +13,22 @@ declare global {
         baths: number;
         listingType: string;
         _id: string;
+    }
+
+    interface Listing extends ListingPartial {
+        bestSeller: true;
+        createdAt: Date;
+        updatedAt: Date;
+        description: string;
+        location: {
+            unit: string,
+            street: string,
+            city: string,
+            province: string,
+            country: string,
+            _id: string,
+        };
+        rules: string[];
     }
 }
 
