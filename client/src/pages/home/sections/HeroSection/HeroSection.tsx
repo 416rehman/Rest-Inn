@@ -11,7 +11,7 @@ interface Slide {
     description: string;
     min_price: number;
     num_of_listings: number;
-    top_sellers?: Listing[];
+    top_sellers?: ListingPartial[];
 }
 
 const slides: Slide[] = [
@@ -41,7 +41,10 @@ const slides: Slide[] = [
 function HeroSection() {
     return (
         <div className={'hero-section'}>
-            <Hero>
+            <Hero autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+            }} loop>
                 {slides.map((slide, index) => (
                     <div key={index} className={'location-slide'}>
                         <div className={'slide-background'}>
