@@ -8,8 +8,8 @@
  *      Creation Date: 2022-01-24
  */
 
-const User = require('../models/user.model.js');
-const Property = require('../models/property.model.js');
+const User = require('../models/user/user.model.js');
+const Property = require('../models/property/property.model.js');
 const {newUserValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
 const {userFilter} = require("../helpers/filters");
 
