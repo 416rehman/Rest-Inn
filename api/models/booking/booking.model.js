@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const {bookingStatus} = require("../../constants/booking.constants");
 
 const BookingSchema = new mongoose.Schema({
