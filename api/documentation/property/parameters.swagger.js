@@ -8,7 +8,6 @@
  *        schema:
  *          description: The id of the property object
  *          type: string
- *          format: uuid
  *          readOnly: true
  *
  *      title:

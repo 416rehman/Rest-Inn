@@ -134,7 +134,7 @@
  *          items:
  *            type: object
  *            properties:
- *              id:
+ *              listingId:
  *                type: string
  *                format: string
  *                readOnly: true
@@ -144,11 +144,6 @@
  *                format: date-time
  *                readOnly: true
  *                description: The date when the listing was added to favorites
- *              _id:
- *                type: string
- *                format: string
- *                readOnly: true
- *                description: The unique id of the favorite object
  *
  */
 

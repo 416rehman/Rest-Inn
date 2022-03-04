@@ -81,7 +81,7 @@ router.get('/', user.getAllUsers);
  *                  data:
  *                    type: array
  *                    items:
- *                      $ref: '#/definitions/Favorite'
+ *                      $ref: '#/components/userParameters/favorites/schema'
  *      404:
  *        $ref: '#/components/responses/BadRequest'
  *      500:
@@ -194,13 +194,7 @@ router.post('/', user.createUser);
  *                    example: Favorite added to favorites
  *                    description: A message to indicate the status of the request
  *                  data:
- *                    type: object
- *                    properties:
- *                      id:
- *                        type: string
- *                        example: 5e9f8f8f-f8f8-f8f8-f8f8-f8f8f8f8f8f8
- *                        description: The id of the property added to favorites
- *                        format: uuid
+ *                    $ref: '#/components/userParameters/favorites/schema'
  *      404:
  *        $ref: '#/components/responses/BadRequest'
  *      500:
