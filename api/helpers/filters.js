@@ -7,6 +7,7 @@
  *      Student ID: hahmadzai3
  *      Creation Date: 2022-02-09
  */
+const {bookingStatus} = require("../constants/booking.constants");
 const propertyTypes = require('../constants/property.constants').propertyTypes;
 
 module.exports.sortFilter = (query) => {
@@ -16,10 +17,12 @@ module.exports.sortFilter = (query) => {
     }
     return sort;
 }
+
 /**
- * This function creates a filter object for the given property type
- * which can be used to filter the properties in the database.
- * @returns {object} filter object
+ * This function creates a user filter object from the given query object
+ *
+ * @param query
+ * @return {Object} ready to use filter object for mongoose
  */
 module.exports.propertyFilter = (query) => {
     let filter = {};
@@ -109,7 +112,12 @@ module.exports.propertyFilter = (query) => {
     return filter;
 };
 
-/** Email and phone number filtering is not supported from this endpoint since they are sensitive data. **/
+/**
+ * This function creates a user filter object from the given query object
+ *
+ * @param query
+ * @return {Object} ready to use filter object for mongoose
+ */
 module.exports.userFilter = (query) => {
     let filter = {};
 
@@ -131,6 +139,54 @@ module.exports.userFilter = (query) => {
 
     if (query.email) {
         filter.email = query.email;
+    }
+
+    return filter;
+}
+
+/**
+ * This function creates a booking filter object from the given query object
+ *
+ * @param query
+ * @return {Object} ready to use filter object for mongoose
+ */
+module.exports.bookingFilter = (query) => {
+    let filter = {};
+
+    if (query.property) {
+        filter.property = query.property;
+    }
+
+    // If both checkin and checkout are given, then we need to make sure that the booking is within the given 2 dates
+    if (query.checkIn && query.checkOut) {
+        filter.checkIn = {};
+        filter.checkIn.$gte = query.checkIn;
+        filter.checkOut = {};
+        filter.checkOut.$lte = query.checkOut;
+    }
+    else {
+        if (query.checkIn) {
+            filter.checkIn = {};
+            filter.checkIn.$gte = query.checkIn;
+            filter.checkIn.$lte = query.checkIn;
+        }
+        if (query.checkOut) {
+            filter.checkOut = {};
+            filter.checkOut.$gte = query.checkOut;
+            filter.checkOut.$lte = query.checkOut;
+        }
+    }
+
+    if (query.status && bookingStatus.includes(query.status)) {
+        filter.status = query.status;
+    }
+
+    if (query.guests) {
+        filter.user = query.user;
+    }
+
+    if (query.price) {
+        filter.price = query.price;
     }
 
     return filter;

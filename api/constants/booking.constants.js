@@ -1,0 +1,1 @@
+module.exports.bookingStatus = ['pending', 'approved', 'rejected']
