@@ -1,4 +1,5 @@
 const propertySchema = require('property.model')
+const bookingSchema = require('../booking/booking.model')
 
 /**
  * Returns all properties
@@ -149,4 +150,24 @@ module.exports.add = async function (data) {
     const property = new propertySchema(data);
     await property.save();
     return property;
+}
+
+/**
+ * Returns all the reserved date blocks for a property
+ * @param id
+ * @return {Promise<{start: Date, end: Date}[]>}
+ */
+module.exports.getReservedDates = async function (id) {
+    return new Promise((resolve, reject) => {
+        bookingSchema.find({property: id}).exec().then(bookings => {
+            resolve(bookings.map(booking => {
+                return {
+                    start: booking.checkIn,
+                    end: booking.checkOut
+                }
+            }));
+        }).catch(err => {
+            reject(err);
+        })
+    });
 }
