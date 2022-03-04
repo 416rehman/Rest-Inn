@@ -8,7 +8,7 @@
  *      Creation Date: 2022-01-24
  */
 
-const property = require('../models/property/property.model');
+const property = require('../models/property/property.methods');
 const {idCondition, existingPropertyValidation, propertyTypeCondition} = require('../helpers/property-validation');
 const {propertyFilter, sortFilter} = require("../helpers/filters");
 

@@ -11,7 +11,6 @@ const {propertyTypes, amenities, listingTypes} = require("../../constants/proper
 const mongoose = require("mongoose");
 const bookingModel = require("../booking/booking.model");
 
-
 const LocationSchema = new mongoose.Schema({
     unit: String,
     street: {
@@ -109,16 +108,21 @@ const PropertySchema = new mongoose.Schema({
 PropertySchema.virtual('rating').get(function () {
     const filter = {property: this._id, rating: { $ne: null}}
 
-    return bookingModel.find(filter).then(bookings => {
+    const rating = {
+        average: 0,
+        count: 0
+    }
+
+    bookingModel.find(filter).then(bookings => {
         let rating = [0, 0, 0, 0, 0];
         bookings.forEach(booking => {
             rating[booking.rating - 1]++;
         });
-        return {
-            rating: rating.reduce((acc, curr) => acc + curr, 0) / bookings.length,
-            total: bookings.length
-        }
+        rating.average = rating.reduce((acc, curr) => acc + curr, 0) / bookings.length || 0
+        rating.total = bookings.length || 0
     });
+
+    return rating;
 });
 
 module.exports = mongoose.model("Property", PropertySchema);

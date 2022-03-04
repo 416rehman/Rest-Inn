@@ -1,4 +1,4 @@
-const propertyModel = require('property.model')
+const propertyModel = require('./property.model')
 const bookingModel = require('../booking/booking.model')
 
 /**
