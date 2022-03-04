@@ -1,5 +1,10 @@
 /** https://mongoosejs.com/docs/tutorials/getters-setters.html **/
-// Mongoose passes the raw value in MongoDB `email` to the getter
+
+/**
+ * Obfuscates the email address
+ * @param email {String}
+ * @return obfuscatedEmail {String}
+ */
 module.exports.obfuscate = (email) => {
     const separatorIndex = email.indexOf('@');
     if (separatorIndex < 3) {
@@ -13,15 +18,24 @@ module.exports.obfuscate = (email) => {
         email.slice(separatorIndex);
 }
 
-/** Weighted rating calculation **/
+/**
+ * Weighted rating calculation
+ *
+ * @param ratings {Array[Number]}
+ * **/
 module.exports.calculateRating = (ratings) => {
     if (!ratings || ratings.length === 0) {
         return 0;
     }
     let weightedSum = 0;
+    let reviewCount = 0;
     ratings.forEach((r, i) => {
         weightedSum += r * (i + 1);
+        reviewCount += r;
     });
 
-    return weightedSum / ratings.length;
+    return {
+        average: weightedSum / ratings.length,
+        count: ratings.length
+    }
 }
