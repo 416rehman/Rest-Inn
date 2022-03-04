@@ -1,4 +1,4 @@
-const Booking = require('./booking.model')
+const bookingModel = require('./booking.model')
 
 /**
  * Returns all user bookings
@@ -19,5 +19,5 @@ module.exports.getBookingsByGuestUsername = function (username, filter={}, limit
         user: username
     };
 
-    return Booking.find(filterQuery).limit(limit).skip((page - 1) * limit).sort(sort).exec();
+    return bookingModel.find(filterQuery).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 };

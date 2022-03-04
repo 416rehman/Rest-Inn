@@ -1,5 +1,5 @@
-const propertySchema = require('property.model')
-const bookingSchema = require('../booking/booking.model')
+const propertyModel = require('property.model')
+const bookingModel = require('../booking/booking.model')
 
 /**
  * Returns all properties
@@ -13,7 +13,7 @@ module.exports.getAll = function (filter={}, limit=10, page=0, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
 
-    return propertySchema.find(filter).limit(limit).skip((page - 1) * limit).sort(sort).exec()
+    return propertyModel.find(filter).limit(limit).skip((page - 1) * limit).sort(sort).exec()
 }
 
 /**
@@ -22,7 +22,7 @@ module.exports.getAll = function (filter={}, limit=10, page=0, sort={}) {
  * @return {Promise<number>}
  */
 module.exports.count = function (filter={}) {
-    return propertySchema.countDocuments(filter).exec()
+    return propertyModel.countDocuments(filter).exec()
 }
 
 /**
@@ -30,7 +30,7 @@ module.exports.count = function (filter={}) {
  * @return {Promise<Array<any>>}
  */
 module.exports.getAllTypes = function () {
-    return propertySchema.aggregate([
+    return propertyModel.aggregate([
         {
             $group: {
                 _id: "$type",
@@ -51,7 +51,7 @@ module.exports.getAllTypes = function () {
 module.exports.getAllByType = function (type, limit=10, page=1, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
-    return propertySchema.find({type}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
+    return propertyModel.find({type}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 }
 
 /**
@@ -59,7 +59,7 @@ module.exports.getAllByType = function (type, limit=10, page=1, sort={}) {
  * @return {Promise}
  */
 module.exports.getAllLocations = function () {
-    return propertySchema.aggregate([
+    return propertyModel.aggregate([
         {
             $group: {
                 _id: {
@@ -83,7 +83,7 @@ module.exports.getAllLocations = function () {
 module.exports.getAllByLocation = function (location,limit=10, page=0, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
-    return propertySchema.find({
+    return propertyModel.find({
         $or: [
             {
                 "location.city": location
@@ -106,7 +106,7 @@ module.exports.getAllByLocation = function (location,limit=10, page=0, sort={}) 
 module.exports.getBestSellers = function (limit=10, page=0, sort={}) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
-    return propertySchema.find({bestSeller: true}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
+    return propertyModel.find({bestSeller: true}).limit(limit).skip((page - 1) * limit).sort(sort).exec();
 }
 
 /**
@@ -116,7 +116,7 @@ module.exports.getBestSellers = function (limit=10, page=0, sort={}) {
  * @return {Promise}
  */
 module.exports.getById = function (id) {
-    return propertySchema.findById(id).exec();
+    return propertyModel.findById(id).exec();
 }
 
 /**
@@ -127,7 +127,7 @@ module.exports.getById = function (id) {
  * @return {Promise}
  */
 module.exports.update = function (id, data) {
-    return propertySchema.findByIdAndUpdate(id, data, {new: true}).exec();
+    return propertyModel.findByIdAndUpdate(id, data, {new: true}).exec();
 }
 
 /**
@@ -137,7 +137,7 @@ module.exports.update = function (id, data) {
  * @return {Promise<any>}
  */
 module.exports.delete = function (id) {
-    return propertySchema.findByIdAndDelete(id).exec();
+    return propertyModel.findByIdAndDelete(id).exec();
 }
 
 /**
@@ -147,7 +147,7 @@ module.exports.delete = function (id) {
  * @return {Promise<any>}
  */
 module.exports.add = async function (data) {
-    const property = new propertySchema(data);
+    const property = new propertyModel(data);
     await property.save();
     return property;
 }
@@ -159,7 +159,7 @@ module.exports.add = async function (data) {
  */
 module.exports.getReservedDates = async function (id) {
     return new Promise((resolve, reject) => {
-        bookingSchema.find({property: id}).exec().then(bookings => {
+        bookingModel.find({property: id}).exec().then(bookings => {
             resolve(bookings.map(booking => {
                 return {
                     start: booking.checkIn,
