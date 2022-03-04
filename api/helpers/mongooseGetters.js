@@ -17,25 +17,3 @@ module.exports.obfuscate = (email) => {
         email.slice(2, separatorIndex).replace(/./g, '*') +
         email.slice(separatorIndex);
 }
-
-/**
- * Weighted rating calculation
- *
- * @param ratings {Array[Number]}
- * **/
-module.exports.calculateRating = (ratings) => {
-    if (!ratings || ratings.length === 0) {
-        return 0;
-    }
-    let weightedSum = 0;
-    let reviewCount = 0;
-    ratings.forEach((r, i) => {
-        weightedSum += r * (i + 1);
-        reviewCount += r;
-    });
-
-    return {
-        average: weightedSum / ratings.length,
-        count: ratings.length
-    }
-}

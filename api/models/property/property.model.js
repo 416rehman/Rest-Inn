@@ -9,7 +9,8 @@
  */
 const {propertyTypes, amenities, listingTypes} = require("../../constants/property.constants");
 const mongoose = require("mongoose");
-const {calculateRating} = require("../../helpers/mongooseGetters");
+const bookingModel = require("../booking/booking.model");
+
 
 const LocationSchema = new mongoose.Schema({
     unit: String,
@@ -93,11 +94,6 @@ const PropertySchema = new mongoose.Schema({
         enum: listingTypes,
         default: listingTypes[0]
     },
-    rating: {
-        type: [Number],
-        default: [0, 0, 0, 0, 0],
-        get: calculateRating
-    },
 }, {
     timestamps: true,
     toJSON:{
@@ -108,6 +104,21 @@ const PropertySchema = new mongoose.Schema({
         locale: 'en_US',
         strength: 2
     }
+});
+
+PropertySchema.virtual('rating').get(function () {
+    const filter = {property: this._id, rating: { $ne: null}}
+
+    return bookingModel.find(filter).then(bookings => {
+        let rating = [0, 0, 0, 0, 0];
+        bookings.forEach(booking => {
+            rating[booking.rating - 1]++;
+        });
+        return {
+            rating: rating.reduce((acc, curr) => acc + curr, 0) / bookings.length,
+            total: bookings.length
+        }
+    });
 });
 
 module.exports = mongoose.model("Property", PropertySchema);

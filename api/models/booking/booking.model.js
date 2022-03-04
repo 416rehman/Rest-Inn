@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const {bookingStatus} = require("../../constants/booking.constants");
+
 const BookingSchema = new mongoose.Schema({
     user: {
         type: String,
@@ -32,6 +33,12 @@ const BookingSchema = new mongoose.Schema({
         enum: bookingStatus,
         default: 'pending'
     },
+    rating: {
+        type: Number,
+        default: null,
+        min: 0,
+        max: 5
+    }
 }, {
     timestamps: true
 });
