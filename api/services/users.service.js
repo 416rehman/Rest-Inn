@@ -8,8 +8,8 @@
  *      Creation Date: 2022-01-24
  */
 
-const User = require('../models/user/user.model.js');
-const Property = require('../models/property/property.model.js');
+const User = require('../models/user/user.methods');
+const Property = require('../models/property/property.methods');
 const {newUserValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
 const {userFilter} = require("../helpers/filters");
 
@@ -134,8 +134,8 @@ const updateUser = (req, res) => {
  */
 function getFavorites(req, res) {
     usernameCondition.validateAsync(req.params.username).then(username => {
-        User.getFavorites(username).then(({favorites}) => {
-            if (favorites?.length > 0) {
+        User.getFavoriteProperties(username).then(({favorites}) => {
+            if (favorites?.properties?.length > 0) {
                 res.json({
                     message: 'Favorites retrieved successfully',
                     data: favorites
@@ -166,13 +166,14 @@ function addFavorite(req, res) {
     usernameCondition.validateAsync(req.params.username).then(username => {
         favoriteValidation.validateAsync(req.params.listingId).then(id => {
             Property.getById(id).then( () => {
-                User.getFavorites(username).then(({favorites}) => {
-                    if (favorites.find(fav => fav.id === id)) {
+                User.getFavoriteProperties(username).then(({favorites}) => {
+                    console.log(favorites.properties)
+                    if (favorites.properties && favorites.properties.find(fav => fav.listingId.toString() === id)) {
                         res.status(400).json({
                             message: 'Listing already in favorites',
                         });
                     } else {
-                        User.addFavorite(username, id).then(() => {
+                        User.addFavoriteProperty(username, id).then(() => {
                             res.status(201).json({
                                 message: 'Listing added to favorites',
                                 data: {
@@ -218,7 +219,7 @@ function addFavorite(req, res) {
 function removeFavorite(req, res) {
     usernameCondition.validateAsync(req.params.username).then(username => {
         favoriteValidation.validateAsync(req.params.listingId).then(id => {
-            User.removeFavorite(username, id).then(() => {
+            User.removeFavoriteProperty(username, id).then(() => {
                 res.status(200).json({
                     message: 'Listing removed from favorites',
                     data: {

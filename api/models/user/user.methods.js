@@ -1,4 +1,4 @@
-const userSchema = require("./user.model");
+const userModel = require("./user.model");
 
 // Sensitive fields
 const ommited_fields = {
@@ -18,7 +18,7 @@ const ommited_fields = {
  * @return {Promise<Array<HydratedDocument<any, {}, {}>>>}
  */
 module.exports.getAll = (filter={}) => {
-    return userSchema.find(filter, ommited_fields).exec();
+    return userModel.find(filter, ommited_fields).exec();
 };
 
 /**
@@ -28,7 +28,7 @@ module.exports.getAll = (filter={}) => {
  * @return {Promise<any>}
  */
 module.exports.getByUsername = (username) => {
-    return userSchema.findOne({username: username}, ommited_fields).exec();
+    return userModel.findOne({username: username}, ommited_fields).exec();
 };
 
 /**
@@ -38,7 +38,7 @@ module.exports.getByUsername = (username) => {
  * @return {Promise<any>}
  */
 module.exports.getByEmail = (email) => {
-    return userSchema.findOne({email: email},ommited_fields).exec();
+    return userModel.findOne({email: email},ommited_fields).exec();
 };
 
 /**
@@ -49,7 +49,7 @@ module.exports.getByEmail = (email) => {
  * @return {Promise<any>}
  */
 module.exports.updateUser = (username, user) => {
-    return userSchema.findOneAndUpdate({username: username}, user, {
+    return userModel.findOneAndUpdate({username: username}, user, {
         new: true, // return the new user instead of the old one
         projection: ommited_fields
     }).exec();
@@ -59,14 +59,14 @@ module.exports.updateUser = (username, user) => {
  * Add a favorite property/listing to a user
  *
  * @param username
- * @param id - property/listing id
+ * @param listingId - property/listing id
  * @return {Promise<any>}
  */
-module.exports.addFavoriteProperty = (username, id) => {
-    return userSchema.findOneAndUpdate({username: username}, {
+module.exports.addFavoriteProperty = (username, listingId) => {
+    return userModel.findOneAndUpdate({username: username}, {
         $push: {
             'favorites.properties': {
-                id: id,
+                listingId: listingId,
                 date: new Date()
             }
         }
@@ -80,14 +80,14 @@ module.exports.addFavoriteProperty = (username, id) => {
  * Remove a favorite property/listing from a user
  *
  * @param username
- * @param id - property/listing id
+ * @param listingId - property/listing id
  * @return {Promise<any>}
  */
-module.exports.removeFavoriteProperty = (username, id) => {
-    return userSchema.findOneAndUpdate({username: username}, {
+module.exports.removeFavoriteProperty = (username, listingId) => {
+    return userModel.findOneAndUpdate({username: username}, {
         $pull: {
             'favorites.properties': {
-                id: id
+                listingId: listingId
             }
         }
     }, {
@@ -103,7 +103,7 @@ module.exports.removeFavoriteProperty = (username, id) => {
  * @return {Promise<any>}
  */
 module.exports.getFavoriteProperties = (username) => {
-    return userSchema.findOne({username: username}, {
+    return userModel.findOne({username: username}, {
         'favorites.properties': 1,
     }).exec();
 };
@@ -115,7 +115,7 @@ module.exports.getFavoriteProperties = (username) => {
  * @return {Promise<any>}
  */
 module.exports.addUser = async (data) => {
-    const user = new userSchema(data);
+    const user = new userModel(data);
     await user.save();
     return user;
 };
@@ -127,7 +127,7 @@ module.exports.addUser = async (data) => {
  * @return {Promise<any>}
  */
 module.exports.deleteUser = (username) => {
-    return userSchema.findOneAndDelete({username: username}, {
+    return userModel.findOneAndDelete({username: username}, {
         projection: ommited_fields,
         new: true
     }).exec();

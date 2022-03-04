@@ -63,10 +63,14 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     favorites: {
-        type: {
-            properties: [{id: String, date: Date}],
-        },
-        default: []
+        properties: {
+            type: [{
+                _id: false,
+                listingId: mongoose.Schema.Types.ObjectId,
+                date: Date
+            }],
+            default: []
+        }
     },
 }, {
     timestamps: true,
