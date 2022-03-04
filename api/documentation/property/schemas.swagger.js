@@ -95,9 +95,17 @@
  *           $ref: '#/components/propertyParameters/photos/schema'
  *
  *         rating:
- *           allOf:
- *             - $ref: '#/components/propertyParameters/rating/schema'
- *             - readOnly: true
+ *           type: object
+ *           description: The rating of the property
+ *           properties:
+ *               average:
+ *                   allOf:
+ *                      - $ref: '#/components/propertyParameters/averageRating/schema'
+ *                      - readOnly: true
+ *               count:
+ *                   type: integer
+ *                   description: The number of ratings
+ *                   readOnly: true
  *
  *   PropertyType:
  *     type: object
