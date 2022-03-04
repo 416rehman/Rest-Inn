@@ -107,6 +107,9 @@
  *                   description: The number of ratings
  *                   readOnly: true
  *
+ *         guests:
+ *           $ref: '#/components/propertyParameters/guests/schema'
+ *
  *   PropertyType:
  *     type: object
  *     properties:

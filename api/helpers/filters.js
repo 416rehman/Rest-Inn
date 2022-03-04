@@ -60,13 +60,13 @@ module.exports.propertyFilter = (query) => {
         }
     }
 
-    if (query.min_baths || query.max_baths) {
+    if (query.bathsMin || query.bathsMax) {
         filter.baths = {};
-        if (query.min_baths) {
-            filter.baths.$gte = query.min_baths;
+        if (query.bathsMin) {
+            filter.baths.$gte = query.bathsMin;
         }
-        if (query.max_baths) {
-            filter.baths.$lte = query.max_baths;
+        if (query.bathsMax) {
+            filter.baths.$lte = query.bathsMax;
         }
     }
     if (query.location) {
@@ -107,6 +107,16 @@ module.exports.propertyFilter = (query) => {
 
     if (query.listingType) {
         filter.listingType = query.listingType;
+    }
+
+    if (query.guestsMin || query.guestsMax) {
+        filter.guests = {};
+        if (query.guestsMin) {
+            filter.guests.$gte = query.guestsMin;
+        }
+        if (query.guestsMax) {
+            filter.guests.$lte = query.guestsMax;
+        }
     }
 
     return filter;

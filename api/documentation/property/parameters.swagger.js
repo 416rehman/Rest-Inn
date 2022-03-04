@@ -171,6 +171,15 @@
  *          maximum: 5
  *          readOnly: true
  *
+ *      guests:
+ *        name: guests
+ *        schema:
+ *          description: The number of guests that can be accommodated in the property
+ *          type: number
+ *          format: integer
+ *          minimum: 1
+ *          maximum: 100
+ *
  */
 
 /**
@@ -277,10 +286,29 @@
  *          allOf:
  *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: query
+ *              - name: ratingMin
+ *              - description: The minimum average rating of the property
+ *
  *      ratingMax:
  *          allOf:
  *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: query
+ *              - name: ratingMax
+ *              - description: The maximum average rating of the property
+ *
+ *      guestsMin:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/guests'
+ *              - in: query
+ *              - name: guestsMin
+ *              - description: The minimum number of guests in the property
+ *
+ *      guestsMax:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/guests'
+ *              - in: query
+ *              - name: guestsMax
+ *              - description: The maximum number of guests in the property
  */
 
 /**

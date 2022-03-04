@@ -93,6 +93,12 @@ const PropertySchema = new mongoose.Schema({
         enum: listingTypes,
         default: listingTypes[0]
     },
+    guests: {
+        type: Number,
+        required: true,
+        default: 1,
+        max: 100
+    },
 }, {
     timestamps: true,
     toJSON:{

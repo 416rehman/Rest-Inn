@@ -27,6 +27,7 @@ const bedCondition = Joi.number().min(0).max(10).label('Beds')
 const bedroomCondition = Joi.number().min(0).max(10).label('Bedrooms')
 const bathCondition = Joi.number().min(0).max(10).label('Baths')
 const listingTypeCondition = Joi.string().valid(...listingTypes).label('Listing Type').lowercase()
+const guestCondition = Joi.number().min(0).max(100).label('Guests')
 
 //Location Conditions
 const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
@@ -63,7 +64,8 @@ const newPropertyValidation = Joi.object().keys({
     bestSeller: bestSellerCondition,
     thumbnail: photoCondition,
     photos: photosCondition,
-    listingType: listingTypeCondition
+    listingType: listingTypeCondition,
+    guests: guestCondition
 })
 
 // use this to validate a property in PUT
@@ -82,6 +84,7 @@ const existingPropertyValidation = Joi.object().keys({
     thumbnail: photoCondition,
     photos: photosCondition,
     listingType: listingTypeCondition,
+    guests: guestCondition
 })
 
 module.exports = {
@@ -107,5 +110,6 @@ module.exports = {
     bestSellerCondition,
     photoCondition,
     photosCondition,
+    guestCondition,
     idCondition
 }

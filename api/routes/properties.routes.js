@@ -36,6 +36,8 @@ const propertiesService = require('../services/properties.service')
  *          - $ref: '#/components/propertyQueryParameters/bestSeller'
  *          - $ref: '#/components/propertyQueryParameters/bedroomsMin'
  *          - $ref: '#/components/propertyQueryParameters/bedroomsMax'
+ *          - $ref: '#/components/propertyQueryParameters/guestsMin'
+ *          - $ref: '#/components/propertyQueryParameters/guestsMax'
  *          - $ref: '#/components/paginationParameters/page'
  *          - $ref: '#/components/paginationParameters/limit'
  *
