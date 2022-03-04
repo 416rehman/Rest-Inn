@@ -162,10 +162,10 @@
  *            format: url
  *            example: "https://www.example.com/photo.jpg"
  *
- *      rating:
- *        name: rating
+ *      averageRating:
+ *        name: averageRating
  *        schema:
- *          description: The rating of the property
+ *          description: The averageRating of the property
  *          type: number
  *          format: double
  *          minimum: 0
@@ -276,11 +276,11 @@
  *              - in: query
  *      ratingMin:
  *          allOf:
- *              - $ref: '#/components/propertyParameters/rating'
+ *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: query
  *      ratingMax:
  *          allOf:
- *              - $ref: '#/components/propertyParameters/rating'
+ *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: query
  */
 
@@ -360,14 +360,14 @@
  *              type: string
  *      ratingMin:
  *          allOf:
- *              - $ref: '#/components/propertyParameters/rating'
+ *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: path
  *              - name: ratingMin
- *              - description: The minimum rating of the property
+ *              - description: The minimum averageRating of the property
  *      ratingMax:
  *          allOf:
- *              - $ref: '#/components/propertyParameters/rating'
+ *              - $ref: '#/components/propertyParameters/averageRating'
  *              - in: path
  *              - name: ratingMax
- *              - description: The maximum rating of the property
+ *              - description: The maximum averageRating of the property
  */
