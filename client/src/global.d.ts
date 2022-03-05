@@ -6,12 +6,16 @@ declare global {
     interface ListingPartial {
         type:string
         title: string;
-        rating: number;
+        rating: {
+            average: number,
+            count: number
+        };
         photos: string[];
         price: number;
         bedrooms: number;
         beds: number;
         amenities: string[];
+        guests: number;
         baths: number;
         listingType: 'entire place' | 'hotel room' | 'private room' | 'shared room';
         _id: string;
