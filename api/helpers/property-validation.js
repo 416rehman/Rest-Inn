@@ -115,6 +115,5 @@ module.exports = {
     guestCondition,
     monthCondition,
     yearCondition,
-    monthYearValidation,
     idCondition
 }
