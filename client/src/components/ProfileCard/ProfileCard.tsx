@@ -11,7 +11,7 @@ function ProfileCard({user}:any) {
                 padding: "0.25rem",
                 maxWidth: "200px",
             }}>
-                <Stack direction={'row'} spacing={2} alignItems={'center'} sx={{
+                <Stack direction={'row'} spacing={1} alignItems={'center'} sx={{
                     width: "100%",
                 }} >
                     <Avatar
