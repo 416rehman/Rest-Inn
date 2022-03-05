@@ -89,11 +89,6 @@ const existingPropertyValidation = Joi.object().keys({
     guests: guestCondition
 })
 
-const monthYearValidation = Joi.object().keys({
-    month: monthCondition.required(),
-    year: yearCondition.required()
-})
-
 module.exports = {
     newPropertyValidation,
     existingPropertyValidation,
