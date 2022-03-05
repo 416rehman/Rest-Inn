@@ -12,6 +12,7 @@ import {
 } from "@mui/icons-material";
 import VerticalButton from "../../../components/VerticalButton/VerticalButton";
 import ProfileCard from "../../../components/ProfileCard/ProfileCard";
+import CheckoutCard from "../../../components/CheckoutCard/CheckoutCard";
 
 function ListingDescriptionPage() {
     const {listingId} = useParams();
@@ -61,7 +62,7 @@ function ListingDescriptionPage() {
                             <Typography variant={'h6'}>
                                 {titleCase(listing.listingType)} in a {titleCase(listing.type)} in {titleCase(listing.location.city)}
                             </Typography>
-                            <Typography variant={'body2'} color={'dimgray'}>6 guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.baths} bath</Typography>
+                            <Typography variant={'body2'} color={'dimgray'}>{listing.guests} guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.baths} bath</Typography>
                         </div>
                         <div>
                             <ProfileCard user={{
@@ -96,7 +97,7 @@ function ListingDescriptionPage() {
                     </div>
                 </div>
                 <div className={'listing-checkout-card'}>
-                    <h1>CHECKOUT CARD</h1>
+                    <CheckoutCard listing={listing}/>
                 </div>
             </div>;
     }
