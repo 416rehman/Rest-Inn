@@ -419,7 +419,7 @@ router.get('/:id', propertiesService.getOneById);
 /** Retrieves all the reserved date for a listing */
 /**
  * @swagger
- * /properties/{id}/reservedDates:
+ * /properties/{id}/reserved-dates:
  *   get:
  *     tags:
  *       - Properties
@@ -444,6 +444,6 @@ router.get('/:id', propertiesService.getOneById);
  *                   $ref: '#/definitions/ReservedDates'
  *
  */
-router.get('/:id/reservedDates', propertiesService.getReservedDates);
+router.get('/:id/reserved-dates', propertiesService.getReservedDates);
 
 module.exports = router;
