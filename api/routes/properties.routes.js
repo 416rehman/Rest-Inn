@@ -416,6 +416,34 @@ router.delete('/:id', propertiesService.deleteById);
  */
 router.get('/:id', propertiesService.getOneById);
 
+/** Retrieves all the reserved date for a listing */
+/**
+ * @swagger
+ * /properties/{id}/reservedDates:
+ *   get:
+ *     tags:
+ *       - Properties
+ *     summary: Retrieves all the reserved dates for a listing
+ *     description: Retrieves all the reserved dates for a listing which can be used to display the calendar with the available dates
+ *     parameters:
+ *       - $ref: '#/components/propertyPathParameters/id'
+ *     responses:
+ *       '200':
+ *         description: A successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: The message of the response
+ *                   example: "Retrieved reserved dates"
+ *                 data:
+ *                   description: The reserved dates
+ *                   $ref: '#/definitions/ReservedDates'
+ *
+ */
 router.get('/:id/reservedDates', propertiesService.getReservedDates);
 
 module.exports = router;

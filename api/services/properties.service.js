@@ -12,8 +12,7 @@ const property = require('../models/property/property.methods');
 const {
     idCondition,
     existingPropertyValidation,
-    propertyTypeCondition,
-    monthYearValidation
+    propertyTypeCondition
 } = require('../helpers/property-validation');
 const {propertyFilter, sortFilter} = require("../helpers/filters");
 
@@ -286,8 +285,7 @@ module.exports.deleteById = (req, res) => {
 
 module.exports.getReservedDates = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id => {
-        monthYearValidation.validateAsync(req.query).then(cleanedQuery => {
-            property.getReservedDates(id, cleanedQuery.month, cleanedQuery.year).then(dates => {
+            property.getReservedDates(id).then(dates => {
                 res.json({
                     message: 'Retrieved reserved dates',
                     data: dates
@@ -298,12 +296,6 @@ module.exports.getReservedDates = (req, res) => {
                     error: err.message
                 });
             });
-        }).catch(err => {
-            res.status(400).json({
-                message: 'Valid month and year required (0-12, 0-9999)',
-                error: err.message
-            });
-        });
     }).catch(err => {
         res.status(400).json({
             message: 'Invalid id',

@@ -137,4 +137,25 @@
  *           type: number
  *           description: The number of properties in this location
  *           example: 5
+ *
+ *
+ *   ReservedDates:
+ *     type: object
+ *     properties:
+ *        year:
+ *           type: object
+ *           description: The year of the reserved dates, key is the year.
+ *           properties:
+ *               month:
+ *                   type: object
+ *                   description: The month of the reserved dates, key is the month.
+ *                   properties:
+ *                       date:
+ *                         type: array
+ *                         description: The date of the reserved dates, key is the date.
+ *                         items:
+ *                             type: string
+ *                             description: The date of the reserved dates
+ *                             example: '2020-01-01'
+ *
  */

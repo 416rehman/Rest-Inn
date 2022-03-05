@@ -155,25 +155,43 @@ module.exports.add = async function (data) {
 /**
  * Returns all the reserved date blocks in a month for a property
  * @param id
- * @param month
- * @param year
  * @return {Promise<{start: Date, end: Date}[]>}
  */
-module.exports.getReservedDates = async function (id, month, year) {
+module.exports.getReservedDates = async function (id) {
     return new Promise((resolve, reject) => {
         bookingModel.find({
             property: id,
-            start: {
-                $gte: new Date(year, month, 1),
-                $lt: new Date(year, month + 1, 1)
-            }
         }).exec().then(bookings => {
-            resolve(bookings.map(booking => {
-                return {
-                    start: booking.checkIn,
-                    end: booking.checkOut
+            // Get all reserved dates in range
+            const reservedDates = bookings.map(booking => {
+                const start = booking.checkIn;
+                const end = booking.checkOut;
+
+                const dates = [];
+                for (let i = start; i < end; i.setDate(i.getDate() + 1)) {
+                    dates.push(new Date(i));
                 }
-            }));
+                return dates;
+            });
+
+            // Flatten array
+            const reservedDatesFlat = reservedDates.reduce((acc, val) => acc.concat(val), []);
+
+            // group the dates by year and month
+            const grouped = {};
+            reservedDatesFlat.forEach(date => {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                if (!grouped[year]) {
+                    grouped[year] = {};
+                }
+                if (!grouped[year][month]) {
+                    grouped[year][month] = [];
+                }
+                grouped[year][month].push(date);
+            });
+
+            resolve(grouped);
         }).catch(err => {
             reject(err);
         })
