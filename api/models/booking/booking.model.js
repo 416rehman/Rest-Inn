@@ -21,8 +21,29 @@ const BookingSchema = new mongoose.Schema({
         required: true
     },
     guests: {
-        type: Number,
-        required: true
+        // Adults and Children depend on the property guest capacity
+        adults: {
+            type: Number,
+            required: true,
+            default: 1,
+            min: 1
+        },
+        children: {
+            type: Number,
+            required: true
+        },
+        // Infants are not included in the guest count
+        infants: {
+            type: Number,
+            required: true,
+            max: 5
+        },
+        // Pets are not included in the guests count. Depends on property rules
+        pets: {
+            type: Number,
+            required: true,
+            max: 5
+        }
     },
     price: {
         type: Number,
@@ -31,16 +52,39 @@ const BookingSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: bookingStatus,
-        default: 'pending'
+        default: 'pending',
     },
     rating: {
         type: Number,
         default: null,
         min: 0,
         max: 5
+    },
+    review: {
+        type: String,
+        default: null,
+        maxlength: 500
     }
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model('Booking', BookingSchema);
+const bookingModel = mongoose.model('Booking', BookingSchema);
+module.exports = bookingModel;
+
+module.exports.addFeedback = async function (bookingId, rating, review) {
+    const booking = await this.findById(bookingId);
+    if (!booking) {
+        throw new Error('Booking not found');
+    }
+    if (booking.checkOut > new Date()) {
+        throw new Error('Booking is not completed yet - cannot add feedback');
+    }
+    if (rating) {
+        booking.rating = rating;
+    }
+    if (review) {
+        booking.review = review;
+    }
+    await booking.save();
+};

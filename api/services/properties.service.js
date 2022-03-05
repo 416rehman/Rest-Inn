@@ -9,7 +9,12 @@
  */
 
 const property = require('../models/property/property.methods');
-const {idCondition, existingPropertyValidation, propertyTypeCondition} = require('../helpers/property-validation');
+const {
+    idCondition,
+    existingPropertyValidation,
+    propertyTypeCondition,
+    monthYearValidation
+} = require('../helpers/property-validation');
 const {propertyFilter, sortFilter} = require("../helpers/filters");
 
 module.exports.getAll = (req, res) => {
@@ -18,7 +23,7 @@ module.exports.getAll = (req, res) => {
     const sort = sortFilter(req.query)
     const filter = propertyFilter(req.query);
 
-    property.getAll(filter,limit, page, sort).then(async properties => {
+    property.getAll(filter, limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({
                 message: 'No properties found',
@@ -32,7 +37,7 @@ module.exports.getAll = (req, res) => {
                 pagination: {
                     page: req.query.page || 1,
                     limit: req.query.limit || 100,
-                    totalPages: Math.ceil(count /  (req.query.limit || 100)),
+                    totalPages: Math.ceil(count / (req.query.limit || 100)),
                     count: count
                 }
             })
@@ -67,7 +72,7 @@ module.exports.getAllPropertyTypes = (req, res) => {
 }
 
 module.exports.getAllByType = (req, res) => {
-    propertyTypeCondition.validateAsync(req.params.type).then(type=>{
+    propertyTypeCondition.validateAsync(req.params.type).then(type => {
         const {page, limit} = req.query;
         const sort = sortFilter(req.query)
 
@@ -84,7 +89,7 @@ module.exports.getAllByType = (req, res) => {
                     pagination: {
                         page: req.query.page || 1,
                         limit: req.query.limit || 100,
-                        totalPages: Math.ceil(count /  (req.query.limit || 100)),
+                        totalPages: Math.ceil(count / (req.query.limit || 100)),
                         count: count
                     }
                 })
@@ -156,7 +161,7 @@ module.exports.getAllByLocation = (req, res) => {
 module.exports.getAllBestSellers = (req, res) => {
     const {page, limit} = req.query;
     const sort = sortFilter(req.query)
-    console.log(limit)
+
     property.getBestSellers(limit, page, sort).then(async properties => {
         if (properties.length === 0) {
             res.status(404).send({
@@ -184,7 +189,7 @@ module.exports.getAllBestSellers = (req, res) => {
 }
 
 module.exports.getOneById = (req, res) => {
-    idCondition.validateAsync(req.params.id).then(id=>{
+    idCondition.validateAsync(req.params.id).then(id => {
         property.getById(id).then(property => {
             if (!property) {
                 res.status(404).send({
@@ -268,6 +273,34 @@ module.exports.deleteById = (req, res) => {
         }).catch(err => {
             res.status(500).json({
                 message: 'Error when deleting property by id',
+                error: err.message
+            });
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'Invalid id',
+            error: err.message
+        });
+    });
+}
+
+module.exports.getReservedDates = (req, res) => {
+    idCondition.validateAsync(req.params.id).then(id => {
+        monthYearValidation.validateAsync(req.query).then(cleanedQuery => {
+            property.getReservedDates(id, cleanedQuery.month, cleanedQuery.year).then(dates => {
+                res.json({
+                    message: 'Retrieved reserved dates',
+                    data: dates
+                })
+            }).catch(err => {
+                res.status(500).json({
+                    message: 'Error when getting reserved dates',
+                    error: err.message
+                });
+            });
+        }).catch(err => {
+            res.status(400).json({
+                message: 'Valid month and year required (0-12, 0-9999)',
                 error: err.message
             });
         });

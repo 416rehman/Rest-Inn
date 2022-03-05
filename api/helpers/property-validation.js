@@ -28,6 +28,8 @@ const bedroomCondition = Joi.number().min(0).max(10).label('Bedrooms')
 const bathCondition = Joi.number().min(0).max(10).label('Baths')
 const listingTypeCondition = Joi.string().valid(...listingTypes).label('Listing Type').lowercase()
 const guestCondition = Joi.number().min(0).max(100).label('Guests')
+const monthCondition = Joi.number().min(0).max(12).label('Month')
+const yearCondition = Joi.number().min(0).max(9999).label('Year')
 
 //Location Conditions
 const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
@@ -87,6 +89,11 @@ const existingPropertyValidation = Joi.object().keys({
     guests: guestCondition
 })
 
+const monthYearValidation = Joi.object().keys({
+    month: monthCondition.required(),
+    year: yearCondition.required()
+})
+
 module.exports = {
     newPropertyValidation,
     existingPropertyValidation,
@@ -111,5 +118,8 @@ module.exports = {
     photoCondition,
     photosCondition,
     guestCondition,
+    monthCondition,
+    yearCondition,
+    monthYearValidation,
     idCondition
 }

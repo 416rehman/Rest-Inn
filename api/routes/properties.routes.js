@@ -416,4 +416,6 @@ router.delete('/:id', propertiesService.deleteById);
  */
 router.get('/:id', propertiesService.getOneById);
 
+router.get('/:id/reservedDates', propertiesService.getReservedDates);
+
 module.exports = router;

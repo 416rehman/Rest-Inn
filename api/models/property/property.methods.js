@@ -153,13 +153,21 @@ module.exports.add = async function (data) {
 }
 
 /**
- * Returns all the reserved date blocks for a property
+ * Returns all the reserved date blocks in a month for a property
  * @param id
+ * @param month
+ * @param year
  * @return {Promise<{start: Date, end: Date}[]>}
  */
-module.exports.getReservedDates = async function (id) {
+module.exports.getReservedDates = async function (id, month, year) {
     return new Promise((resolve, reject) => {
-        bookingModel.find({property: id}).exec().then(bookings => {
+        bookingModel.find({
+            property: id,
+            start: {
+                $gte: new Date(year, month, 1),
+                $lt: new Date(year, month + 1, 1)
+            }
+        }).exec().then(bookings => {
             resolve(bookings.map(booking => {
                 return {
                     start: booking.checkIn,
