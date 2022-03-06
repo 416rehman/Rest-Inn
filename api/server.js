@@ -19,6 +19,7 @@ const swaggerUi = require("swagger-ui-express");
 const usersRouter = require('./routes/users.routes');
 const propertiesRouter = require('./routes/properties.routes');
 const bookingsRouter = require('./routes/bookings.routes');
+const validRouter = require('./routes/valid.routes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/', swaggerUi.serve, indexRouter);
 app.use('/users', usersRouter);
 app.use('/properties', propertiesRouter);
 app.use('/bookings', bookingsRouter);
+app.use('/valid', validRouter);
 
 //404 error handler
 app.use((req, res) => {

@@ -317,7 +317,7 @@
  *   propertyPathParameters:
  *      id:
  *          allOf:
- *              - $ref: '#/components/propertyParameters/id/schema'
+ *              - $ref: '#/components/propertyParameters/id'
  *              - in: path
  *      priceMin:
  *          allOf:
