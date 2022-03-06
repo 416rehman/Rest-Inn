@@ -140,7 +140,7 @@ function Navbar() {
                     </Link>
                 </MenuItemStyled>
                 <MenuItemStyled>
-                    <Link to={'listings'}>
+                    <Link to={'login'}>
                         <ListItemIconStyled>
                             <Login fontSize="small"/>
                             Log In
