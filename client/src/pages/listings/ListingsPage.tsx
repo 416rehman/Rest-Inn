@@ -6,6 +6,8 @@ import axios from 'axios'
 import InvalidPage from "../../components/InvalidPage/InvalidPage";
 import {Pagination, Skeleton} from "@mui/material";
 
+//TODO: Add Filtering
+
 function ListingsPage() {
     const [searchParams] = useSearchParams();
     const [listings, setListings] = React.useState<ListingPartial[]>([]);

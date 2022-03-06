@@ -14,6 +14,9 @@ import ListingDescriptionPage from "./pages/listings/ListingDescriptionPage/List
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 
+//TODO: Add Authentication
+//TODO: Add secured and visitor-only routes
+
 function App() {
     return (
         <ThemeProvider theme={theme}>
