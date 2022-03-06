@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import InvalidPage from "../../../components/InvalidPage/InvalidPage";
 import "./ListingDescriptionPage.scss"
 import Hero from "../../../components/Hero/Hero";
-import {Button, Tooltip, Typography} from "@mui/material";
+import {Button, Stack, Tooltip, Typography} from "@mui/material";
 import {
     FavoriteBorderOutlined,
     LocationOnOutlined,
@@ -96,9 +96,17 @@ function ListingDescriptionPage() {
                         <Typography variant={'body1'}>15 Reviews</Typography>
                     </div>
                 </div>
-                <div className={'listing-checkout-card'}>
+                <Stack justifyContent={'center'} sx={{
+                    width: '30%',
+                    height: '100vh',
+                    position: 'fixed',
+                    zIndex: '1000',
+                    top: '0',
+                    left: '70%',
+                    maxWidth: '400px',
+                }}>
                     <CheckoutCard listing={listing}/>
-                </div>
+                </Stack>
             </div>;
     }
 }
