@@ -11,6 +11,8 @@ import HomePage from "./pages/home/HomePage";
 import InvalidPage from "./pages/404/404Page";
 import ListingsPage from "./pages/listings/ListingsPage";
 import ListingDescriptionPage from "./pages/listings/ListingDescriptionPage/ListingDescriptionPage";
+import LoginPage from "./pages/login/LoginPage";
+import SignupPage from "./pages/signup/SignupPage";
 
 function App() {
     return (
@@ -25,9 +27,8 @@ function App() {
                             <Route path={":listingId"} element={<ListingDescriptionPage/>}/>
                         </Route>
 
-                        <Route path={'auth'}>
-                            <Route index={true} element={<h1>This is the AUTH route</h1>}/>
-                        </Route>
+                        <Route path={'login'} element={<LoginPage/>}/>
+                        <Route path={'signup'} element={<SignupPage/>}/>
 
                         <Route path={'*'} element={<InvalidPage/>}/>
                     </Route>
