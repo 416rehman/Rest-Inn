@@ -1,95 +1,110 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import DatePicker, {DatePickerProps} from '@mui/lab/DatePicker';
 import CalendarPickerSkeleton from '@mui/lab/CalendarPickerSkeleton';
-import getDaysInMonth from 'date-fns/getDaysInMonth';
+import axios from "axios";
+import {PickersDay} from "@mui/lab";
 
-function getRandomNumber(min: number, max: number) {
-    return Math.round(Math.random() * (max - min) + min);
-}
-
-/**
- * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
- * ⚠️ No IE11 support
- */
-function fakeFetch(date: Date, { signal }: { signal: AbortSignal }) {
-    return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            const daysInMonth = getDaysInMonth(date);
-            const daysToHighlight = [1, 2, 3].map(() => getRandomNumber(1, daysInMonth));
-
-            resolve({ daysToHighlight });
-        }, 500);
-
-        signal.onabort = () => {
-            clearTimeout(timeout);
-            reject(new DOMException('aborted', 'AbortError'));
-        };
+function fetchReservedDates(listingId: string): Promise<ReservedDates>{
+    return new Promise<ReservedDates>((resolve, reject) => {
+        axios.get(apiURL(`/properties/${listingId}/reserved-dates`))
+            .then(res => {
+                resolve(res.data.data);
+            })
+            .catch(err => {
+                reject(err);
+            });
     });
 }
 
-const initialValue = new Date();
+const initialDate = new Date();
 
-function DynamicDatePicker() {
-    const requestAbortController = React.useRef<AbortController | null>(null);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
-    const [value, setValue] = React.useState<Date | null>(initialValue);
+interface IProps {
+    listingId: string;
+    dpProps?: DatePickerProps<any>;
+}
 
-    const fetchHighlightedDays = (date: Date) => {
-        const controller = new AbortController();
-        fakeFetch(date, {
-            signal: controller.signal,
-        })
-            .then(({ daysToHighlight }) => {
-                setHighlightedDays(daysToHighlight);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                // ignore the error if it's caused by `controller.abort`
-                if (error.name !== 'AbortError') {
-                    throw error;
-                }
-            });
+function DynamicDatePicker({listingId, dpProps}: IProps) {
+    const [reservedDates, setReservedDates] = React.useState<ReservedDates>({});
+    const [reservedDays, setReservedDays] = React.useState<Number[]>([]);
+    const [value, setValue] = React.useState<Date | null>(null);
 
-        requestAbortController.current = controller;
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    /**
+     * Returns the reserved dates for the given month
+     *
+     * @param date
+     * @returns {Number[]} The reserved dates for the given month
+     */
+    const getReservedDaysOfMonth = (date: Date) => {
+        const currentYear = date.getFullYear();
+        const currentMonth = date.getMonth();
+
+        // Changes the date string (e.g. "2019-01-01-00:00:00") to a date number (e.g. 1, 2, 3, ...)
+        return reservedDates[currentYear]?.[currentMonth]?.map(day => new Date(day).getDate()) || [];
     };
 
     React.useEffect(() => {
-        fetchHighlightedDays(initialValue);
-        // abort request on unmount
-        return () => requestAbortController.current?.abort();
+        fetchReservedDates(listingId).then(dates => {
+            setReservedDates(dates);
+            setReservedDays(getReservedDaysOfMonth(initialDate));
+        }).catch(err => {
+            console.log(err);
+        }).finally(() => {
+            setIsLoading(false);
+        });
     }, []);
 
     const handleMonthChange = (date: Date) => {
-        if (requestAbortController.current) {
-            // make sure that you are aborting useless requests
-            // because it is possible to switch between months pretty quickly
-            requestAbortController.current.abort();
-        }
-
         setIsLoading(true);
-        setHighlightedDays([]);
-        fetchHighlightedDays(date);
+        setReservedDays(getReservedDaysOfMonth(date))
+        setIsLoading(false);
     };
-    
+
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-                value={value}
-                loading={isLoading}
-                onChange={(newValue) => {
-                    setValue(newValue);
-                }}
-                shouldDisableDate={(date) => {
-                    return highlightedDays.indexOf(date.getDate()) >= 0;
-                }}
-                onMonthChange={handleMonthChange}
+                // Format the input field
                 renderInput={(params) => <TextField {...params}  size={'small'} variant={'standard'}/>}
-                renderLoading={() => <CalendarPickerSkeleton />}/>
-        </LocalizationProvider>
+
+
+                {...dpProps}
+
+                value={value}
+                onChange={(newDate) => {
+                    setValue(newDate);
+                    handleMonthChange(newDate || initialDate);
+                    dpProps?.onChange(newDate);
+                }}
+                onMonthChange={(newDate)=>{
+                    handleMonthChange(newDate);
+                    dpProps?.onMonthChange && dpProps?.onMonthChange(newDate);
+                }}
+
+                // Allow selecting the same day - Fixes a bug where the date picker does not reflect if the date is typed in
+                allowSameDateSelection={true}
+
+                defaultCalendarMonth={initialDate}
+
+                // Disable reserved days
+                shouldDisableDate={(date) => {
+                    return reservedDays.indexOf(date.getDate()) >= 0;
+                }}
+
+                // Handle loading
+                loading={isLoading}
+                renderLoading={() => <CalendarPickerSkeleton />}
+
+                // Format the days
+                renderDay={(day, _value, pickersDayProps) => {
+                    const isReserved = reservedDays.indexOf(day.getDate()) >= 0;
+                    return (
+                        <PickersDay {...pickersDayProps} sx={{
+                            textDecoration: isReserved ? 'line-through' : 'none',
+                        }} />
+                    );
+                }}
+            />
     );
 }
 
