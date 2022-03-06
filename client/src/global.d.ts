@@ -36,6 +36,12 @@ declare global {
         };
         rules: string[];
     }
+
+    interface ReservedDates {
+        [year:string]: {
+            [month:string]: Date[];
+        }
+    }
 }
 
 export {}
