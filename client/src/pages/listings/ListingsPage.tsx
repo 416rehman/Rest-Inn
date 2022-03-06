@@ -20,7 +20,6 @@ function ListingsPage() {
     useEffect(()=> {
         searchParams.set('page', currentPage.toString());
         const filter = searchParams.toString()
-
         axios.get(apiURL('/properties', filter))
             .then(res => {
                 setListings(res.data.data)
