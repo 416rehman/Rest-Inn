@@ -1,7 +1,9 @@
-const prodAPI = 'https://rest-inn.herokuapp.com';
-const devAPI = 'http://localhost:8080';
-global.api = prodAPI;
-global.apiURL = (path: string, query?:string) => `${global.api}${path||''}?${query||''}`
+enum API_GATEWAY {
+  PROD = `https://rest-inn.herokuapp.com`,
+  DEV = `http://localhost:8080`
+}
+
+global.apiURL = (path: string, query?:string) => `${API_GATEWAY.DEV}${path||''}${query ? '?' + query : ''}`
 
 global.titleCase = (string) => {
   return string.replace(/\w\S*/g, (txt) => {
