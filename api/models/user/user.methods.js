@@ -15,30 +15,34 @@ const ommited_fields = {
  * Get all users
  *
  * @param filter
+ * @param omitSensitiveData
  * @return {Promise<Array<HydratedDocument<any, {}, {}>>>}
  */
-module.exports.getAll = (filter={}) => {
-    return userModel.find(filter, ommited_fields).exec();
+module.exports.getAll = (filter={}, omitSensitiveData = true) => {
+    return userModel.find(filter, omitSensitiveData ? ommited_fields : {}).exec();
 };
 
 /**
  * Get user by username
  *
  * @param username
+ * @param omitSensitiveData
+ * @param filter
  * @return {Promise<any>}
  */
-module.exports.getByUsername = (username) => {
-    return userModel.findOne({username: username}, ommited_fields).exec();
+module.exports.getByUsername = (username, omitSensitiveData = true, filter={}) => {
+    return userModel.findOne({username: username, ...filter}, omitSensitiveData ? ommited_fields : {}).exec();
 };
 
 /**
  * Get user by email
  *
  * @param email
+ * @param omitSensitiveData
  * @return {Promise<any>}
  */
-module.exports.getByEmail = (email) => {
-    return userModel.findOne({email: email},ommited_fields).exec();
+module.exports.getByEmail = (email, omitSensitiveData = true) => {
+    return userModel.findOne({email: email},omitSensitiveData ? ommited_fields : {}).exec();
 };
 
 /**
@@ -46,12 +50,13 @@ module.exports.getByEmail = (email) => {
  *
  * @param username
  * @param user
+ * @param omitSensitiveData
  * @return {Promise<any>}
  */
-module.exports.updateUser = (username, user) => {
+module.exports.updateUser = (username, user, omitSensitiveData = true) => {
     return userModel.findOneAndUpdate({username: username}, user, {
         new: true, // return the new user instead of the old one
-        projection: ommited_fields
+        projection: omitSensitiveData ? ommited_fields : {}
     }).exec();
 };
 
@@ -60,9 +65,11 @@ module.exports.updateUser = (username, user) => {
  *
  * @param username
  * @param listingId - property/listing id
+ * @param omitSensitiveData
  * @return {Promise<any>}
  */
-module.exports.addFavoriteProperty = (username, listingId) => {
+module.exports.addFavoriteProperty = (username, listingId, omitSensitiveData = true) => {
+    const projection = (omitSensitiveData ? ommited_fields : {})
     return userModel.findOneAndUpdate({username: username}, {
         $push: {
             'favorites.properties': {
@@ -72,7 +79,7 @@ module.exports.addFavoriteProperty = (username, listingId) => {
         }
     }, {
         new: true, // return the new user instead of the old one
-        projection: {email: 0, ...ommited_fields}
+        projection: {email: 0, ...projection}
     }).exec();
 };
 
@@ -81,9 +88,11 @@ module.exports.addFavoriteProperty = (username, listingId) => {
  *
  * @param username
  * @param listingId - property/listing id
+ * @param omitSensitiveData
  * @return {Promise<any>}
  */
-module.exports.removeFavoriteProperty = (username, listingId) => {
+module.exports.removeFavoriteProperty = (username, listingId, omitSensitiveData = true) => {
+    const projection = (omitSensitiveData ? ommited_fields : {})
     return userModel.findOneAndUpdate({username: username}, {
         $pull: {
             'favorites.properties': {
@@ -92,7 +101,7 @@ module.exports.removeFavoriteProperty = (username, listingId) => {
         }
     }, {
         new: true, // return the new user instead of the old one
-        projection: {email: 0, ...ommited_fields}
+        projection: {email: 0, ...projection}
     }).exec();
 };
 
@@ -128,7 +137,6 @@ module.exports.addUser = async (data) => {
  */
 module.exports.deleteUser = (username) => {
     return userModel.findOneAndDelete({username: username}, {
-        projection: ommited_fields,
         new: true
     }).exec();
 };
