@@ -49,6 +49,8 @@ const UserSchema = new mongoose.Schema({
     },
     phone:  {
         type: String,
+        unique: true,
+        sparse: true
     },
     extension: {
         type: String,
@@ -89,7 +91,7 @@ UserSchema.pre('save', async function (next) {
         this.password = await bcrypt.hash(this.password, 10);
 
         // 2. Generate new refresh token
-        jsonwebtoken.sign({username: this.username}, process.env.SECRET, {}, (err, token) => {
+        jsonwebtoken.sign({id: this.id, username: this.username}, process.env.SECRET, {}, (err, token) => {
             if (err) {
                 console.log(err);
                 return next(err);
@@ -100,4 +102,7 @@ UserSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports = mongoose.model('User', UserSchema);
+
+const Model = mongoose.model('User', UserSchema);
+
+module.exports = Model;
