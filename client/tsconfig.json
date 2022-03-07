@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "baseUrl": "./src",
     "lib": [
       "dom",
       "dom.iterable",
@@ -22,7 +23,7 @@
     "downlevelIteration": true
   },
   "include": [
-    "src",
-    "global.d.ts"
+    "./src/*",
+    "./src/**/*"
   ]
 }
