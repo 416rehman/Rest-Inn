@@ -6,11 +6,13 @@ import {APIValidate} from "../../helpers/validationAPI.helper";
 import {Link} from "react-router-dom";
 import {createUser} from "../../helpers/userAPI.helper";
 import {NewUser, NewUserField} from "../../@typings/users";
+import {LoadingButton} from "@mui/lab";
 
 export default function SignupPage() {
 
     const [errors, setErrors] = React.useState<NewUser>({});
     const [formData, setFormData] = React.useState<NewUser>({});
+    const [loading, setLoading] = React.useState(false);
 
     const validateAll = (): Promise<boolean> => {
         return new Promise(async resolve => {
@@ -28,14 +30,12 @@ export default function SignupPage() {
         })
     };
     const handleSubmit = async (event: any) => {
+        setLoading(true);
         event.preventDefault();
 
         validateAll().then(valid => {
-            if (valid) {
-                console.log(formData);
-                createUser(formData);
-            }
-        })
+            if (valid) createUser(formData);
+        }).finally(() => setTimeout(() => setLoading(false), 500));
 
     };
 
@@ -142,9 +142,9 @@ export default function SignupPage() {
                             value={formData?.password}
                         />
 
-                        <Button variant="contained" disableElevation color="primary" size={'large'} type={'submit'}>
+                        <LoadingButton variant="contained" disableElevation color="primary" size={'large'} type={'submit'} loading={loading}>
                             Sign Up
-                        </Button>
+                        </LoadingButton>
                         <Divider/>
                         <Typography variant="body2">
                             Already have an account? <Link to={'/login'}> <Button> Log in </Button> </Link>
