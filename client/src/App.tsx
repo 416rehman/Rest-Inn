@@ -1,23 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
     Routes,
     Route,
 } from "react-router-dom";
 import Layout from "./layout/Layout";
-import { ThemeProvider } from "@mui/material";
+import {ThemeProvider} from "@mui/material";
 import theme from "./theme";
 import HomePage from "./pages/home/HomePage";
-import InvalidPage from "./pages/404/404Page";
+import NotFoundPage from "./pages/notFound/NotFoundPage";
 import ListingsPage from "./pages/listings/ListingsPage";
 import ListingDescriptionPage from "./pages/listings/ListingDescriptionPage/ListingDescriptionPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
-
-//TODO: Add Authentication
-//TODO: Add secured and visitor-only routes
+import LogoutPage from "./pages/logout/LogoutPage";
+import {renewSession} from "./helpers/userAPI.helper";
+import SecuredRoute from "./components/SecuredRoute/SecuredRoute";
 
 function App() {
+    useEffect(() => {
+        renewSession().then(() => {
+            console.log("Welcome back!");
+        })
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <div className="App">
@@ -30,15 +36,18 @@ function App() {
                             <Route path={":listingId"} element={<ListingDescriptionPage/>}/>
                         </Route>
 
-                        <Route path={'login'} element={<LoginPage/>}/>
-                        <Route path={'signup'} element={<SignupPage/>}/>
+                        <Route path={'logout'} element={<SecuredRoute><LogoutPage/></SecuredRoute>}/>
+                        <Route path={'login'} element={<SecuredRoute visitorOnly={true}><LoginPage/></SecuredRoute>}/>
+                        <Route path={'signup'} element={<SecuredRoute visitorOnly={true}><SignupPage/></SecuredRoute>}/>
 
-                        <Route path={'*'} element={<InvalidPage/>}/>
+                        <Route path={'*'} element={<NotFoundPage/>}/>
                     </Route>
                 </Routes>
             </div>
         </ThemeProvider>
-    );
+    )
+        ;
 }
 
 export default App;
+
