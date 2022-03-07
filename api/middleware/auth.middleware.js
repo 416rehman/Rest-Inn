@@ -17,8 +17,9 @@ const User = require("../models/user/user.methods");
  */
 module.exports.authRefreshToken = async (req, res, next) => {
     try {
+        console.log(req.header("Authorization"));
         // Get rid of the 'Bearer ' part of the token
-        const token = req.header("Authorization").replace("Bearer ", "");
+        const token = req.header("Authorization")?.replace("Bearer ", "");
 
         if (!token) {
             throw new Error('A refresh token is required to authenticate this request. Include a refresh token in the Authorization header. (i.e. Authorization: <refresh token>)');
@@ -52,8 +53,10 @@ module.exports.authRefreshToken = async (req, res, next) => {
  */
 module.exports.authAccessToken = async (req, res, next) => {
     try {
+        console.log('authAccessToken');
+        console.log(req.header("Authorization"));
         // Get rid of the 'Bearer ' part of the token
-        const token = req.header("Authorization").replace("Bearer ", "");
+        const token = req.header("Authorization")?.replace("Bearer ", "");
 
         if (!token)
             throw new Error('An access token is required to authenticate this request. Include an access token in the Authorization header. (i.e. Authorization: <access token>)');

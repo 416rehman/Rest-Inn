@@ -9,6 +9,7 @@
  */
 const router = require('express').Router();
 const user = require('../services/users.service');
+const {authAccessToken} = require("../middleware/auth.middleware");
 
 
 /** Get all users */
@@ -174,13 +175,15 @@ router.post('/', user.createUser);
  *      - Favorites
  *    summary: Add to user's favorites
  *    description: Adds a favorite to a user's favorites
+ *    security:
+ *      - accessToken: []
  *    produces:
  *      - application/json
  *    parameters:
- *      - $ref: '#/components/userPathParameters/username'
  *      - allOf:
  *        - $ref: '#/components/propertyPathParameters/id'
  *        - name: listingId
+ *        - required: true
  *    responses:
  *      200:
  *        description: A favorite is added to a user's favorites
@@ -200,7 +203,7 @@ router.post('/', user.createUser);
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.post('/:username/favorites/:listingId', user.addFavorite);
+router.post('/:username/favorites/:listingId', authAccessToken, user.addFavorite);
 
 /** Update user by username */
 /**
