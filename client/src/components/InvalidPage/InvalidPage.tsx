@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react';
-import { Button} from "@mui/material";
+import {Button, Stack} from "@mui/material";
 import {Link} from "react-router-dom";
 interface IProps {
     children?: ReactElement | ReactElement[];
@@ -10,16 +10,17 @@ interface IProps {
 }
 function InvalidPage({title, children, buttonLink, buttonText, ...rest}: IProps) {
     return (
-        <div {...rest}>
-            <h1>{title || `No Listings Found`}</h1>
-            {children || <p> There are no listings available for your search. </p>}
-            <Link to={buttonLink || '/listings'}>
-                <Button>
-                    {buttonText || `View All Listings`}
-                </Button>
-            </Link>
-            {children}
-        </div>
+        <Stack {...rest} alignItems={'center'}>
+            <Stack spacing={'1rem'}>
+                <h1>{title || `No Listings Found`}</h1>
+                {children || <p> There are no listings available for your search. </p>}
+                <Link to={buttonLink || '/'}>
+                    <Button>
+                        {buttonText || `Return to Home`}
+                    </Button>
+                </Link>
+            </Stack>
+        </Stack>
     );
 }
 
