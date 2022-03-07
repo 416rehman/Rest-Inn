@@ -1,9 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {
-    Routes,
-    Route,
-} from "react-router-dom";
+import {Route, Routes,} from "react-router-dom";
 import Layout from "./layout/Layout";
 import {ThemeProvider} from "@mui/material";
 import theme from "./theme";
@@ -21,7 +18,7 @@ function App() {
     useEffect(() => {
         renewSession().then(() => {
             console.log("Welcome back!");
-        })
+        }).catch(()=>{})
     }, []);
 
     return (
