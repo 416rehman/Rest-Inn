@@ -60,4 +60,19 @@
  *                       type: string
  *                       description: The error object key
  *                       example: "Invalid query parameter"
+ *    Unauthorized:
+ *       description: Unauthorized - Check your credentials.
+ *       content:
+ *         application/json:
+ *            schema:
+ *               type: object
+ *               properties:
+ *                   message:
+ *                     type: string
+ *                     description: The message of the response
+ *                     example: "Unauthorized"
+ *                   error:
+ *                     description: The error object with error details
+ *                     type: string
+ *                     example: "Invalid credentials"
  */

@@ -16,6 +16,7 @@ const cors = require("cors");
 
 const indexRouter = require('./routes/index.routes');
 const swaggerUi = require("swagger-ui-express");
+const authRouter = require('./routes/auth.routes');
 const usersRouter = require('./routes/users.routes');
 const propertiesRouter = require('./routes/properties.routes');
 const bookingsRouter = require('./routes/bookings.routes');
@@ -33,6 +34,7 @@ app.use(cookieParser());
 app.use('/static', express.static('public'));
 
 app.use('/', swaggerUi.serve, indexRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/properties', propertiesRouter);
 app.use('/bookings', bookingsRouter);
