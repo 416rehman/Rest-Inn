@@ -2,35 +2,68 @@ import React, {useState} from 'react';
 import {Button, Card, Divider, IconButton, InputAdornment, Stack, TextField, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {login} from "../../helpers/userAPI.helper";
+import {LoadingButton} from "@mui/lab";
 
 function LoginPage() {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+    const [formError, setFormError] = useState('');
 
+    const [loading, setLoading] = React.useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-    return (
-        <Card className={'page-content'} variant={'outlined'} sx={{
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true);
+        event.preventDefault();
+        login(formData.email, formData.password).then((data) => {
+            console.log('Login successful', data);
+        }).catch((error) => {
+            setFormError(error || 'Login or password is invalid');
+        }).finally(() => {
+            setLoading(false);
+        });
+    };
+
+    return <Card className={'page-content'} variant={'outlined'} sx={{
             marginTop: '2rem',
             padding: '1rem',
             height: '100%',
             maxWidth: '95%',
             width: '700px',
         }}>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <Stack spacing={'1rem'} sx={{userSelect: 'none',}}>
                     <Typography textAlign={'center'} variant={'h6'}> Welcome to CRIB </Typography>
                     <Stack spacing={'1rem'} sx={{
                         filter: 'opacity(0.5)',
                     }}>
-                        <img src={'/illustrations/Paris.svg'} alt={'Paris'}/>
+                        <img src={'/illustrations/Paris.svg'} alt={'Paris'} loading={"eager"}/>
                     </Stack>
                     <Stack spacing={2}>
-                        <TextField type={'text'} placeholder={'Username'} variant={'outlined'} label={'Username'}/>
-                        <TextField placeholder={'Password'} label={'Password'}
-                                   type={showPassword ? "text" : "password"} // <-- This is where the magic happens
-                            // onChange={someChangeHandler}
-                                   InputProps={{ // <-- This is where the toggle button is added.
+                        <TextField
+                            type={'text'}
+                            placeholder={'Email'}
+                            variant={'outlined'}
+                            label={'Email'}
+                            autoComplete={'email'}
+                            error={!!formError}
+                            value={formData.email}
+                            onChange={(event) => setFormData({...formData, email: event.target.value})}
+                        />
+                        <TextField
+                            placeholder={'Password'}
+                            label={'Password'}
+                            autoComplete={'current-password'}
+                            type={showPassword ? "text" : "password"}
+                            error={!!formError}
+                            helperText={formError}
+                            onChange={(event) => setFormData({...formData, password: event.target.value})}
+                                   InputProps={{
                                        endAdornment: (
                                            <InputAdornment position="end">
                                                <IconButton
@@ -44,8 +77,8 @@ function LoginPage() {
                                        )
                                    }}/>
 
-                        <Button type={'submit'} fullWidth variant={'contained'} disableElevation
-                                size={'large'}>Login</Button>
+                        <LoadingButton type={'submit'} fullWidth variant={'contained'} disableElevation loading={loading}
+                                size={'large'}>Login</LoadingButton>
 
                         <Divider variant={'middle'}/>
 
@@ -60,7 +93,7 @@ function LoginPage() {
                 </Stack>
             </form>
         </Card>
-    );
 }
+
 
 export default LoginPage;

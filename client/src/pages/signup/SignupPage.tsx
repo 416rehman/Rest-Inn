@@ -2,33 +2,54 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {Card, Divider, Stack, TextField} from "@mui/material";
-import {APIValidate, fieldType} from "../../helpers/apiValidators";
+import {APIValidate} from "../../helpers/validationAPI.helper";
 import {Link} from "react-router-dom";
-
-enum formField {
-    firstName = 'firstName',
-    lastName = 'lastName',
-    email = 'email',
-    password = 'password',
-    username = 'username',
-}
-
-interface FormFields {
-    [formField: string]: string;
-}
+import {createUser} from "../../helpers/userAPI.helper";
+import {NewUser, NewUserField} from "../../@typings/users";
 
 export default function SignupPage() {
-    const [errors, setErrors] = React.useState<FormFields>({});
 
-    // TODO
-    //const [formData, setFormData] = React.useState<FormFields>({});
+    const [errors, setErrors] = React.useState<NewUser>({});
+    const [formData, setFormData] = React.useState<NewUser>({});
 
-    const apiValidate = (field: fieldType, value: string, errorKey: formField, required: boolean = false) => {
+    const validateAll = (): Promise<boolean> => {
+        return new Promise(async resolve => {
+            const form_errors:NewUser = {}
+
+            form_errors[NewUserField.email] = await APIValidate('email', formData['email'], true);
+            form_errors[NewUserField.password] = await APIValidate('password', formData['password'], true);
+            form_errors[NewUserField.username] = await APIValidate('username', formData['username'], true);
+            form_errors[NewUserField.firstName] = await APIValidate('firstName', formData['firstName'], true);
+            form_errors[NewUserField.lastName] = await APIValidate('lastName', formData['lastName'], true);
+
+            setErrors(form_errors);
+
+            resolve(Object.values(form_errors).every(error => error === ''))
+        })
+    };
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+
+        validateAll().then(valid => {
+            if (valid) {
+                console.log(formData);
+                createUser(formData);
+            }
+        })
+
+    };
+
+    const handleOnBlur = (field: NewUserField, value: string, required: boolean = false) => {
         APIValidate(field, value, required).then(validation_msg => {
-            if (validation_msg) setErrors({...errors, [errorKey]: validation_msg});
-            else setErrors({...errors, [errorKey]: ''});
+            if (validation_msg) setErrors({...errors, [field]: validation_msg})
+            else setErrors({...errors, [field]: ''})
         })
     }
+
+    const handleOnChange = (event: any) => {
+        const {name, value} = event.target;
+        setFormData({...formData, [name]: value});
+    };
 
     return (
         <Card className={'page-content'} variant={'outlined'} sx={{
@@ -38,7 +59,7 @@ export default function SignupPage() {
             maxWidth: '95%',
             width: '700px',
         }}>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <Stack spacing={'1rem'} sx={{userSelect: 'none',}}>
                     <Typography variant="h6">WELCOME TO CRIB</Typography>
                     <Stack>
@@ -49,67 +70,84 @@ export default function SignupPage() {
                         <TextField
                             label="Email"
                             variant="outlined"
+                            autoComplete={'email'}
+                            name={NewUserField.email}
                             fullWidth
-                            helperText={errors && errors?.email || ''}
+                            helperText={(errors && errors?.email) || ''}
                             error={!!errors?.email}
                             onBlur={(e) => {
-                                apiValidate('email', e.target.value, formField.email, true)
+                                handleOnBlur(NewUserField.email, e.target.value,  true)
                             }}
+                            onChange={handleOnChange}
+                            value={formData?.email}
                         />
 
                         <Stack direction={'row'} justifyContent={'space-between'} spacing={'1rem'}>
                             <TextField
                                 label="First Name"
                                 variant="outlined"
-                                sx={{
-                                    flex: 1,
-                                }}
-                                helperText={errors && errors?.firstName || ''}
+                                autoComplete={'given-name'}
+                                name={NewUserField.firstName}
+                                sx={{flex: 1}}
+                                helperText={(errors && errors?.firstName) || ''}
                                 error={!!errors?.firstName}
                                 onBlur={(e) => {
-                                    apiValidate('firstName', e.target.value, formField.firstName, true)
+                                    handleOnBlur(NewUserField.firstName, e.target.value,  true)
                                 }}
+                                onChange={handleOnChange}
+                                value={formData?.firstName}
                             />
                             <TextField
                                 label="Last Name"
                                 variant="outlined"
-                                sx={{
-                                    flex: 1,
-                                }}
-                                helperText={errors && errors?.lastName || ''}
+                                autoComplete={'family-name'}
+                                name={NewUserField.lastName}
+                                sx={{ flex: 1 }}
+                                helperText={(errors && errors?.lastName) || ''}
                                 error={errors?.lastName?.length > 0}
                                 onBlur={(e) => {
-                                    apiValidate('lastName', e.target.value, formField.lastName, true)
+                                    handleOnBlur(NewUserField.lastName, e.target.value,  true)
                                 }}
+                                onChange={handleOnChange}
+                                value={formData?.lastName}
                             />
                         </Stack>
                         <TextField
                             label="Username"
                             variant="outlined"
+                            autoComplete={'username'}
+                            name={NewUserField.username}
                             fullWidth
-                            helperText={errors && errors?.username || ''}
+                            helperText={(errors && errors?.username) || ''}
                             error={!!errors?.username}
                             onBlur={(e) => {
-                                apiValidate('username', e.target.value, formField.username, true)
+                                handleOnBlur(NewUserField.username, e.target.value,  true)
                             }}
+                            onChange={handleOnChange}
+                            value={formData?.username}
                         />
                         <TextField
                             label="Password"
                             variant="outlined"
+                            autoComplete={'new-password'}
+                            name={NewUserField.password}
                             fullWidth
-                            helperText={errors && errors?.password || ''}
+                            helperText={(errors && errors?.password) || ''}
                             error={!!errors?.password}
                             onBlur={(e) => {
-                                apiValidate('password', e.target.value, formField.password, true)
+                                console.log('onblur')
+                                handleOnBlur(NewUserField.password, e.target.value,  true)
                             }}
+                            onChange={handleOnChange}
+                            value={formData?.password}
                         />
 
-                        <Button variant="contained" disableElevation color="primary" size={'large'}>
+                        <Button variant="contained" disableElevation color="primary" size={'large'} type={'submit'}>
                             Sign Up
                         </Button>
                         <Divider/>
                         <Typography variant="body2">
-                            Already have an account? <Link to={'/login'}><Button>Log in</Button></Link>
+                            Already have an account? <Link to={'/login'}> <Button> Log in </Button> </Link>
                         </Typography>
                     </Stack>
                 </Stack>
