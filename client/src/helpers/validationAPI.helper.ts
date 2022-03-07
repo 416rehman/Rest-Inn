@@ -1,19 +1,14 @@
-/**
- * Checks if the given email is valid and not already in use.
- * @param email
- * @return {String} error message
- */
 import axios from "axios";
 
-enum SUPPORTED_FIELDS {
-    email = "email",
-    username = "username",
-    password = "password",
-    firstName = "firstName",
-    lastName = "lastName",
+const SUPPORTED_FIELDS = {
+    email: "email",
+    username: "username",
+    password: "password",
+    firstName: "firstName",
+    lastName: "lastName",
 }
 
-type fieldType = keyof typeof SUPPORTED_FIELDS;
+type SUPPORTED_FIELDS = keyof typeof SUPPORTED_FIELDS;
 
 interface IAPIValidator {
     [field: string]: string | null;
@@ -26,9 +21,9 @@ interface IAPIValidator {
  * @param required
  * @return {Promise<string>} The validation error message or empty string if valid
  */
-const APIValidate = (field: fieldType, value: string, required: boolean = false): Promise<string> => {
+const APIValidate = (field: SUPPORTED_FIELDS, value: string, required: boolean = false): Promise<string> => {
     return new Promise((resolve) => {
-        value = value.trim();
+        value = value ? value.trim() : "";
 
         if (required && (!value || !value.length))
             resolve(`Required`);
@@ -47,4 +42,3 @@ const APIValidate = (field: fieldType, value: string, required: boolean = false)
 };
 
 export {APIValidate};
-export type { fieldType };
