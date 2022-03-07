@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
 import { HomeOutlined} from "@mui/icons-material";
 import { useNavigate  } from 'react-router-dom';
 
-function InvalidPage()
+function NotFoundPage()
 {
     let history = useNavigate();
 
@@ -17,4 +17,4 @@ function InvalidPage()
     );
 }
 
-export default InvalidPage;
+export default NotFoundPage;
