@@ -71,20 +71,3 @@ const BookingSchema = new mongoose.Schema({
 
 const bookingModel = mongoose.model('Booking', BookingSchema);
 module.exports = bookingModel;
-
-module.exports.addFeedback = async function (bookingId, rating, review) {
-    const booking = await this.findById(bookingId);
-    if (!booking) {
-        throw new Error('Booking not found');
-    }
-    if (booking.checkOut > new Date()) {
-        throw new Error('Booking is not completed yet - cannot add feedback');
-    }
-    if (rating) {
-        booking.rating = rating;
-    }
-    if (review) {
-        booking.review = review;
-    }
-    await booking.save();
-};
