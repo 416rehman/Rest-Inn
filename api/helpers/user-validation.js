@@ -20,7 +20,7 @@ const lastNameCondition = Joi.string().trim().min(3).pattern(/^[a-z A-Z\-'.]+$/)
 const phoneCondition = Joi.string().trim().length(10).pattern(/^[0-9]+$/).label('Phone Number')
 const phonesCondition = Joi.array().items(phoneCondition).label('Phone Numbers')
 
-const newUserValidation = Joi.object({
+const signupValidation = Joi.object({
     email: emailCondition.required(),
     password: passwordCondition.required(),
     username: usernameCondition.required(),
@@ -38,6 +38,11 @@ const existingUserValidation = Joi.object({
     phone: phonesCondition
 })
 
+const loginValidation = Joi.object({
+    email: emailCondition.required(),
+    password: passwordCondition.required()
+})
+
 const favoriteValidation = idCondition.required();
 
 module.exports = {
@@ -48,7 +53,8 @@ module.exports = {
     lastNameCondition,
     phoneCondition,
     phonesCondition,
-    newUserValidation,
+    signupValidation,
     existingUserValidation,
-    favoriteValidation
+    favoriteValidation,
+    loginValidation
 }

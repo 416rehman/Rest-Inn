@@ -10,7 +10,7 @@
 
 const User = require('../models/user/user.methods');
 const Property = require('../models/property/property.methods');
-const {newUserValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
+const {signupValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
 const {userFilter} = require("../helpers/filters");
 
 /**
@@ -72,7 +72,7 @@ const getUserByUsername = async function (req, res) {
  * Creates a new user object.
  */
 const createUser = async function (req, res) {
-    newUserValidation.validateAsync(req.body).then(sanitized => {
+    signupValidation.validateAsync(req.body).then(sanitized => {
         User.addUser(sanitized).then(user => {
             res.status(201).json({
                 message: 'User Created!',
