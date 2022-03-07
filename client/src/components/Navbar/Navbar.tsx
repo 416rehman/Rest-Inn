@@ -24,11 +24,18 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import {AccountCircleOutlined, Login, Logout, SettingsOutlined} from "@mui/icons-material";
+import {
+    AccountCircleOutlined,
+    Login,
+    Logout,
+    SettingsOutlined
+} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
+import {useSelector} from "react-redux";
+import {RootState} from "../../@typings/auth";
 
 const MenuItemStyled = styled(MenuItem)({
-    padding: 0,
+    padding: '0.5rem 1rem',
     width: '100%',
     height: '100%',
 });
@@ -41,6 +48,7 @@ function Navbar() {
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const auth = useSelector((state: RootState) => state);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -53,10 +61,10 @@ function Navbar() {
 
     return (
         <nav className={'navbar'}
-            style={{
-            backgroundColor: theme.palette.background.paper,
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        }}>
+             style={{
+                 backgroundColor: theme.palette.background.paper,
+                 borderBottom: `1px solid ${theme.palette.divider}`,
+             }}>
             <div id={"logo"}>
                 <Link to={"/"}>
                     <img src={isSmallScreen ? '/logo/icon.svg' : '/logo/logo.svg'} alt={"logo"}/>
@@ -81,7 +89,9 @@ function Navbar() {
                         padding: '20px'
                     }}
                 >
-                    <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+                    <Avatar sx={{width: 32, height: 32}}>{
+                        (auth?.user?.username ? auth.user.username[0] : <AccountCircleOutlined />)
+                    }</Avatar>
                 </IconButton>
             </Tooltip>
             <Menu
@@ -119,42 +129,67 @@ function Navbar() {
                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
-                <MenuItem>
-                    <Avatar/> Profile
-                </MenuItem>
-                <Divider/>
-                <MenuItemStyled>
-                    <Link to={'listings'}>
-                        <ListItemIconStyled>
-                            <SettingsOutlined fontSize="small"/>
-                            Settings
-                        </ListItemIconStyled>
+
+                {
+                    auth.isAuthenticated &&
+                    <>
+                    <Link to={'/@' + auth?.user?.username}>
+                        <MenuItem>
+                            <ListItemIconStyled>
+                                <Avatar sx={{width: 32, height: 32}}>{
+                                    (auth?.user?.username[0] + '').toUpperCase() || 'C'
+                                }</Avatar>
+                            </ListItemIconStyled>
+                            <span>{auth?.user?.username || 'Profile'}</span>
+                        </MenuItem>
                     </Link>
-                </MenuItemStyled>
-                <MenuItemStyled>
-                    <Link to={'listings'}>
-                        <ListItemIconStyled>
-                            <AccountCircleOutlined fontSize="small"/>
-                            Sign Up
-                        </ListItemIconStyled>
+                    <Divider/>
+                    </>
+                }
+
+
+                {auth.isAuthenticated &&
+                    <Link to={'settings'}>
+                        <MenuItemStyled>
+                            <ListItemIconStyled>
+                                <SettingsOutlined fontSize="small"/>
+                                Settings
+                            </ListItemIconStyled>
+                        </MenuItemStyled>
                     </Link>
-                </MenuItemStyled>
-                <MenuItemStyled>
-                    <Link to={'login'}>
-                        <ListItemIconStyled>
-                            <Login fontSize="small"/>
-                            Log In
-                        </ListItemIconStyled>
+                }
+                {!auth.isAuthenticated &&
+                    <Link to={'/signup'}>
+                        <MenuItemStyled>
+                            <ListItemIconStyled>
+                                <AccountCircleOutlined fontSize="small"/>
+                                Sign Up
+                            </ListItemIconStyled>
+                        </MenuItemStyled>
                     </Link>
-                </MenuItemStyled>
-                <MenuItemStyled>
-                    <Link to={'listings'}>
-                        <ListItemIconStyled>
-                            <Logout fontSize="small"/>
-                            Logout
-                        </ListItemIconStyled>
+                }
+
+                {!auth.isAuthenticated &&
+                    <Link to={'/login'}>
+                        <MenuItemStyled>
+                            <ListItemIconStyled>
+                                <Login fontSize="small"/>
+                                Log In
+                            </ListItemIconStyled>
+                        </MenuItemStyled>
                     </Link>
-                </MenuItemStyled>
+                }
+
+                {auth.isAuthenticated &&
+                    <Link to={'/logout'}>
+                        <MenuItemStyled>
+                            <ListItemIconStyled>
+                                <Logout fontSize="small"/>
+                                Logout
+                            </ListItemIconStyled>
+                        </MenuItemStyled>
+                    </Link>
+                }
             </Menu>
         </nav>
     );
