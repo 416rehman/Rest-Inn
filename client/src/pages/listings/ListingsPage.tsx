@@ -5,6 +5,7 @@ import {useSearchParams} from 'react-router-dom'
 import axios from 'axios'
 import InvalidPage from "../../components/InvalidPage/InvalidPage";
 import {Pagination, Skeleton} from "@mui/material";
+import {ListingPartial} from "../../@typings/listings";
 
 //TODO: Add Filtering
 

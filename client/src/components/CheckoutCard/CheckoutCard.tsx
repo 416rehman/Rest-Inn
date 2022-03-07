@@ -5,6 +5,7 @@ import {LocalizationProvider} from "@mui/lab";
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DynamicDatePicker from "../DynamicDatePicker/DynamicDatePicker";
 import Counter from "../Counter/Counter";
+import {ListingPartial} from "../../@typings/listings";
 
 interface IProps {
     listing: ListingPartial

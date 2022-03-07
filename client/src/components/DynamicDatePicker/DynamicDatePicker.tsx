@@ -4,6 +4,7 @@ import DatePicker, {DatePickerProps} from '@mui/lab/DatePicker';
 import CalendarPickerSkeleton from '@mui/lab/CalendarPickerSkeleton';
 import axios from "axios";
 import {PickersDay} from "@mui/lab";
+import {ReservedDates} from "../../@typings/listings";
 
 function fetchReservedDates(listingId: string): Promise<ReservedDates>{
     return new Promise<ReservedDates>((resolve, reject) => {

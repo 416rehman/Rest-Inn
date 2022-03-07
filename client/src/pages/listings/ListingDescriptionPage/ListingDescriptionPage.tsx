@@ -13,6 +13,7 @@ import {
 import VerticalButton from "../../../components/VerticalButton/VerticalButton";
 import ProfileCard from "../../../components/ProfileCard/ProfileCard";
 import CheckoutCard from "../../../components/CheckoutCard/CheckoutCard";
+import {Listing} from "../../../@typings/listings";
 
 function ListingDescriptionPage() {
     const {listingId} = useParams();

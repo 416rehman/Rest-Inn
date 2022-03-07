@@ -5,6 +5,7 @@ import {A11y, Pagination} from "swiper";
 import {CardActionArea, Rating, Stack, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
+import {ListingPartial} from "../../@typings/listings";
 
 interface IProps {
     listing: ListingPartial;

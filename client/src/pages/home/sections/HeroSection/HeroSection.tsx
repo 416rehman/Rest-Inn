@@ -4,6 +4,7 @@ import './HeroSection.scss';
 import {Chip, Fab, Rating, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import {MapsHomeWorkOutlined} from "@mui/icons-material";
+import {ListingPartial} from "../../../../@typings/listings";
 
 interface Slide {
     image: string;
