@@ -14,7 +14,7 @@ interface IProps {
     maxValue?: number;
 }
 
-export default function MinMaxFilter({title, fields, filters, setFiltersHandler, minValue, maxValue}: IProps) {
+export default function MinMaxFilterChoice({title, fields, filters, setFiltersHandler, minValue, maxValue}: IProps) {
     const [pendingFilters, setPendingFilters] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {

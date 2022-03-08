@@ -11,7 +11,7 @@ interface IProps {
     clearOnFalse?: boolean;
 }
 
-function ToggleFilter({label, name, filters, setFiltersHandler, clearOnFalse = true}: IProps) {
+function ToggleFilterChoice({label, name, filters, setFiltersHandler, clearOnFalse = true}: IProps) {
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (clearOnFalse && !event.target.checked) clearFilter()
@@ -45,4 +45,4 @@ function ToggleFilter({label, name, filters, setFiltersHandler, clearOnFalse = t
     );
 }
 
-export default ToggleFilter;
+export default ToggleFilterChoice;
