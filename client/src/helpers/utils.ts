@@ -7,6 +7,8 @@ enum API_GATEWAY {
     DEV = `http://localhost:8080`
 }
 
+let RENEWAL_IN_PROGRESS = false;
+
 /**
  * Builds the API Gateway URL, and renews the accessToken if needed
  * @param path
@@ -17,8 +19,11 @@ global.apiURL = (path: string, query?: string) => {
     const accessToken = store.getState().accessToken;
     if (accessToken) {
         const decodedToken: any = jwtDecode(accessToken || "");
-        if (decodedToken && decodedToken.exp < Date.now() / 1000)
-          renewSession();
+        if (!RENEWAL_IN_PROGRESS && (decodedToken && decodedToken.exp < Date.now() / 1000)) {
+            console.log("Renewing accessToken");
+            RENEWAL_IN_PROGRESS = true;
+            renewSession().then(() => RENEWAL_IN_PROGRESS = false);
+        }
     }
 
     return `${API_GATEWAY.DEV}${path || ''}${query ? '?' + query : ''}`;
