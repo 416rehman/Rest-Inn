@@ -3,6 +3,8 @@ const User = require('../models/user/user.methods')
 const {loginValidation} = require("../helpers/user-validation");
 const bcrypt = require("bcrypt");
 
+const TTL = '5m';
+
 /**
  * Receives the user's login credentials and returns the user's refresh token from the DB.
  * @param req
@@ -61,7 +63,7 @@ module.exports.renewAccessToken = (req, res) => {
         }
 
         const accessToken = jwt.sign(PAYLOAD, process.env.SECRET, {
-            expiresIn: '5m'
+            expiresIn: TTL || '5m'
         });
 
         res.json({
