@@ -6,7 +6,7 @@ import InvalidPage from "../../components/InvalidPage/InvalidPage";
 import {Pagination, Skeleton, Stack} from "@mui/material";
 import {ListingPartial} from "../../@typings/listings";
 import {useSearchParams} from "react-router-dom";
-import ListingsFilterBar from "../../components/Filters/ListingsFilterBar";
+import ListingsFilter from "../../components/Filters/ListingsFilter";
 
 
 function ListingsPage() {
@@ -47,7 +47,7 @@ function ListingsPage() {
 
     return loading ? (
         <div className={'listings-page page-content'}>
-            <ListingsFilterBar filters={appliedFilters} setFiltersHandler={setAppliedFilters}/>
+            <ListingsFilter filters={appliedFilters} setFiltersHandler={setAppliedFilters}/>
             {Array(5).map((_, i) => (
                 <Skeleton key={i} variant={'rectangular'} height={180} style={{
                     borderRadius: '25px',
@@ -56,7 +56,7 @@ function ListingsPage() {
         </div>
     ) : (
         <div className={'listings-page page-content'}>
-            <Stack><ListingsFilterBar filters={appliedFilters} setFiltersHandler={setAppliedFilters}/></Stack>
+            <Stack><ListingsFilter filters={appliedFilters} setFiltersHandler={setAppliedFilters}/></Stack>
             {listings.length ?
                 (<Fragment>
                     <div className={'listings-container'}>
