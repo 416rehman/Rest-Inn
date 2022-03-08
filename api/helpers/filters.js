@@ -27,6 +27,10 @@ module.exports.sortFilter = (query) => {
 module.exports.propertyFilter = (query) => {
     let filter = {};
 
+    if (query.bestSeller) {
+        filter.bestSeller = JSON.parse(query.bestSeller || false);
+    }
+
     if (query.priceMin || query.priceMax) {
         filter.price = {};
         if (query.priceMin) {
