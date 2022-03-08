@@ -18,7 +18,7 @@ const {propertyFilter, sortFilter} = require("../helpers/filters");
 
 module.exports.getAll = (req, res) => {
 
-    const {page, limit} = req.query;
+    let {page, limit} = req.query;
     const sort = sortFilter(req.query)
     const filter = propertyFilter(req.query);
 
@@ -34,9 +34,9 @@ module.exports.getAll = (req, res) => {
                 message: 'Retrieved all properties',
                 data: properties,
                 pagination: {
-                    page: req.query.page || 1,
-                    limit: req.query.limit || 100,
-                    totalPages: Math.ceil(count / (req.query.limit || 100)),
+                    page: page || 1,
+                    limit: limit || 100,
+                    totalPages: Math.ceil(count / (limit || 100)),
                     count: count
                 }
             })

@@ -21,6 +21,7 @@ const propertiesService = require('../services/properties.service')
  *      description: Retrieves all the properties in the database with an optional filter through query parameters
  *      parameters:
  *          - $ref: '#/components/propertyQueryParameters/listingType'
+ *          - $ref: '#/components/propertyQueryParameters/bestSeller'
  *          - $ref: '#/components/propertyQueryParameters/priceMin'
  *          - $ref: '#/components/propertyQueryParameters/priceMax'
  *          - $ref: '#/components/propertyQueryParameters/bedsMin'

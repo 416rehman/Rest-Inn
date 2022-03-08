@@ -97,8 +97,7 @@ const PropertySchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 1,
-        min: 1,
-        max: 100
+        min: 1
     },
 }, {
     timestamps: true,
