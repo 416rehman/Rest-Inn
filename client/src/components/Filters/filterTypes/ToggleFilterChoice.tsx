@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControlLabel, IconButton, Paper, Stack, Typography} from "@mui/material";
+import {FormControlLabel, IconButton, Paper, Stack, Typography} from "@mui/material";
 import SwitchStyled from "../../SwitchStyled";
 import {CloseRounded} from "@mui/icons-material";
 
@@ -29,18 +29,17 @@ function ToggleFilterChoice({label, name, filters, setFiltersHandler, clearOnFal
     }
 
     return (
-        <Stack>
-            <Paper sx={{pl: '1rem'}} variant={'outlined'}>
+        <Stack borderRadius={'50%'} borderColor={'ActiveBorder'}>
+            <Paper sx={{pl: '1rem', borderRadius: 150}} variant={'outlined'}>
                 <FormControlLabel control={
                     <SwitchStyled size={'medium'} checked={JSON.parse(filters[name] || 'false')} name={name} onChange={handleOnChange}/>
                 } label={
                     <Typography variant={'subtitle2'}>{label}</Typography>
                 } />
-                {isActive(name, filters) && <IconButton onClick={clearFilter} aria-label={'clear'} size={'small'}>
+                {(isActive(name, filters) && !clearOnFalse) && <IconButton onClick={clearFilter} aria-label={'clear'} size={'small'}>
                     <CloseRounded/>
                 </IconButton>}
             </Paper>
-
         </Stack>
     );
 }
