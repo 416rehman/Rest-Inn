@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './stylesheets/stylesheet.scss';
+import './stylesheet.scss';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {CssBaseline} from "@mui/material";
 import store from "./redux/store";
-import "./helpers/utils";
+import "./services/helper.service";
 import {Provider} from "react-redux";
 
 ReactDOM.render(

@@ -11,14 +11,16 @@ import ListingDescriptionPage from "./pages/listings/ListingDescriptionPage/List
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 import LogoutPage from "./pages/logout/LogoutPage";
-import {renewSession} from "./helpers/userAPI.helper";
-import SecuredRoute from "./components/SecuredRoute/SecuredRoute";
+import SecuredElement from "./components/SecuredRoute/SecuredRoute";
+import {isAccessExpired, renewSessionUsingRefreshToken} from "./services/user.service";
+import {refreshMetaData} from "./services/listing.service";
 
 function App() {
     useEffect(() => {
-        renewSession().then(() => {
-            console.log("Welcome back!");
-        }).catch(()=>{})
+        if (isAccessExpired())
+            renewSessionUsingRefreshToken()
+
+        refreshMetaData();
     }, []);
 
     return (
@@ -32,10 +34,10 @@ function App() {
                             <Route index={true} element={<ListingsPage/>}/>
                             <Route path={":listingId"} element={<ListingDescriptionPage/>}/>
                         </Route>
+                        <Route path={"login"} element={<SecuredElement visitorOnly><LoginPage/></SecuredElement>}/>
+                        <Route path={"signup"} element={<SecuredElement visitorOnly><SignupPage/></SecuredElement>}/>
+                        <Route path={"logout"} element={<SecuredElement><LogoutPage/></SecuredElement>}/>
 
-                        <Route path={'logout'} element={<SecuredRoute><LogoutPage/></SecuredRoute>}/>
-                        <Route path={'login'} element={<SecuredRoute visitorOnly={true}><LoginPage/></SecuredRoute>}/>
-                        <Route path={'signup'} element={<SecuredRoute visitorOnly={true}><SignupPage/></SecuredRoute>}/>
 
                         <Route path={'*'} element={<NotFoundPage/>}/>
                     </Route>
