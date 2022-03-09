@@ -8,7 +8,7 @@ const router = express.Router()
  * /valid:
  *   post:
  *     tags:
- *       - Validation
+ *       - Meta
  *     summary: Validates a received field
  *     description: Multiple fields are not supported. Supported fields are username, firstName, lastName, email, phone, password
  *     produces:
