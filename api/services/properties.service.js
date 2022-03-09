@@ -15,16 +15,16 @@ const {
     propertyTypeCondition
 } = require('../helpers/property-validation');
 const {propertyFilter, sortFilter} = require("../helpers/filters");
+const {listingTypes, propertyTypes, amenities} = require("../constants/property.constants");
 
 module.exports.getAll = (req, res) => {
-
     let {page, limit} = req.query;
     const sort = sortFilter(req.query)
     const filter = propertyFilter(req.query);
 
     property.getAll(filter, limit, page, sort).then(async properties => {
         if (properties.length === 0) {
-            res.status(404).send({
+            res.status(404).json({
                 message: 'No properties found',
             });
         } else {
@@ -51,23 +51,76 @@ module.exports.getAll = (req, res) => {
 }
 
 module.exports.getAllPropertyTypes = (req, res) => {
-    property.getAllTypes().then(propertyTypes => {
-        if (propertyTypes.length === 0) {
-            res.status(404).send({
-                message: 'No property types found',
-            });
-        } else {
-            res.json({
-                message: 'Retrieved all property types',
-                data: propertyTypes
+    if (req.query.all) {
+        res.json({
+            message: 'Retrieved all available property types',
+            data: propertyTypes.map(pt => {
+                return {
+                    _id: pt,
+                }
             })
-        }
-    }).catch(err => {
-        res.status(500).json({
-            message: 'Error when getting all property types',
-            error: err.message
+        })
+    } else {
+        property.getAllTypes().then(propertyTypes => {
+            if (propertyTypes.length === 0) {
+                res.status(404).json({
+                    message: 'No property types found',
+                });
+            } else {
+                res.json({
+                    message: 'Retrieved all property types',
+                    data: propertyTypes
+                })
+            }
+        }).catch(err => {
+            res.status(500).json({
+                message: 'Error when getting all property types',
+                error: err.message
+            });
         });
-    });
+    }
+}
+
+module.exports.getAllListingTypes = (req, res) => {
+    if (req.query.all) {
+        res.json({
+            message: 'Retrieved all available listing types',
+            data: listingTypes.map(lt => {
+                return {
+                    _id: lt,
+                }
+            })
+        })
+    } else {
+        property.getAllListingTypes().then(types => {
+            if (types.length === 0) {
+                res.status(404).json({
+                    message: 'No Listing Types Found'
+                })
+            } else {
+                res.json({
+                    message: "Retrieved all listing types",
+                    data: types
+                })
+            }
+        }).catch(e => {
+            res.status(500).json({
+                message: "Failed to retrieve listing types",
+                error: e.message
+            })
+        })
+    }
+}
+
+module.exports.getAllAmenities = (req, res) => {
+    res.json({
+        message: 'Retrieved all amenities',
+        data: amenities.map(amenity => {
+            return {
+                _id: amenity,
+            }
+        })
+    })
 }
 
 module.exports.getAllByType = (req, res) => {
@@ -77,7 +130,7 @@ module.exports.getAllByType = (req, res) => {
 
         property.getAllByType(type, limit, page, sort).then(async properties => {
             if (properties.length === 0) {
-                res.status(404).send({
+                res.status(404).json({
                     message: 'No properties found of type ' + type,
                 });
             } else {
@@ -133,7 +186,7 @@ module.exports.getAllByLocation = (req, res) => {
 
     property.getAllByLocation(req.params.location, limit, page, sort).then(properties => {
         if (properties.length === 0) {
-            res.status(404).send({
+            res.status(404).json({
                 message: 'No properties found at location ' + req.params.location,
             });
         } else {
@@ -163,7 +216,7 @@ module.exports.getAllBestSellers = (req, res) => {
 
     property.getBestSellers(limit, page, sort).then(async properties => {
         if (properties.length === 0) {
-            res.status(404).send({
+            res.status(404).json({
                 message: 'No Best Sellers found',
             });
         } else {
@@ -191,7 +244,7 @@ module.exports.getOneById = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id => {
         property.getById(id).then(property => {
             if (!property) {
-                res.status(404).send({
+                res.status(404).json({
                     message: 'No property found with id ' + id,
                 });
             } else {
@@ -285,17 +338,17 @@ module.exports.deleteById = (req, res) => {
 
 module.exports.getReservedDates = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id => {
-            property.getReservedDates(id).then(dates => {
-                res.json({
-                    message: 'Retrieved reserved dates',
-                    data: dates
-                })
-            }).catch(err => {
-                res.status(500).json({
-                    message: 'Error when getting reserved dates',
-                    error: err.message
-                });
+        property.getReservedDates(id).then(dates => {
+            res.json({
+                message: 'Retrieved reserved dates',
+                data: dates
+            })
+        }).catch(err => {
+            res.status(500).json({
+                message: 'Error when getting reserved dates',
+                error: err.message
             });
+        });
     }).catch(err => {
         res.status(400).json({
             message: 'Invalid id',
