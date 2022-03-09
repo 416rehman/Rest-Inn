@@ -11,15 +11,13 @@ import ListingDescriptionPage from "./pages/listings/ListingDescriptionPage/List
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 import LogoutPage from "./pages/logout/LogoutPage";
-import SecuredElement from "./components/SecuredRoute/SecuredRoute";
-import {isAccessExpired, renewSessionUsingRefreshToken} from "./services/user.service";
+import {renewSessionUsingRefreshToken} from "./services/user.service";
 import {refreshMetaData} from "./services/listing.service";
+import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 
 function App() {
     useEffect(() => {
-        if (isAccessExpired())
-            renewSessionUsingRefreshToken()
-
+        renewSessionUsingRefreshToken()
         refreshMetaData();
     }, []);
 
@@ -34,9 +32,9 @@ function App() {
                             <Route index={true} element={<ListingsPage/>}/>
                             <Route path={":listingId"} element={<ListingDescriptionPage/>}/>
                         </Route>
-                        <Route path={"login"} element={<SecuredElement visitorOnly><LoginPage/></SecuredElement>}/>
-                        <Route path={"signup"} element={<SecuredElement visitorOnly><SignupPage/></SecuredElement>}/>
-                        <Route path={"logout"} element={<SecuredElement><LogoutPage/></SecuredElement>}/>
+                        <Route path={"login"} element={<SecuredRoute visitorOnly><LoginPage/></SecuredRoute>}/>
+                        <Route path={"signup"} element={<SecuredRoute visitorOnly><SignupPage/></SecuredRoute>}/>
+                        <Route path={"logout"} element={<SecuredRoute><LogoutPage/></SecuredRoute>}/>
 
 
                         <Route path={'*'} element={<NotFoundPage/>}/>
