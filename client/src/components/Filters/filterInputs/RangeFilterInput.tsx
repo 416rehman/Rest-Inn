@@ -15,7 +15,7 @@ interface IProps {
     icon?: ReactElement;
 }
 
-export default function MinMaxFilterChoice({title, fields, filters, setFiltersHandler, minValue, maxValue, icon}: IProps) {
+export default function RangeFilterInput({title, fields, filters, setFiltersHandler, minValue, maxValue, icon}: IProps) {
     const [pendingFilters, setPendingFilters] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
