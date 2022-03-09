@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {useParams} from "react-router-dom";
-import InvalidPage from "../../../components/InvalidPage/InvalidPage";
+import ErrorGeneric from "../../../components/Errors/ErrorGeneric";
 import "./ListingDescriptionPage.scss"
 import Hero from "../../../components/Hero/Hero";
 import {Button, Stack, Tooltip, Typography} from "@mui/material";
@@ -14,6 +14,7 @@ import VerticalButton from "../../../components/VerticalButton/VerticalButton";
 import ProfileCard from "../../../components/ProfileCard/ProfileCard";
 import CheckoutCard from "../../../components/CheckoutCard/CheckoutCard";
 import {Listing} from "../../../@typings/listings";
+import {apiURL, titleCase} from "../../../services/helper.service";
 
 function ListingDescriptionPage() {
     const {listingId} = useParams();
@@ -36,7 +37,7 @@ function ListingDescriptionPage() {
     if (loading) {
         return <div>Loading...</div>;
     } else {
-        return !listing ? <InvalidPage className={'page-content'}/> :
+        return !listing ? <ErrorGeneric className={'page-content'}/> :
             <div className={'page-content listing-description-page'}>
                 <div className={'listing-main'}>
                     <div className={'listing-header'}>
