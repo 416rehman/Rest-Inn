@@ -1,17 +1,17 @@
 import {Fragment, useEffect, useState} from 'react';
 import ListingCard from "../../components/ListingCard/ListingCard";
 import './ListingsPage.scss';
-import axios from 'axios'
-import InvalidPage from "../../components/InvalidPage/InvalidPage";
-import {Pagination, Skeleton, Stack} from "@mui/material";
+import ErrorGeneric from "../../components/Errors/ErrorGeneric";
+import {CircularProgress, Pagination, Stack} from "@mui/material";
 import {ListingPartial} from "../../@typings/listings";
 import {useSearchParams} from "react-router-dom";
 import ListingsFilter from "../../components/Filters/ListingsFilter";
+import {getAllListings} from "../../services/listing.service";
 
 
 function ListingsPage() {
     const [searchParams] = useSearchParams();
-    const [appliedFilters, setAppliedFilters] = useState<any>({});
+    const [appliedFilters, setAppliedFilters] = useState<any>(Object.fromEntries(searchParams));
 
     const [listings, setListings] = useState<ListingPartial[]>([]);
     const [counts, setCounts] = useState<{ count: number, pages: number }>({count: 0, pages: 0});
@@ -19,45 +19,32 @@ function ListingsPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const params = Object.fromEntries(searchParams);
-        setAppliedFilters(params);
-    }, [])
-
-    useEffect(() => {
+        setLoading(true);
         // Create a new URLSearchParams object from the applied filters, convert to query string, and update the URL
         const newFilter = new URLSearchParams(appliedFilters);
         window.history.pushState(null, '', `?${newFilter.toString()}`);
 
         // Fetch listings with the applied filters
-        axios.get(apiURL('/properties', newFilter.toString()))
+        getAllListings(newFilter.toString())
             .then(res => {
-                setListings(res.data.data)
+                setListings(res.data)
                 setCounts({
-                    count: res.data.pagination.count,
-                    pages: res.data.pagination.totalPages
+                    count: res.pagination.count,
+                    pages: res.pagination.totalPages
                 })
             })
-            .catch(() => {
-                setListings([])
-            })
-            .finally(() => {
-                setLoading(false)
-            })
+            .catch(() => { setListings([]) })
+            .finally(() => { setLoading(false) })
     }, [appliedFilters])
 
-    return loading ? (
-        <div className={'listings-page page-content'}>
-            <ListingsFilter filters={appliedFilters} setFiltersHandler={setAppliedFilters}/>
-            {Array(5).map((_, i) => (
-                <Skeleton key={i} variant={'rectangular'} height={180} style={{
-                    borderRadius: '25px',
-                }}/>
-            ))}
-        </div>
-    ) : (
+    return (
         <div className={'listings-page page-content'}>
             <Stack><ListingsFilter filters={appliedFilters} setFiltersHandler={setAppliedFilters}/></Stack>
-            {listings.length ?
+
+            {loading ? (
+                <CircularProgress />
+
+            ) : listings.length ?
                 (<Fragment>
                     <div className={'listings-container'}>
                         {listings.map(listing => <ListingCard key={listing._id} listing={listing}/>)}
@@ -71,8 +58,9 @@ function ListingsPage() {
                     />
                 </Fragment>)
                 :
-                <InvalidPage/>
-            }
+                <ErrorGeneric title={'No Listings Found'} message={'There are no listings that match your search criteria. Please try again.'}
+                              buttonText={'Remove Filters'} buttonHandler={() => setAppliedFilters({})}/>
+                }
         </div>
     )
 }
