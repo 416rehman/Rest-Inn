@@ -18,7 +18,7 @@ interface IProps {
  * @param visitorOnly {boolean} If true, the user must not be authenticated.
  * @param children {React.ReactNode} The route to be rendered if security check passes.
  */
-function SecuredElement({requiredRoles, visitorOnly, children}: IProps) {
+function SecuredRoute({requiredRoles, visitorOnly, children}: IProps) {
     const {auth} = useSelector((state: any) => state);
     const location = useLocation();
 
@@ -45,4 +45,4 @@ function SecuredElement({requiredRoles, visitorOnly, children}: IProps) {
     return <>{children}</>;
 }
 
-export default SecuredElement;
+export default SecuredRoute;
