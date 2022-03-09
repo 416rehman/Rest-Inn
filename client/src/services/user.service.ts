@@ -2,6 +2,10 @@ import axios from "axios";
 import {CompleteUser, NewUser} from "../@typings/users";
 import store from "../redux/store";
 import {AuthAction, AuthActionEnum} from "../@typings/auth";
+import {apiURL} from "./helper.service";
+import jwtDecode from "jwt-decode";
+
+let TOKEN_RENEWAL_IN_PROGRESS = false;
 
 const createUser = async (user: NewUser): Promise<CompleteUser> => {
     return new Promise<CompleteUser>((resolve, reject) => {
@@ -31,7 +35,7 @@ const login = async (email: string, password: string) => {
                 localStorage.setItem('refreshToken', res.data.data.refreshToken);
                 store.dispatch(action)
 
-                const refresh_token = store.getState().user?.refreshToken || null;
+                const refresh_token = store.getState().auth.user?.refreshToken || null;
                 if (refresh_token) renewAccessToken(refresh_token).then(() => {
                     resolve(res.data.data);
                 }).catch(err => {
@@ -47,7 +51,19 @@ const login = async (email: string, password: string) => {
     });
 };
 
+/**
+ * Renews access token by exchanging refresh token
+ * @summary Only one renewal at a time
+ * @param refresh_token
+ */
 const renewAccessToken = (refresh_token: string): Promise<any> => {
+    if (TOKEN_RENEWAL_IN_PROGRESS) return new Promise((resolve, reject) => {
+        reject('Token renewal in progress');
+    });
+
+    TOKEN_RENEWAL_IN_PROGRESS = true;
+    localStorage.removeItem('accessToken');
+
     return new Promise<any>((resolve, reject) => {
         if (!refresh_token?.length) {
             reject('Please provide a refresh token');
@@ -58,11 +74,14 @@ const renewAccessToken = (refresh_token: string): Promise<any> => {
                     type: AuthActionEnum.RENEW_ACCESS_TOKEN,
                     payload: res.data.data
                 }
+                localStorage.setItem('accessToken', res.data.data.accessToken);
                 store.dispatch(action)
                 resolve(res.data.data);
             }
         }).catch(err => {
             reject(err);
+        }).finally(() => {
+            TOKEN_RENEWAL_IN_PROGRESS = false;
         });
     });
 };
@@ -74,17 +93,29 @@ const logout = async () => {
         }
         store.dispatch(action)
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessToken');
         return Promise.resolve();
 };
 
 /**
  * If refreshToken is in memory or localStorage, uses it to renew access token
  */
-const renewSession = () => {
-    const refresh_token = store.getState().user?.refreshToken || localStorage.getItem('refreshToken') || null;
+const renewSessionUsingRefreshToken = () => {
+    const refresh_token = store.getState().auth.user?.refreshToken || localStorage.getItem('refreshToken') || null;
     if (refresh_token) return renewAccessToken(refresh_token)
     else return Promise.reject();
 };
 
+const isAccessExpired = () => {
+    const accessToken = store.getState().auth.user?.accessToken || localStorage.getItem('accessToken') || null;
+    if (accessToken) {
+        const decoded:any = jwtDecode(''+accessToken);
+        if (decoded.exp < Date.now() / 1000) {
+            return true;
+        }
+    }
+    return false;
+};
 
-export {createUser, login, logout, renewSession};
+
+export {createUser, login, logout, renewSessionUsingRefreshToken, isAccessExpired};
