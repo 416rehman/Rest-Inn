@@ -1,52 +1,31 @@
-import React, {useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
 import PortraitCard from "../../../../components/PortraitCard/PortraitCard";
 import {Swiper, SwiperSlide} from "swiper/react";
 import './PropertyTypeSection.scss'
-import {Box, LinearProgress} from "@mui/material";
+import {titleCase} from "../../../../services/helper.service";
+import {useSelector} from "react-redux";
+import ErrorAPI from "../../../../components/Errors/ErrorAPI";
 
 function PropertyTypeSection() {
-    const [propertyTypes, setPropertyTypes] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const {types} = useSelector((state: any) => state.meta);
 
-    useEffect(() => {
-        axios.get(apiURL('/properties/types'))
-            .then(res => {
-                setPropertyTypes(res.data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, [])
+    return types.length > 0 ?
+        <div className={'property-type-section page-content full-width-mobile'}>
+            <h2>Find spaces that suit your style</h2>
+            <Swiper
+                slidesPerView={'auto'}
+                spaceBetween={30}
+            >
+                {types.map((p: any, i: number) => {
+                    return (<SwiperSlide key={p._id}>
+                        <PortraitCard name={titleCase(p._id)} key={i} url={'/listings?type=' + p._id}
+                                      image={'https://www.concertproperties.com/legacy/sites/default/files/imagecache/rental-gallery/14-78.JPG'}/>
+                    </SwiperSlide>)
+                })}
 
-    return isLoading ?
-            <React.Fragment>
-                <h2>Find spaces that suit your style</h2>
-                <Box sx={{width: '100%'}}>
-                    <LinearProgress/>
-                </Box>
-            </React.Fragment>
-                :
-            propertyTypes.length > 0 ?
-                <div className={'property-type-section page-content full-width-mobile'}>
-                    <h2>Find spaces that suit your style</h2>
-                    <Swiper
-                        slidesPerView={'auto'}
-                        spaceBetween={30}
-                    >
-                        {propertyTypes.map((p: any, i) => {
-                            return (<SwiperSlide>
-                                <PortraitCard name={titleCase(p._id)} key={i} url={'/listings?type=' + p._id}
-                                              image={'https://www.concertproperties.com/legacy/sites/default/files/imagecache/rental-gallery/14-78.JPG'}/>
-                            </SwiperSlide>)
-                        })}
-
-                    </Swiper>
-                </div> :
-                null
+            </Swiper>
+        </div>
+     : <ErrorAPI/>
 }
 
 export default PropertyTypeSection;
