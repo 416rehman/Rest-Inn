@@ -5,6 +5,7 @@ import CalendarPickerSkeleton from '@mui/lab/CalendarPickerSkeleton';
 import axios from "axios";
 import {PickersDay} from "@mui/lab";
 import {ReservedDates} from "../../@typings/listings";
+import {apiURL} from "../../services/helper.service";
 
 function fetchReservedDates(listingId: string): Promise<ReservedDates>{
     return new Promise<ReservedDates>((resolve, reject) => {

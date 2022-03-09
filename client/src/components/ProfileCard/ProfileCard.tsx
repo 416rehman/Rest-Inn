@@ -3,6 +3,7 @@ import "./ProfileCard.scss";
 import React from 'react';
 import {Avatar, Button, Stack, Typography} from "@mui/material";
 import { Link } from "react-router-dom";
+import {randomHexColor} from "../../services/helper.service";
 
 function ProfileCard({user}:any) {
     return (

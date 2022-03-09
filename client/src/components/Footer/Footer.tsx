@@ -9,10 +9,10 @@ import {
 import "./Footer.scss"
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {RootState} from "../../@typings/auth";
+import {apiURL} from "../../services/helper.service";
 
 function Footer() {
-    const {isAuthenticated} = useSelector((state: RootState) => state);
+    const {isAuthenticated} = useSelector((state: any) => state.auth);
 
     return (
         <Stack className={'footer'} direction={'row'} justifyContent={'space-between'} sx={{

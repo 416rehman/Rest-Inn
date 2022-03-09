@@ -32,7 +32,6 @@ import {
 } from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import {useSelector} from "react-redux";
-import {RootState} from "../../@typings/auth";
 
 const MenuItemStyled = styled(MenuItem)({
     padding: '0.5rem 1rem',
@@ -48,7 +47,7 @@ function Navbar() {
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const auth = useSelector((state: RootState) => state);
+    const auth = useSelector((state: any) => state.auth);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);

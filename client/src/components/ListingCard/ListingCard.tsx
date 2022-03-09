@@ -6,6 +6,7 @@ import {CardActionArea, Rating, Stack, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import {BathroomOutlined, BedroomParentOutlined} from "@mui/icons-material";
 import {ListingPartial} from "../../@typings/listings";
+import {titleCase} from "../../services/helper.service";
 
 interface IProps {
     listing: ListingPartial;
