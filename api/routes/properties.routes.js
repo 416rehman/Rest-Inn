@@ -76,9 +76,16 @@ router.get('/', propertiesService.getAll);
  * /properties/types:
  *  get:
  *     tags:
- *         - Property Types
+ *       - Properties
+ *       - Meta
+ *     parameters:
+ *       - in: query
+ *         name: all
+ *         schema:
+ *           type: boolean
+ *           description: Whether to retrieve all types or only the available ones
  *     summary: Retrieves all property types in the database
- *     description: Retrieves all the property types in the database
+ *     description: Retrieves all the property types in the database (i.e. house, apartment etc.). ALL parameter will only return the types without their count.
  *     responses:
  *         '200':
  *             description: A successful response
@@ -104,13 +111,92 @@ router.get('/', propertiesService.getAll);
  */
 router.get('/types', propertiesService.getAllPropertyTypes);
 
+/** Retrieves all the listing types in the database */
+/**
+ * @swagger
+ * /properties/listing-types:
+ *   get:
+ *     tags:
+ *       - Properties
+ *       - Meta
+ *     parameters:
+ *       - in: query
+ *         name: all
+ *         schema:
+ *           type: boolean
+ *           description: Whether to retrieve all listing-types or only the available ones
+ *     summary: Retrieves all the listing types in the database
+ *     description: Retrieves all the listing types in the database (e.g. entire place, private room, etc.). ALL parameter will only return the types without their count.
+ *     responses:
+ *         '200':
+ *             description: A successful response
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                       type: object
+ *                       properties:
+ *                         message:
+ *                           type: string
+ *                           description: The message of the response
+ *                           example: Successfully retrieved all listing types
+ *                         data:
+ *                           type: array
+ *                           description: The listing types in the database
+ *                           items:
+ *                             $ref: '#/definitions/PropertyType'
+ *         '404':
+ *             $ref: '#/components/responses/NotFound'
+ *
+ *         '500':
+ *             $ref: '#/components/responses/InternalServerError'
+ *
+ */
+router.get('/listing-types', propertiesService.getAllListingTypes);
+
+/** Retrieves all the amenities in the database */
+/**
+ * @swagger
+ * /properties/amenities:
+ *   get:
+ *     tags:
+ *         - Properties
+ *         - Meta
+ *     summary: Retrieves all the supported amenities
+ *     description: Retrieves all the amenities (e.g. wifi, pool, etc.)
+ *     responses:
+ *         '200':
+ *             description: A successful response
+ *             content:
+ *                 application/json:
+ *                     schema:
+ *                       type: object
+ *                       properties:
+ *                         message:
+ *                           type: string
+ *                           description: The message of the response
+ *                           example: Successfully retrieved all amenities
+ *                         data:
+ *                           type: array
+ *                           description: The amenities in the database
+ *                           items:
+ *                             type: string
+ *                             description: The amenity name
+ *         '404':
+ *             $ref: '#/components/responses/NotFound'
+ *
+ *         '500':
+ *             $ref: '#/components/responses/InternalServerError'
+ *
+ */
+router.get('/amenities', propertiesService.getAllAmenities);
+
 /** Retrieves all the properties by type in the database */
 /**
  * @swagger
  * /properties/types/{type}:
  *  get:
  *      tags:
- *          - Property Types
+ *          - Properties
  *      summary: Retrieves all the properties by type in the database
  *      description: Retrieves all the properties by type in the database
  *      parameters:
@@ -155,7 +241,7 @@ router.get('/types/:type', propertiesService.getAllByType);
  * /properties/locations:
  *  get:
  *   tags:
- *     - Property Locations
+ *     - Meta
  *   summary: Retrieves all the locations in the database
  *   description: Retrieves all the locations in the database
  *   responses:
@@ -192,7 +278,7 @@ router.get('/locations', propertiesService.getAllLocations);
  * /properties/locations/{location}:
  *  get:
  *      tags:
- *          - Property Locations
+ *          - Properties
  *      summary: Retrieves all the properties in the database by location
  *      description: Searches the location query string in the city, province, and country fields using an or operator
  *      parameters:
@@ -234,7 +320,7 @@ router.get('/locations/:location', propertiesService.getAllByLocation);
  * /properties/bestselling:
  *  get:
  *    tags:
- *      - Property Best Selling
+ *      - Properties
  *    summary: Retrieves all best-selling properties in the database
  *    description: Retrieves all best-selling properties in the database
  *    parameters:
