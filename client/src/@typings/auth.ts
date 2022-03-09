@@ -38,7 +38,6 @@ interface AuthState {
 }
 
 type AuthAction = LoginAction | RenewTokenAction | LogoutAction;
-type RootState = AuthState;
 
 export {AuthActionEnum, RoleEnum}
-export type { AuthState, AuthAction, RootState };
+export type { AuthState, AuthAction };
