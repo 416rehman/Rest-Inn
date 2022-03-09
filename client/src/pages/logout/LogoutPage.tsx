@@ -1,32 +1,27 @@
 import Notification from "../../components/NotificationSnackBar/Notification";
-import InvalidPage from "../../components/InvalidPage/InvalidPage";
+import ErrorGeneric from "../../components/Errors/ErrorGeneric";
 import React, {useEffect} from "react";
-import {Alert, AlertTitle} from "@mui/material";
 import {useSelector} from "react-redux";
-import {RootState} from "../../@typings/auth";
-import {logout} from "../../helpers/userAPI.helper";
+import {logout} from "../../services/user.service";
 
 function LogoutPage() {
-    const {isAuthenticated} = useSelector((state: RootState) => state);
+    const {isAuthenticated} = useSelector((state: any) => state.auth);
 
     useEffect(()=>{
         if (localStorage.getItem('refreshToken') !== null || !isAuthenticated) {
             logout();
         }
-    }, [])
+    }, [isAuthenticated])
     return (
-        <InvalidPage
-            title={"Logged Out"}
+        <ErrorGeneric
+            title={isAuthenticated ? "Logging Out..." : "Logged Out"}
+            message={isAuthenticated ? "Please wait while we log you out." : "You have been logged out. You can now return to the home page."}
             buttonText={"Return to Home"}
             buttonLink={"/"}
+            severity={isAuthenticated ? "info" : "success"}
         >
-            <Alert severity="success">
-                <AlertTitle>{isAuthenticated ? "Logging Out..." : "Logged Out"}</AlertTitle>
-                {isAuthenticated ? "Please wait while we log you out." : "You have been logged out. You can now return to the home page."}<br/>
-
-            </Alert>
             <Notification message={'Logged Out'}/>
-        </InvalidPage>
+        </ErrorGeneric>
     );
 }
 
