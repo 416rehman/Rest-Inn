@@ -2,9 +2,9 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {Card, Divider, Stack, TextField} from "@mui/material";
-import {APIValidate} from "../../helpers/validationAPI.helper";
+import {APIValidate} from "../../services/validation.service";
 import {Link} from "react-router-dom";
-import {createUser} from "../../helpers/userAPI.helper";
+import {createUser} from "../../services/user.service";
 import {NewUser, NewUserField} from "../../@typings/users";
 import {LoadingButton} from "@mui/lab";
 
