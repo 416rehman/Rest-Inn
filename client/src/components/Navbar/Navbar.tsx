@@ -19,7 +19,7 @@ import {
     IconButton,
     ListItemIcon,
     Menu,
-    MenuItem,
+    MenuItem, Stack,
     Tooltip,
     useMediaQuery,
     useTheme
@@ -131,7 +131,7 @@ function Navbar() {
 
                 {
                     auth.isAuthenticated &&
-                    <>
+                    <Stack>
                     <Link to={'/@' + auth?.user?.username}>
                         <MenuItem>
                             <ListItemIconStyled>
@@ -143,7 +143,7 @@ function Navbar() {
                         </MenuItem>
                     </Link>
                     <Divider/>
-                    </>
+                    </Stack>
                 }
 
 
