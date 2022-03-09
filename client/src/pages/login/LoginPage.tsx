@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Button, Card, Divider, IconButton, InputAdornment, Stack, TextField, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {login} from "../../helpers/userAPI.helper";
+import {login} from "../../services/user.service";
 import {LoadingButton} from "@mui/lab";
 
 function LoginPage() {
@@ -10,7 +10,9 @@ function LoginPage() {
         email: '',
         password: '',
     });
+
     const [formError, setFormError] = useState('');
+    const navigate = useNavigate();
 
     const [loading, setLoading] = React.useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -20,8 +22,9 @@ function LoginPage() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
         event.preventDefault();
-        login(formData.email, formData.password).then((data) => {
-            console.log('Login successful', data);
+        login(formData.email, formData.password).then(() => {
+
+            navigate('/');
         }).catch((error) => {
             setFormError(error || 'Login or password is invalid');
         }).finally(() => {
