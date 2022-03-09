@@ -1,13 +1,12 @@
 import React from 'react';
+import { Navigate, useLocation} from 'react-router-dom';
+import { RoleEnum} from "../../@typings/auth";
+import ErrorGeneric from "../Errors/ErrorGeneric";
 import {useSelector} from "react-redux";
-import {Navigate, useLocation} from 'react-router-dom';
-import {RoleEnum, RootState} from "../../@typings/auth";
-import InvalidPage from "../InvalidPage/InvalidPage";
-import {Alert} from "@mui/material";
 
 interface IProps {
-    visitorOnly?: boolean;
-    requiredRole?: RoleEnum;
+    visitorOnly?: boolean | undefined;
+    requiredRoles?: RoleEnum[];
     children: React.ReactNode;
 }
 
@@ -19,23 +18,26 @@ interface IProps {
  * @param visitorOnly {boolean} If true, the user must not be authenticated.
  * @param children {React.ReactNode} The route to be rendered if security check passes.
  */
-function SecuredRoute({requiredRole, visitorOnly, children}: IProps) {
-    const auth = useSelector((state: RootState) => state);
+function SecuredElement({requiredRoles, visitorOnly, children}: IProps) {
+    const {auth} = useSelector((state: any) => state);
     const location = useLocation();
 
     if (visitorOnly) {
-        if (auth.isAuthenticated)
+        if (auth.isAuthenticated) {
             return <Navigate to={'/'}/>;
+        }
     } else {
         if (!auth.isAuthenticated && location.pathname !== '/logout')
-            return <Navigate to="/login" state={{from: location}}/>;
+            return <Navigate to="/login"/>;
         else {
-            if (requiredRole && auth.user && auth.user.role !== requiredRole) {
-                return <InvalidPage title={'Missing Permissions'}>
-                    <Alert severity="error">
-                        You do not have the required permissions to access this page.
-                    </Alert>
-                </InvalidPage>;
+            if (requiredRoles && auth.user) {
+                const authorized = requiredRoles.some(role => auth.user?.role === role)
+                if (!authorized) {
+                    return <ErrorGeneric
+                        title={'Missing Permissions'} severity={'error'}
+                        message={'You do not have the required permissions to access this page.'}
+                    />
+                }
             }
         }
     }
@@ -43,4 +45,4 @@ function SecuredRoute({requiredRole, visitorOnly, children}: IProps) {
     return <>{children}</>;
 }
 
-export default SecuredRoute;
+export default SecuredElement;
