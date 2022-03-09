@@ -116,13 +116,13 @@ const updateUser = (req, res) => {
                 });
             });
         }).catch(err => {
-            res.status(400).send({
+            res.status(400).json({
                 message: "Invalid User Data!",
                 error: err.message
             });
         });
     }).catch(err => {
-        res.status(400).send({
+        res.status(400).json({
             message: "Validation Error in Username!",
             error: err.message
         });
