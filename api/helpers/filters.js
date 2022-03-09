@@ -8,7 +8,22 @@
  *      Creation Date: 2022-02-09
  */
 const {bookingStatus} = require("../constants/booking.constants");
-const propertyTypes = require('../constants/property.constants').propertyTypes;
+
+/**
+ * Returns an array representation of the provided query string (e.g. ?type=house,apartment will return ['house','apartment'])
+ * If the query string is already an array, it will return the same array (e.g. ?type[]=house&type[]=apartment or ?type=house&type=apartment will return ['house','apartment'])
+ * @param value
+ * @return {string[]}
+ */
+const multiValueQuery = (value) => {
+    if (typeof value === 'string') {
+        return value.includes(',') ? value.split(',') : [value];
+    } else if (Array.isArray(value)) {
+        return value;
+    } else {
+        return [''];
+    }
+}
 
 module.exports.sortFilter = (query) => {
     const sort = {};
@@ -41,9 +56,10 @@ module.exports.propertyFilter = (query) => {
         }
     }
 
-    if (query.type && propertyTypes.includes(query.type)) {
-        filter.type = query.type;
+    if (query.type) {
+        filter.type = {$in: multiValueQuery(query.type)};
     }
+
     if (query.bedroomsMin || query.bedroomsMax) {
         filter.bedrooms = {};
         if (query.bedroomsMin) {
@@ -110,7 +126,7 @@ module.exports.propertyFilter = (query) => {
     }
 
     if (query.listingType) {
-        filter.listingType = query.listingType;
+        filter.listingType = {$in: multiValueQuery(query.listingType)};
     }
 
     if (query.guestsMin || query.guestsMax) {
