@@ -41,6 +41,22 @@ module.exports.getAllTypes = function () {
 }
 
 /**
+ * Returns all property types (e.g. entire place, private room, etc.) that are not null
+ * @return {Promise<Array<any>>}
+ */
+
+module.exports.getAllListingTypes = function () {
+    return propertyModel.aggregate([
+        {
+            $group: {
+                _id: "$listingType",
+                count: {$sum: 1}
+            }
+        }
+    ]).exec();
+}
+
+/**
  * Returns all properties by types (e.g. house, apartment, etc.)
  * @param type - {type: String} i.e. {type: 'house'}
  * @param limit - Number
