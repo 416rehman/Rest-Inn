@@ -1,22 +1,20 @@
 import React, {useEffect} from 'react';
-import axios from 'axios';
 import {SwiperSlide} from "swiper/react";
 import CardSwiper from "../../../../components/CardSwiper/CardSwiper";
 import "./BestSellersSection.scss"
 import {Box, LinearProgress} from "@mui/material";
+import {getBestSellingListings} from "../../../../services/listing.service";
+import {Listing} from "../../../../@typings/listings";
 
 function BestSellerSection() {
-    const [bestSellers, setBestSellers] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [bestSellers, setBestSellers] = React.useState<Listing[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     useEffect(() => {
-        axios.get(apiURL('/properties/bestselling', 'limit=10'))
-            .then(res => {
-                setBestSellers(res.data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            }).finally(() => setIsLoading(false));
+        setIsLoading(true);
+
+        getBestSellingListings(10).then(setBestSellers)
+            .finally(() => setIsLoading(false));
     }, []);
 
     return (
