@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import "./searchbar.scss"
-import {TextField} from "@mui/material";
+import {Autocomplete, Button, Stack, TextField} from "@mui/material";
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import {useSelector} from "react-redux";
+import {titleCase} from "../../services/helper.service";
 
 interface IProps {
     className?: string;
@@ -12,47 +13,74 @@ interface IProps {
 }
 
 function SearchBar({className, ...props}: IProps) {
-    const [checkIn, setCheckIn] = useState<any>(null);
-    const [checkOut, setCheckOut] = useState<any>(null);
+
+    const [checkIn, setCheckIn] = useState<any>(new Date());
+    const [checkOut, setCheckOut] = useState<any>(new Date());
+    const [guests, setGuests] = useState<number>(1);
+    const [destination, setDestination] = useState<string>("");
+
+    const {locations} = useSelector((state: any) => state.meta);
+
+    const handleOnSubmit = (e: any) => {
+        const search = e.target.elements.location.value;
+        e.target.elements.location.value = search.split("-")[0]?.trim() || search.trim();
+    };
 
     return (
-        <form action="/search" className={'search-bar' + (className || '')} {...props}>
-            <TextField
-                id="destination"
-                name={'destination'}
-                label="Where are you going?"
-                type="search"
-                variant="outlined"
-                size="small"
-                fullWidth
-                sx={{
-                    flexBasis: {
-                        xs: '100%',
-                        md: '80%'
-                    }
-                }}
-                InputProps={{
-                    className: 'search-bar__input'
-                }}/>
+        <form action={'/listings'} onSubmit={handleOnSubmit} className={'search-bar' + (className || '')} {...props}>
+
+
+            <Stack sx={{
+                flexBasis: {
+                    xs: '100%',
+                    md: '80%'
+                }
+            }}>
+                <Button type="submit" sx={{display: 'none'}} fullWidth variant="contained" color="primary"/>
+                <Autocomplete
+                    freeSolo
+                    fullWidth
+                    size={'small'}
+                    value={destination ?? null}
+                    options={locations.map(({_id}: any) => titleCase(_id.city + " - " + _id.province + ' - ' + _id.country))}
+                    onChange={(event, value) => {
+                        if (value) setDestination(value);
+                    }}
+                    renderInput={(params) => <TextField {...params} name={'location'} label="Destination"/>}
+                />
+            </Stack>
             <LocalizationProvider dateAdapter={DateAdapter}>
                 <DatePicker
                     label="Check In"
                     value={checkIn}
+                    minDate={new Date()}
                     onChange={(newValue) => {
                         setCheckIn(newValue);
                     }}
-                    renderInput={(params) => <TextField name={'check-in'} size="small" {...params} sx={{ display: { xs: 'none', md: 'flex',  }}} />}
+                    onAccept={(newValue) => {
+                        setCheckIn(newValue);
+                    }}
+                    renderInput={(params) => <TextField name={'checkIn'} size="small" {...params}
+                                                        sx={{display: {xs: 'none', md: 'flex',}}}/>}
                 />
                 <DatePicker
                     label="Check Out"
                     value={checkOut}
+                    minDate={checkIn || new Date()}
                     onChange={(newValue) => {
                         setCheckOut(newValue);
                     }}
-                    renderInput={(params) => <TextField name={'check-out'} size={'small'} {...params} sx={{ display: { xs: 'none', md: 'flex',  }}}  />}
+                    onAccept={(newValue) => {
+                        setCheckOut(newValue);
+                    }}
+                    renderInput={(params) => <TextField name={'checkOut'} size={'small'} {...params}
+                                                        sx={{display: {xs: 'none', md: 'flex',}}}/>}
                 />
             </LocalizationProvider>
-            <TextField inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}} size="small" label={"Guests"} sx={{ display: { xs: 'none', md: 'flex',  }}} />
+            <TextField inputProps={{inputMode: 'numeric'}} value={guests}
+                       name={'guests'}
+                       onChange={(e) => setGuests(parseInt(e.target.value) || 0)}
+                       size="small" label={"Guests"} sx={{display: {xs: 'none', md: 'flex',}}}/>
         </form>
     );
 }

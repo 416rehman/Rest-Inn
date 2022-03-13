@@ -15,19 +15,18 @@ import {Link} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import {
     Avatar,
-    Divider,
     IconButton,
     ListItemIcon,
     Menu,
-    MenuItem, Stack,
+    MenuItem,
     Tooltip,
     useMediaQuery,
     useTheme
 } from "@mui/material";
 import {
-    AccountCircleOutlined,
+    AccountCircleOutlined, CabinRounded,
     Login,
-    Logout,
+    Logout, LuggageOutlined,
     SettingsOutlined
 } from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
@@ -47,7 +46,7 @@ function Navbar() {
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const auth = useSelector((state: any) => state.auth);
+    const auth= useSelector((state: any) => state.auth);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -89,7 +88,7 @@ function Navbar() {
                     }}
                 >
                     <Avatar sx={{width: 32, height: 32}}>{
-                        (auth?.user?.username ? auth.user.username[0] : <AccountCircleOutlined />)
+                        (auth?.user?.username ? auth?.user.username[0] : <AccountCircleOutlined />)
                     }</Avatar>
                 </IconButton>
             </Tooltip>
@@ -129,26 +128,28 @@ function Navbar() {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
 
-                {
-                    auth.isAuthenticated &&
-                    <Stack>
-                    <Link to={'/@' + auth?.user?.username}>
-                        <MenuItem>
+                {auth?.accessToken &&
+                    <Link to={'/bookings'}>
+                        <MenuItemStyled>
                             <ListItemIconStyled>
-                                <Avatar sx={{width: 32, height: 32}}>{
-                                    (auth?.user?.username[0] + '').toUpperCase() || 'C'
-                                }</Avatar>
+                                <LuggageOutlined fontSize="small"/>
+                                Bookings
                             </ListItemIconStyled>
-                            <span>{auth?.user?.username || 'Profile'}</span>
-                        </MenuItem>
+                        </MenuItemStyled>
                     </Link>
-                    <Divider/>
-                    </Stack>
                 }
-
-
-                {auth.isAuthenticated &&
-                    <Link to={'settings'}>
+                {auth?.accessToken &&
+                    <Link to={'/hosting'}>
+                        <MenuItemStyled>
+                            <ListItemIconStyled>
+                                <CabinRounded fontSize="small"/>
+                                Hosting
+                            </ListItemIconStyled>
+                        </MenuItemStyled>
+                    </Link>
+                }
+                {auth?.accessToken &&
+                    <Link to={'/settings'}>
                         <MenuItemStyled>
                             <ListItemIconStyled>
                                 <SettingsOutlined fontSize="small"/>
@@ -157,7 +158,7 @@ function Navbar() {
                         </MenuItemStyled>
                     </Link>
                 }
-                {!auth.isAuthenticated &&
+                {!auth?.accessToken &&
                     <Link to={'/signup'}>
                         <MenuItemStyled>
                             <ListItemIconStyled>
@@ -168,7 +169,7 @@ function Navbar() {
                     </Link>
                 }
 
-                {!auth.isAuthenticated &&
+                {!auth?.accessToken &&
                     <Link to={'/login'}>
                         <MenuItemStyled>
                             <ListItemIconStyled>
@@ -179,7 +180,7 @@ function Navbar() {
                     </Link>
                 }
 
-                {auth.isAuthenticated &&
+                {auth?.accessToken &&
                     <Link to={'/logout'}>
                         <MenuItemStyled>
                             <ListItemIconStyled>

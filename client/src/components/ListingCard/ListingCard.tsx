@@ -12,14 +12,15 @@ interface IProps {
     listing: ListingPartial;
     className?: string;
     [x: string]: any;
+    color?: string;
 }
 
-function ListingCard({listing, className, ...rest}: IProps) {
+function ListingCard({listing, className, color, ...rest}: IProps) {
     return (
         <div className={'listing-card ' + (className || '')} {...rest}>
             <Link to={`/listings/${listing._id}`}>
                 <CardActionArea>
-                    <div className={'listing-card-images'}>
+                    <Stack className={'listing-card-images'} sx={{backgroundColor: color}}>
                         <Swiper
                             modules={[Pagination, A11y]}
                             a11y={{
@@ -29,30 +30,30 @@ function ListingCard({listing, className, ...rest}: IProps) {
                             loop={true}
                             pagination={true}
                             className={'listing-card-swiper ' + (className || '')}>
-                            {listing.photos.map((photo, index) => (
+                            {listing.photos?.map((photo, index) => (
                                 <SwiperSlide key={index} className="swiper-slide">
                                     <img src={photo} alt="" loading={"lazy"}/>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-                    </div>
-                    <div className={'listing-card-groove'}>
-                        <span>· · · · ·</span>
-                    </div>
-                    <div className="listing-card-info">
+                    </Stack>
+                    <Stack className={'listing-card-groove'} sx={{backgroundColor: color}}>
+                        <span>· · · · · · ·</span>
+                    </Stack>
+                    <Stack className="listing-card-info" sx={{backgroundColor: color}}>
                         <div className="listing-card-info-top">
                             <p style={{fontWeight: 500}}>{listing.title}</p>
                             <div className="listing-card-info-rating">
-                                <Tooltip title={'Rating: ' + listing.rating.average}>
+                                <Tooltip title={'Rating: ' + listing.rating?.average}>
                                     <Stack direction={"row"} color={"darkgrey"}>
-                                        <Rating name="read-only" value={listing.rating.average} precision={0.5} readOnly size={'small'}/> / {listing.rating.count}
+                                        <Rating name="read-only" value={listing.rating?.average} precision={0.5} readOnly size={'small'}/> / {listing.rating?.count}
                                     </Stack>
                                 </Tooltip>
-                                <b>{`${titleCase(listing.listingType)}`}</b>
+                                <b>{`${titleCase(listing.listingType || '')}`}</b>
                             </div>
                         </div>
                         <div className="listing-card-info-mid">
-                            {`${listing.guests} guests · ${listing.bedrooms} bedrooms · ${listing.amenities.join(' · ')}`}
+                            {`${listing.guests} guests · ${listing.bedrooms} bedrooms · ${listing.amenities?.join(' · ')}`}
                         </div>
                         <div className="listing-card-info-bottom">
                             <div className={"listing-card-info-data"}>
@@ -76,7 +77,7 @@ function ListingCard({listing, className, ...rest}: IProps) {
                             </div>
                             <div className={"listing-card-info-price"}>${`${listing.price}`}</div>
                         </div>
-                    </div>
+                    </Stack>
                 </CardActionArea>
             </Link>
         </div>

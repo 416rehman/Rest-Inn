@@ -5,9 +5,15 @@ import {Avatar, Button, Stack, Typography} from "@mui/material";
 import { Link } from "react-router-dom";
 import {randomHexColor} from "../../services/helper.service";
 
-function ProfileCard({user}:any) {
+interface IUser {
+    username: string;
+    name: string;
+    avatar?: string;
+}
+
+function ProfileCard({username, name, avatar}:IUser) {
     return (
-        <Link to={`/profile/${user.username}`}>
+        <Link to={`/profile/${username}`}>
             <Button sx={{
                 padding: "0.25rem",
                 maxWidth: "200px",
@@ -16,8 +22,8 @@ function ProfileCard({user}:any) {
                     width: "100%",
                 }} >
                     <Avatar
-                        alt={user.name}
-                        src={user.avatar}
+                        alt={name}
+                        src={avatar || 'https://picsum.photos/200/300'}
                         sx={{ width: 40, height: 40, backgroundColor: randomHexColor() }}
                         variant={'rounded'}
                     />
@@ -26,10 +32,10 @@ function ProfileCard({user}:any) {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
                     }}>
-                        <Typography variant={'caption'} textTransform={'none'} margin={'0 !important'}>@{user.username}</Typography>
+                        <Typography variant={'caption'} textTransform={'none'} margin={'0 !important'}>@{username}</Typography>
                         <Typography variant={'subtitle2'} textTransform={'none'} margin={'0 !important'} sx={{
                             lineHeight: '1.2rem',
-                        }}>{user.name.split(' ')[0] || user.name || user.username}</Typography>
+                        }}>{name || username}</Typography>
                     </Stack>
                 </Stack>
             </Button>

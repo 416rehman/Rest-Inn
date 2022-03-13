@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, CardActionArea, Typography} from "@mui/material";
+import {Card, CardActionArea, Stack, Typography} from "@mui/material";
 import "./VerticalButton.scss";
 interface IProps {
     icon: any;
@@ -11,21 +11,25 @@ interface IProps {
     elevation?: number;
 }
 
-function VerticalButton({icon, label, outlined, onClick, typographyProps, variant, elevation, ...rest}: IProps) {
+function VerticalButton({icon, label, outlined, onClick, typographyProps, elevation, ...rest}: IProps) {
     return (
         <Card className={'vertical-button'} variant={(outlined && 'outlined') || 'elevation'} elevation={elevation || 0} {...rest} sx={{
+            minWidth: 50,
             maxWidth: 50,
             textAlign: 'center',
             height: 75,
             margin: 0,
+            ...rest.sx
         }} >
-            <CardActionArea sx={{
+            <CardActionArea onClick={onClick} sx={{
                 height: '100%',
             }}>
-                {icon}
-                <Typography variant="caption" fontWeight={'medium'} {...typographyProps}>
-                    {label}
-                </Typography>
+                <Stack alignItems={'center'}>
+                    {icon}
+                    <Typography variant="caption" fontWeight={'medium'} {...typographyProps}>
+                        {label}
+                    </Typography>
+                </Stack>
             </CardActionArea>
         </Card>
     );

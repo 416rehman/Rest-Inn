@@ -4,7 +4,7 @@ import {Close} from "@mui/icons-material";
 interface IProps {
     message: string;
 }
-function Notification(props: IProps) {
+function Notification({message}: IProps) {
     const [open, setOpen] = React.useState(true);
 
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -33,7 +33,7 @@ function Notification(props: IProps) {
             open={open}
             autoHideDuration={6000}
             onClose={handleClose}
-            message={props.message}
+            message={message}
             action={action}
         />
     );

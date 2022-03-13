@@ -20,7 +20,7 @@ export default function ListingsFilter({filters, setFiltersHandler}: FilterBarPr
     const {listingTypes, types, amenities} = useSelector((state: any ) => state.meta);
 
     return (
-        <Stack direction={'row'} gap={'1rem'} alignItems={'center'}>
+        <Stack direction={'row'} gap={'1rem'} width={'100%'} alignItems={'center'} justifyContent={'center'} padding={'0.5rem 0'}>
             <RangeFilterInput title={"Price"} minValue={0} icon={<AttachMoneyOutlined fontSize={'small'}/>} fields={[
                 { name: 'priceMin', label: 'Minimum Price' },
                 { name: 'priceMax', label: 'Maximum Price' }
@@ -46,8 +46,7 @@ export default function ListingsFilter({filters, setFiltersHandler}: FilterBarPr
                 { name: 'guestsMax', label: 'Maximum Guests' }
             ]} filters={filters} setFiltersHandler={setFiltersHandler}/>
 
-            <BooleanFilterInput filters={filters} setFiltersHandler={setFiltersHandler} name={'bestSeller'} label={'Best Seller'}/>
-            <BooleanFilterInput filters={filters} setFiltersHandler={setFiltersHandler} name={'JoeMama'} label={'Test'} clearOnFalse={false}/>
+            <BooleanFilterInput filters={filters} setFiltersHandler={setFiltersHandler} name={'bestSeller'} label={'Hot'}/>
 
             <ListFilterInput title={'Type'} name={'type'}
                  options={ types.map((type: any) => {

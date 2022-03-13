@@ -12,10 +12,10 @@ import {useSelector} from "react-redux";
 import {apiURL} from "../../services/helper.service";
 
 function Footer() {
-    const {isAuthenticated} = useSelector((state: any) => state.auth);
+    const auth= useSelector((state: any) => state.auth);
 
     return (
-        <Stack className={'footer'} direction={'row'} justifyContent={'space-between'} sx={{
+        <Stack className={'footer'} direction={'row'} justifyContent={'space-between'} mt={'2rem'} sx={{
             padding: '1rem',
             backgroundColor: '#F7F7F7',
             borderTop: '1px solid #e5e5e5',
@@ -27,7 +27,7 @@ function Footer() {
                 <div className={'footer-links'}>
                     <Link to={'/'}><Button startIcon={<HomeOutlined/>}>Home</Button></Link>
                     <Link to={'/listings'}><Button>Listings</Button></Link>
-                    {!isAuthenticated && <>
+                    {!auth?.accessToken && <>
                         <Link to={'/auth/login'}><Button>Log In</Button></Link>
                         <Link to={'/auth/signup'}><Button>Sign Up</Button></Link>
                         <Link to={'/auth/forgot'}><Button>Forgot Password</Button></Link>

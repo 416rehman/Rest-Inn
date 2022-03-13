@@ -2,27 +2,14 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import DatePicker, {DatePickerProps} from '@mui/lab/DatePicker';
 import CalendarPickerSkeleton from '@mui/lab/CalendarPickerSkeleton';
-import axios from "axios";
 import {PickersDay} from "@mui/lab";
 import {ReservedDates} from "../../@typings/listings";
-import {apiURL} from "../../services/helper.service";
-
-function fetchReservedDates(listingId: string): Promise<ReservedDates>{
-    return new Promise<ReservedDates>((resolve, reject) => {
-        axios.get(apiURL(`/properties/${listingId}/reserved-dates`))
-            .then(res => {
-                resolve(res.data.data);
-            })
-            .catch(err => {
-                reject(err);
-            });
-    });
-}
+import {getReservedDates} from "../../services/listing.service";
 
 const initialDate = new Date();
 
 interface IProps {
-    listingId: string;
+    listingId: string | null;
     dpProps?: DatePickerProps<any>;
 }
 
@@ -48,7 +35,8 @@ function DynamicDatePicker({listingId, dpProps}: IProps) {
     };
 
     React.useEffect(() => {
-        fetchReservedDates(listingId).then(dates => {
+        if (!listingId) return;
+        getReservedDates(listingId).then(dates => {
             setReservedDates(dates);
             setReservedDays(getReservedDaysOfMonth(initialDate));
         }).catch(err => {

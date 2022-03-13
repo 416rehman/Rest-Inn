@@ -2,6 +2,7 @@ import React, {ReactElement} from 'react';
 import {Alert, AlertTitle, Button, Divider, Stack} from "@mui/material";
 import {apiURL} from "../../services/helper.service";
 import {LaunchOutlined} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 interface IProps {
     children?: ReactElement | ReactElement[];
     message ?: string;
@@ -12,6 +13,7 @@ interface IProps {
     [x: string]: any;
 }
 function ErrorGeneric({title, message, children, buttonHandler, buttonText, severity, ...rest}: IProps) {
+    const navigate = useNavigate();
     return (
         <Stack {...rest} alignItems={'center'}>
             <Stack spacing={'1rem'}>
@@ -28,6 +30,7 @@ function ErrorGeneric({title, message, children, buttonHandler, buttonText, seve
                     <Stack direction={'row'} gap={'1rem'}>
                         <Button variant={'outlined'}  color={'inherit'} onClick={()=>{
                             if (buttonHandler) buttonHandler();
+                            else navigate('/')
                         }}>
                             {buttonText || `Return to Home`}
                         </Button>
