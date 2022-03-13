@@ -1,5 +1,5 @@
 import {createStore} from "redux";
-import {combineReducers} from "@reduxjs/toolkit";
+import { combineReducers } from "redux"
 import authReducer from "./reducers/auth.reducer";
 import {metaReducer} from "./reducers/meta.reducer";
 

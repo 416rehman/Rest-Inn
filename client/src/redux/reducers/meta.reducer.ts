@@ -2,31 +2,46 @@ enum metaActionTypeEnum {
     SET_LISTING_TYPES = 'SET_LISTING_TYPES',
     SET_TYPES = 'SET_TYPES',
     SET_AMENITIES = 'SET_AMENITIES',
+    SET_LOCATIONS = 'SET_LOCATIONS',
     CLEAR_LISTING_TYPES = 'CLEAR_LISTING_TYPES',
     CLEAR_TYPES = 'CLEAR_TYPES',
     CLEAR_AMENITIES = 'CLEAR_AMENITIES',
+    CLEAR_LOCATIONS = 'CLEAR_LOCATIONS',
 }
 
-interface metaItem {
+interface genericMetaItem {
     _id: string,
-    count?: 0
+    count?: 0 | any,
+}
+
+interface Location {
+    city?: string,
+    province?: string,
+    country?: string,
+    startingFrom?: number,
+}
+
+interface LocationMetaItem extends genericMetaItem {
+    count?: Location
 }
 
 interface metaAction {
     type: keyof typeof metaActionTypeEnum,
-    payload: metaItem[];
+    payload: genericMetaItem[];
 }
 
 interface metaState {
-    listingTypes: metaItem[];
-    types: metaItem[];
-    amenities: metaItem[];
+    listingTypes: genericMetaItem[];
+    types: genericMetaItem[];
+    amenities: genericMetaItem[];
+    locations: LocationMetaItem[];
 }
 
 const initialState: metaState = {
     listingTypes: [],
     types: [],
     amenities: [],
+    locations: [],
 }
 
 const metaReducer = (state: metaState = initialState, action:metaAction) => {
@@ -46,6 +61,11 @@ const metaReducer = (state: metaState = initialState, action:metaAction) => {
                 ...state,
                 amenities: action.payload
             };
+        case 'SET_LOCATIONS':
+            return {
+                ...state,
+                locations: action.payload
+            };
 
         case 'CLEAR_TYPES':
             return {
@@ -61,6 +81,11 @@ const metaReducer = (state: metaState = initialState, action:metaAction) => {
             return {
                 ...state,
                 amenities: []
+            };
+        case 'CLEAR_LOCATIONS':
+            return {
+                ...state,
+                locations: []
             };
 
         default:

@@ -1,37 +1,27 @@
-import {AuthAction, AuthState} from "../../@typings/auth";
+import {AuthAction, AuthActionEnum, AuthState} from "../../@typings/auth";
 
 const initialState : AuthState = {
-    isAuthenticated: false,
     user: null,
     accessToken: null,
 };
 
 export default (state = initialState, action:AuthAction) => {
     switch (action.type) {
-        case 'LOGIN':
-            console.log(action);
+        case AuthActionEnum.SET_USER:
             return {
                 ...state,
-                isAuthenticated: false,
-                user: action.payload.user,
-                accessToken: null,
+                user: action.payload
             };
-        case 'LOGOUT':
-            console.log('LOGOUT');
+        case AuthActionEnum.CLEAR_ALL:
             return {
                 ...state,
-                isAuthenticated: false,
                 user: null,
-                refreshToken: null,
                 accessToken: null,
             };
-        case 'RENEW_ACCESS_TOKEN':
-            console.log('RENEW_ACCESS_TOKEN');
+        case AuthActionEnum.SET_ACCESS_TOKEN:
             return {
                 ...state,
-                user: action.payload.user,
-                accessToken: action.payload.accessToken,
-                isAuthenticated: true
+                accessToken: action.payload,
             };
         default:
             return state;
