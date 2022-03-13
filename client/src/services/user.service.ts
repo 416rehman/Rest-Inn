@@ -11,7 +11,8 @@ const createUser = async (user: NewUser): Promise<CompleteUser> => {
     return new Promise<CompleteUser>((resolve, reject) => {
         axios.post(apiURL('/users'), user).then(res => {
             if (res.data.data) {
-                renewAccessToken(res.data.data.refreshToken).then(() => {
+                localStorage.setItem('refreshToken', res.data.data.refreshToken);
+                renewAccessToken().then(() => {
                     resolve(res.data.data);
                 }).catch(err => {
                     reject(err);
@@ -43,9 +44,8 @@ const login = async (email: string, password: string) => {
 /**
  * Renews access token by exchanging refresh token
  * @summary Only one renewal at a time
- * @param refresh_token
  */
-const renewAccessToken = (refresh_token: string): Promise<any> => {
+const renewAccessToken = (): Promise<any> => {
     if (TOKEN_RENEWAL_IN_PROGRESS) return new Promise((resolve, reject) => {
         reject('Token renewal in progress');
     });
@@ -54,10 +54,6 @@ const renewAccessToken = (refresh_token: string): Promise<any> => {
     localStorage.removeItem('accessToken');
 
     return new Promise<any>((resolve, reject) => {
-        if (!refresh_token?.length) {
-            reject('Please provide a refresh token');
-        }
-
         securedPOST(apiURL('/auth/token'), {}, true).then(res => {
             try {
                 localStorage.setItem('accessToken', res.data.data.accessToken);
@@ -98,11 +94,13 @@ const tryLogout = async () => {
  * @returns {Boolean} true if renewal was successful, false otherwise
  */
 const tryRenewSessionUsingRefreshToken = () => {
-    const refresh_token = localStorage.getItem('refreshToken') || null;
-    if (refresh_token) renewAccessToken(refresh_token).then(() => {
-        return true;
-    }).catch(() => {
-        return false;
+    return new Promise((resolve, reject) => {
+        const refresh_token = localStorage.getItem('refreshToken') || null;
+        if (refresh_token) renewAccessToken().then(() => {
+            resolve(true);
+        }).catch(() => {
+            reject(false);
+        });
     });
 };
 

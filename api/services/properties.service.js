@@ -378,9 +378,7 @@ module.exports.updateById = (req, res) => {
         });
     } else {
         getById(req.params.id).then(property => {
-            console.log(property.host);
-            console.log(req.user.id);
-            if (property.host.toString() === req.user.id) {
+            if (property.host._id.toString() === req.user.id) {
                 addImages(req, res);
             } else {
                 res.status(403).json({

@@ -7,7 +7,7 @@ const s3 = new aws.S3({
     secretAccessKey: process.env.AWS_ACCESS_KEY
 })
 
-module.exports.deleteFromS3 = (key) => {
+const deleteFromS3 = (key) => {
     s3.deleteObject({Bucket: 'restinn', Key: key}, (err, data) => {
         console.error(err);
         console.log(data);
@@ -36,3 +36,4 @@ const upload = multerMiddleware({
 })
 
 module.exports = upload;
+module.exports.deleteFromS3 = deleteFromS3;

@@ -14,7 +14,7 @@ import "./navbar.scss";
 import {Link} from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import {
-    Avatar,
+    Avatar, Divider,
     IconButton,
     ListItemIcon,
     Menu,
@@ -46,7 +46,7 @@ function Navbar() {
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const auth= useSelector((state: any) => state.auth);
+    const auth = useSelector((state: any) => state.auth);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -88,7 +88,7 @@ function Navbar() {
                     }}
                 >
                     <Avatar sx={{width: 32, height: 32}}>{
-                        (auth?.user?.username ? auth?.user.username[0] : <AccountCircleOutlined />)
+                        (auth?.user?.username ? auth?.user.username[0] : <AccountCircleOutlined/>)
                     }</Avatar>
                 </IconButton>
             </Tooltip>
@@ -128,6 +128,20 @@ function Navbar() {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
 
+                {
+                    auth?.accessToken &&
+                    <>
+                        <MenuItem>
+                            <ListItemIconStyled>
+                                <Avatar sx={{width: 32, height: 32}}>{
+                                    (auth?.user?.username[0] + '').toUpperCase() || 'C'
+                                }</Avatar>
+                            </ListItemIconStyled>
+                            <span>{auth?.user?.username || 'Profile'}</span>
+                        </MenuItem>
+                        <Divider/>
+                    </>
+                }
                 {auth?.accessToken &&
                     <Link to={'/bookings'}>
                         <MenuItemStyled>

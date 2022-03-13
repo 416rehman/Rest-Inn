@@ -186,9 +186,10 @@ function ListingDescriptionPage() {
                             <Divider/>
                         </Stack>
                     </Grid>
-                    {user?._id == listing.host ? null :
+                    {user?._id == listing.host?._id ? null :
                         <Grid item xs={12} md={4}>
-                            <Stack justifyContent={'center'} sx={{
+                            <Stack justifyContent={'flex-start'} sx={{
+                                margin: '1rem',
                                 height: '100%',
                                 position: {
                                     md: 'sticky',

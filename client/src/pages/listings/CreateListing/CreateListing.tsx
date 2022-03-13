@@ -97,7 +97,11 @@ function CreateListing() {
         const id = listingId || locationState?.listingId; //support url params and state
         if (id) {
             getListingById(id).then(data => {
-                if (userInfo && userInfo.id == data.host) {
+                console.log(data);
+                console.log(userInfo.id);
+                console.log(data.host?._id)
+                console.log(userInfo.id === data.host?._id)
+                if (userInfo && userInfo.id == data.host?._id) {
                     setNotificationMessage('Editing listing');
                     return setListingData({...listingData, ...data});
                 }
@@ -108,7 +112,7 @@ function CreateListing() {
             })
 
         }
-    }, [location, listingId, navigate]);
+    }, []);
 
     const handleChange = (name: any, value: any) => {
         if (name) {

@@ -12,8 +12,8 @@ enum API_GATEWAY {
  * @param query
  */
 const apiURL = (path: string, query?: string) => {
-    if (!validateTokenAndGetInfo() && localStorage.getItem('refreshToken')) {
-        tryRenewSessionUsingRefreshToken();
+    if (!validateTokenAndGetInfo()) {
+        tryRenewSessionUsingRefreshToken().then(()=>console.log("Renewed session")).catch(()=>console.log("Failed to renew session"));
     }
     return `${process.env.REACT_APP_API_URL}${path || ''}${query ? '?' + query : ''}`;
 }
