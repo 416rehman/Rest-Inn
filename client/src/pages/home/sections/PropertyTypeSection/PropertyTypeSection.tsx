@@ -33,7 +33,7 @@ function PropertyTypeSection() {
                 {types.map((p: any, i: number) => {
                     return (<SwiperSlide key={p._id}>
                         <PortraitCard name={titleCase(p._id)} key={i} url={'/listings?type=' + p._id}
-                                      image={'https://www.concertproperties.com/legacy/sites/default/files/imagecache/rental-gallery/14-78.JPG'}/>
+                                      image={(()=>'https://source.unsplash.com/random/?architecture,city,night,'+i)()}/>
                     </SwiperSlide>)
                 })}
 
