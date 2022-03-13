@@ -1,4 +1,6 @@
 const bookingModel = require('./booking.model')
+const {getAll} = require("../property/property.methods");
+
 
 /**
  * Creates a new booking
@@ -13,25 +15,44 @@ module.exports.createBooking = async (booking) => {
 
 
 /**
- * Returns all user bookings
+ * Returns all bookings with the given filter
  *
- * @param username {String}
  * @param filter {Object}
  * @param limit {Number}
  * @param page {Number}
  * @param sort {{field: Number}} -1 for descending, 1 for ascending
  * @return {Promise}
  */
-module.exports.getBookingsByUser = async (username, filter={}, limit=10, page=0, sort={}) => {
+module.exports.getAllBookings = async (filter={}, limit=10, page=0, sort={}) => {
+    limit = Math.min(limit, 100);
+    page = page <= 0 ? 1 : page;
+
+    return bookingModel.find(filter).limit(limit).skip((page - 1) * limit).sort(sort).populate({path: 'user'}).populate({path: 'property'}).exec();
+};
+
+
+/**
+ * Returns all host bookings (Bookings made to the host's properties)
+ *
+ * @param id {String}
+ * @param filter {Object}
+ * @param limit {Number}
+ * @param page {Number}
+ * @param sort {{field: Number}} -1 for descending, 1 for ascending
+ */
+module.exports.getBookingsForHost = (id, filter={}, limit=10, page=0, sort={}) => {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
 
     const filterQuery = {
         ...filter,
-        user: username
     };
 
-    return bookingModel.find(filterQuery).limit(limit).skip((page - 1) * limit).sort(sort).exec();
+    getAll({host: id}).then(properties => {
+        const propertyIds = properties.map(property => property._id);
+        filterQuery.property = {$in: propertyIds};
+        return bookingModel.find(filterQuery).limit(limit).skip((page - 1) * limit).sort(sort).populate({path: 'user'}).populate({path: 'property'}).exec();
+    });
 };
 
 /** Get a booking by id
@@ -113,3 +134,29 @@ module.exports.addFeedback = async function (bookingId, rating, review) {
     }
     await booking.save();
 };
+
+
+module.exports.propertiesInReservedDateRange = (startDate, endDate) => {
+    return new Promise((resolve, reject) => {
+        bookingModel.find({
+            $and: [
+                {
+                    checkIn: {
+                        $lte: endDate
+                    }
+                },
+                {
+                    checkOut: {
+                        $gte: startDate
+                    }
+                }
+            ]
+        }).populate({path: 'property',
+            select: '_id'
+        }).exec().then(bookings => {
+            resolve(bookings);
+        }).catch(err => {
+            reject(err);
+        })
+    });
+}

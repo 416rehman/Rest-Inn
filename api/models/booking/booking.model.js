@@ -3,7 +3,7 @@ const {bookingStatus} = require("../../constants/booking.constants");
 
 const BookingSchema = new mongoose.Schema({
     user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
@@ -20,6 +20,9 @@ const BookingSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    confirmationCode: {
+        type: String,
+    },
     guests: {
         // Adults and Children depend on the property guest capacity
         adults: {
@@ -30,18 +33,15 @@ const BookingSchema = new mongoose.Schema({
         },
         children: {
             type: Number,
-            required: true
         },
         // Infants are not included in the guest count
         infants: {
             type: Number,
-            required: true,
             max: 5
         },
         // Pets are not included in the guests count. Depends on property rules
         pets: {
             type: Number,
-            required: true,
             max: 5
         }
     },
@@ -70,4 +70,10 @@ const BookingSchema = new mongoose.Schema({
 });
 
 const bookingModel = mongoose.model('Booking', BookingSchema);
+
+BookingSchema.pre('save', function (next) {
+    this.confirmationCode = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    next();
+});
+
 module.exports = bookingModel;
