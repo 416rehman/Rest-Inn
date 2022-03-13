@@ -3,13 +3,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {Card, Divider, Stack, TextField} from "@mui/material";
 import {APIValidate} from "../../services/validation.service";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {createUser} from "../../services/user.service";
 import {NewUser, NewUserField} from "../../@typings/users";
 import {LoadingButton} from "@mui/lab";
+import PasswordInput from "../../components/PasswordInput/PasswordInput";
 
 export default function SignupPage() {
-
+    const navigate = useNavigate();
     const [errors, setErrors] = React.useState<NewUser>({});
     const [formData, setFormData] = React.useState<NewUser>({});
     const [loading, setLoading] = React.useState(false);
@@ -34,14 +35,20 @@ export default function SignupPage() {
         event.preventDefault();
 
         validateAll().then(valid => {
-            if (valid) createUser(formData);
+            if (valid) {
+                createUser(formData).then(()=>{
+                    navigate('/');
+                });
+            }
         }).finally(() => setTimeout(() => setLoading(false), 500));
 
     };
 
     const handleOnBlur = (field: NewUserField, value: string, required: boolean = false) => {
         APIValidate(field, value, required).then(validation_msg => {
-            if (validation_msg) setErrors({...errors, [field]: validation_msg})
+            if (validation_msg) {
+                setErrors({...errors, [field]: validation_msg})
+            }
             else setErrors({...errors, [field]: ''})
         })
     }
@@ -126,7 +133,7 @@ export default function SignupPage() {
                             onChange={handleOnChange}
                             value={formData?.username}
                         />
-                        <TextField
+                        <PasswordInput
                             label="Password"
                             variant="outlined"
                             autoComplete={'new-password'}
@@ -135,7 +142,6 @@ export default function SignupPage() {
                             helperText={(errors && errors?.password) || ''}
                             error={!!errors?.password}
                             onBlur={(e) => {
-                                console.log('onblur')
                                 handleOnBlur(NewUserField.password, e.target.value,  true)
                             }}
                             onChange={handleOnChange}
