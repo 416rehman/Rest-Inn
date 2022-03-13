@@ -46,28 +46,29 @@ module.exports.authRefreshToken = async (req, res, next) => {
  *
  * Adds a user object with decoded access_token data to the request object
  *
- * @param req
- * @param res
- * @param next
- * @return {Promise<void>}
+ * @param role - The role of the user that is required to access this endpoint
+ * @return {function(...[*]=)}
  */
-module.exports.authAccessToken = async (req, res, next) => {
-    try {
-        console.log('authAccessToken');
-        console.log(req.header("Authorization"));
-        // Get rid of the 'Bearer ' part of the token
-        const token = req.header("Authorization")?.replace("Bearer ", "");
+module.exports.authAccessToken = (role=null) => {
+    return async (req, res, next) => {
+        try {
+            // Get rid of the 'Bearer ' part of the token
+            const token = req.header("Authorization")?.replace("Bearer ", "");
 
-        if (!token)
-            throw new Error('An access token is required to authenticate this request. Include an access token in the Authorization header. (i.e. Authorization: <access token>)');
+            if (!token)
+                throw new Error('An access token is required to authenticate this request. Include an access token in the Authorization header. (i.e. Authorization: <access token>)');
 
-        req.user = jwt.verify(token, process.env.SECRET);
-        next();
-    }
-    catch (e) {
-        res.status(401).send({
-            message: 'Failed to authenticate via the provided access token',
-            error: e.message
-        });
-    }
-};
+            req.user = jwt.verify(token, process.env.SECRET);
+            if (role && req.user.role !== role)
+                throw new Error('You do not have the required permissions to access this resource');
+
+            next();
+        }
+        catch (e) {
+            res.status(401).send({
+                message: 'Failed to authenticate via the provided access token',
+                error: e.message
+            });
+        }
+    };
+}
