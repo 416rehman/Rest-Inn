@@ -1,4 +1,5 @@
-import {isAccessExpired, renewSessionUsingRefreshToken} from "./user.service";
+import {validateTokenAndGetInfo, tryRenewSessionUsingRefreshToken} from "./user.service";
+import axios from "axios";
 
 enum API_GATEWAY {
     PROD = `https://rest-inn.herokuapp.com`,
@@ -11,14 +12,33 @@ enum API_GATEWAY {
  * @param query
  */
 const apiURL = (path: string, query?: string) => {
-    if (isAccessExpired()) {
-        renewSessionUsingRefreshToken().then();
+    if (!validateTokenAndGetInfo() && localStorage.getItem('refreshToken')) {
+        tryRenewSessionUsingRefreshToken();
     }
-
     return `${API_GATEWAY.DEV}${path || ''}${query ? '?' + query : ''}`;
 }
 
-const titleCase = (string:string) => {
+const securedGET = (path: string, useRefreshToken: boolean = false) => {
+    return axios.get(path, {headers: {Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || ''}});
+}
+const securedPOST = (path: string, body: any, useRefreshToken: boolean = false) => {
+    return axios.post(path, body, {headers: {Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || ''}});
+}
+const securedPUT = (path: string, body: any, useRefreshToken: boolean = false, headers?: {}) => {
+    console.log('securedPUT');
+    const config = {
+        headers: {
+            Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || '',
+            ...headers
+        }
+    }
+    return axios.put(path, body, config);
+}
+const securedDELETE = (path: string, useRefreshToken: boolean = false) => {
+    return axios.delete(path, {headers: {Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || ''}});
+}
+
+const titleCase = (string: string) => {
     if (!string) return '';
     return string.replace(/\w\S*/g, (txt) => {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -32,5 +52,9 @@ const randomHexColor = () => {
 export {
     apiURL,
     titleCase,
-    randomHexColor
+    randomHexColor,
+    securedGET,
+    securedPOST,
+    securedPUT,
+    securedDELETE
 };
