@@ -8,6 +8,12 @@
  *              type: string
  *              description: The id of the booking
  *              readOnly: true
+ *      forHosts:
+ *          name: forHosts
+ *          schema:
+ *              type: boolean
+ *              description: "Whether the booking is for hosts or not - True: Will find all bookings by other users for the user(host), false: Will find all bookings by the user"
+ *              default: false
  *
  *      user:
  *          name: user
@@ -121,7 +127,10 @@
  *          allOf:
  *              - $ref: '#/components/bookingParameters/id'
  *              - in: query
- *
+ *      forHosts:
+ *          allOf:
+ *              - $ref: '#/components/bookingParameters/forHosts'
+ *              - in: query
  *      user:
  *          allOf:
  *              - $ref: '#/components/bookingParameters/user'

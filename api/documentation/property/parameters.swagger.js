@@ -10,6 +10,13 @@
  *          type: string
  *          readOnly: true
  *
+ *      host:
+ *        name: host
+ *        schema:
+ *          description: The id of the host of this property
+ *          type: string
+ *          readOnly: true
+ *
  *      title:
  *        name: title
  *        schema:
@@ -180,6 +187,20 @@
  *          minimum: 1
  *          maximum: 100
  *
+ *      checkIn:
+ *        name: checkIn
+ *        schema:
+ *          description: The available check in time of the property
+ *          type: string
+ *          format: date-time
+ *
+ *      checkOut:
+ *        name: checkOut
+ *        schema:
+ *          description: The available check out time of the property
+ *          type: string
+ *          format: date-time
+ *
  */
 
 /**
@@ -309,6 +330,27 @@
  *              - in: query
  *              - name: guestsMax
  *              - description: The maximum number of guests in the property
+ *
+ *      host:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/host'
+ *              - in: query
+ *              - name: host
+ *              - description: The id of the host of the property
+ *
+ *      checkIn:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/checkIn'
+ *              - in: query
+ *              - name: checkIn
+ *              - description: The available check in date of the property
+ *
+ *      checkOut:
+ *          allOf:
+ *              - $ref: '#/components/propertyParameters/checkOut'
+ *              - in: query
+ *              - name: checkOut
+ *              - description: The available check out date of the property
  */
 
 /**

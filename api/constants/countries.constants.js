@@ -1212,28 +1212,37 @@ const countries = [
 ]
 
 // get country by code
-module.exports.getCountryByCode = (code) => {
+const getCountryByCode = (code) => {
     return countries.find(country => country.code === code)
 }
 
-module.exports.getCountryByDialCode = (dialCode) => {
+const getCountryByDialCode = (dialCode) => {
     return countries.find(country => country.dial_code === dialCode)
 }
 
-module.exports.getCountryByName = (name) => {
+const getCountryByName = (name) => {
     return countries.find(country => country.name === name)
 }
 
-module.exports.getAllDialCodes = () => {
+const getAllDialCodes = () => {
     return countries.map(country => country.dial_code)
 }
 
-module.exports.getAllCodes = () => {
+const getAllCodes = () => {
     return countries.map(country => country.code)
 }
 
-module.exports.getAllNames = () => {
+const getAllNames = () => {
     return countries.map(country => country.name)
+}
+
+module.exports = {
+    getCountryByCode,
+    getCountryByDialCode,
+    getCountryByName,
+    getAllDialCodes,
+    getAllCodes,
+    getAllNames
 }
 
 /**

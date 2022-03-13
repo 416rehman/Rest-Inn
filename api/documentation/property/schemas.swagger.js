@@ -15,9 +15,11 @@
  *      description: readOnly fields can only be updated by users with escalated privileges
  *      type: object
  *      properties:
- *
  *         _id:
  *           $ref: '#/components/propertyParameters/id/schema'
+ *
+ *         host:
+ *           $ref: '#/components/propertyParameters/host/schema'
  *
  *         title:
  *           allOf:
