@@ -15,7 +15,7 @@ const apiURL = (path: string, query?: string) => {
     if (!validateTokenAndGetInfo() && localStorage.getItem('refreshToken')) {
         tryRenewSessionUsingRefreshToken();
     }
-    return `${API_GATEWAY.DEV}${path || ''}${query ? '?' + query : ''}`;
+    return `${process.env.REACT_APP_API_URL}${path || ''}${query ? '?' + query : ''}`;
 }
 
 const securedGET = (path: string, useRefreshToken: boolean = false) => {
