@@ -8,28 +8,36 @@
  *      Creation Date: 2022-01-24
  */
 
+const upload = require('../middleware/multer.middleware');
+const arrayUpload = upload.array('files');
+
 const property = require('../models/property/property.methods');
 const {
     idCondition,
     existingPropertyValidation,
     propertyTypeCondition
 } = require('../helpers/property-validation');
-const {propertyFilter, sortFilter} = require("../helpers/filters");
+const {sortFilter, buildPropertyFilter} = require("../helpers/filters");
 const {listingTypes, propertyTypes, amenities} = require("../constants/property.constants");
+const {update, getById} = require("../models/property/property.methods");
+const {deleteFromS3} = require("../middleware/multer.middleware");
 
-module.exports.getAll = (req, res) => {
+module.exports.getAll = async (req, res) => {
+    console.log('getAll');
     let {page, limit} = req.query;
     const sort = sortFilter(req.query)
-    const filter = propertyFilter(req.query);
-
+    console.log('sort')
+    const filter = await buildPropertyFilter(req.query);
+    console.log('filter');
     property.getAll(filter, limit, page, sort).then(async properties => {
+        console.log(properties)
         if (properties.length === 0) {
             res.status(404).json({
                 message: 'No properties found',
             });
         } else {
+            console.log(properties.map(p => p.title))
             const count = await property.count(filter);
-
             res.json({
                 message: 'Retrieved all properties',
                 data: properties,
@@ -269,6 +277,7 @@ module.exports.getOneById = (req, res) => {
 
 module.exports.add = (req, res) => {
     existingPropertyValidation.validateAsync(req.body).then(sanitized => {
+        if (req.user) sanitized['host'] = req.user.id;
         property.add(sanitized).then(property => {
             res.status(201).json({
                 message: 'Added property',
@@ -288,41 +297,125 @@ module.exports.add = (req, res) => {
     });
 }
 
-module.exports.updateById = (req, res) => {
-    idCondition.validateAsync(req.params.id).then(id => {
-        existingPropertyValidation.validateAsync(req.body).then(sanitized => {
-            property.update(id, sanitized).then(updatedProperty => {
-                res.json({
-                    message: 'Updated property by id',
-                    data: updatedProperty
+function addImages(req, res) {
+    arrayUpload(req, res, function (err) {
+        if (err) {
+            res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
+        } else {
+            if (req.files) {
+                let newImages = req.files.map(file => {
+                    return file.key
                 })
+                if (newImages.length > 0) {
+                    update({_id: req.params.id}, {
+                        $push: {
+                            photos: {
+                                $each: newImages
+                            }
+                        }
+                    }).then(r => {
+                        res.json({
+                            message: 'Images added to property',
+                            data: r
+                        })
+                    }).catch(err => {
+                        res.status(500).json({
+                            message: 'Error when adding images to property ' + req.params.id,
+                            error: err.message
+                        });
+                    });
+                }
+            }
+        }
+    })
+}
+
+module.exports.updateById = (req, res) => {
+    if (req.headers['content-type'] === 'application/json') {
+        idCondition.validateAsync(req.params.id).then(id => {
+            existingPropertyValidation.validateAsync(req.body).then(sanitized => {
+                property.update({id, host: req.user.id}, sanitized).then(updatedProperty => {
+                    if (sanitized['photosToRemove']) {
+                        updatedProperty['photos'] = updatedProperty['photos'].filter(photo => {
+                            deleteFromS3(photo);
+                            return !sanitized['photosToRemove'].includes(photo)
+                        })
+                        updatedProperty.save().then(r => {
+                            res.json({
+                                message: 'Property updated',
+                                data: r
+                            })
+                        }).catch(err => {
+                            res.status(500).json({
+                                message: 'Error when updating property',
+                                error: err.message
+                            });
+                        });
+                    }
+                    else {
+                        res.json({
+                            message: 'Updated property by id',
+                            data: updatedProperty
+                        })
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        message: 'Error when updating property by id',
+                        error: err.message
+                    });
+                });
             }).catch(err => {
-                res.status(500).json({
-                    message: 'Error when updating property by id',
+                res.status(400).json({
+                    message: 'Invalid property data',
                     error: err.message
                 });
             });
         }).catch(err => {
             res.status(400).json({
-                message: 'Invalid property data',
+                message: 'Invalid id',
                 error: err.message
             });
         });
-    }).catch(err => {
-        res.status(400).json({
-            message: 'Invalid id',
-            error: err.message
+    } else {
+        getById(req.params.id).then(property => {
+            console.log(property.host);
+            console.log(req.user.id);
+            if (property.host.toString() === req.user.id) {
+                addImages(req, res);
+            } else {
+                res.status(403).json({
+                    message: 'You are not allowed to update this property',
+                    error: 'You are not allowed to update this property'
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                message: 'Error when getting property by id',
+                error: err.message
+            });
         });
-    });
+    }
+
 }
 
 module.exports.deleteById = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id => {
-        property.delete(id).then(() => {
-            res.json({
-                message: 'Deleted property by id'
-            })
+        property.delete({id, host: req.user.id}).then((d) => {
+            console.log(d);
+            if (d.deletedCount === 0) {
+                res.status(404).json({
+                    message: 'No property found or deleted',
+                });
+            } else {
+                d.photos.forEach(photo => {
+                    deleteFromS3(photo);
+                })
+                res.json({
+                    message: 'Deleted property with id ' + id,
+                })
+            }
         }).catch(err => {
+            console.log(err);
             res.status(500).json({
                 message: 'Error when deleting property by id',
                 error: err.message
