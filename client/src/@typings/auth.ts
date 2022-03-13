@@ -1,9 +1,9 @@
 import {CompleteUser} from "./users";
 
 enum AuthActionEnum {
-    LOGIN = "LOGIN",
-    LOGOUT = "LOGOUT",
-    RENEW_ACCESS_TOKEN = "RENEW_ACCESS_TOKEN",
+    SET_USER = "SET_USER",
+    CLEAR_ALL = "CLEAR_ALL",
+    SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN",
 }
 
 enum RoleEnum {
@@ -12,29 +12,27 @@ enum RoleEnum {
 }
 
 interface LoginAction {
-    type: AuthActionEnum.LOGIN;
+    type: AuthActionEnum.SET_USER;
     payload: {
         user: CompleteUser;
     };
 }
 
 interface RenewTokenAction {
-    type: AuthActionEnum.RENEW_ACCESS_TOKEN;
+    type: AuthActionEnum.SET_ACCESS_TOKEN;
     payload: {
         accessToken: string;
-        user: CompleteUser;
     };
 }
 
 interface LogoutAction {
-    type: AuthActionEnum.LOGOUT;
+    type: AuthActionEnum.CLEAR_ALL;
     payload: {}
 }
 
 interface AuthState {
     user: CompleteUser | null;
     accessToken: string | null;
-    isAuthenticated: boolean;
 }
 
 type AuthAction = LoginAction | RenewTokenAction | LogoutAction;
