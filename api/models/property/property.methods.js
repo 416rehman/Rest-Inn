@@ -9,7 +9,7 @@ const bookingModel = require('../booking/booking.model')
  * @param sort
  * @return {Promise<Array<HydratedDocument<any, {}, {}>>>}
  */
-module.exports.getAll = function (filter={}, limit=10, page=0, sort={}) {
+module.exports.getAll = function (filter, limit=10, page=0, sort) {
     limit = Math.min(limit, 100);
     page = page <= 0 ? 1 : page;
 
@@ -81,7 +81,10 @@ module.exports.getAllLocations = function () {
                 _id: {
                     city: "$location.city",
                     province: "$location.province",
-                    country: "$location.country"
+                    country: "$location.country",
+                    startingFrom: {
+                        $min: "$price"
+                    }
                 },
                 count: {$sum: 1}
             }
@@ -132,28 +135,34 @@ module.exports.getBestSellers = function (limit=10, page=0, sort={}) {
  * @return {Promise}
  */
 module.exports.getById = function (id) {
-    return propertyModel.findById(id).exec();
+    return propertyModel.findById(id).populate({
+        path: 'host',
+        select: '-password -__v -createdAt -updatedAt -email -role -refreshToken -extension -activated -favorites'
+    }).exec();
 }
 
 /**
- * Updates a property by id
+ * Updates one property with the given filter
  *
- * @param id
+ * @param filter
  * @param data
  * @return {Promise}
  */
-module.exports.update = function (id, data) {
-    return propertyModel.findByIdAndUpdate(id, data, {new: true}).exec();
+module.exports.update = function (filter, data) {
+    return propertyModel.findOneAndUpdate(filter, data, {new: true}).populate({
+        path: 'host',
+        select: '-password -__v -createdAt -updatedAt -email -role -refreshToken -extension -activated -favorites'
+    }).exec();
 }
 
 /**
  * Deletes a property by id
  *
- * @param id
  * @return {Promise<any>}
+ * @param filter
  */
-module.exports.delete = function (id) {
-    return propertyModel.findByIdAndDelete(id).exec();
+module.exports.delete = function (filter) {
+    return propertyModel.findOneAndDelete(filter).exec();
 }
 
 /**

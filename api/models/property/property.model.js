@@ -10,6 +10,7 @@
 const {propertyTypes, amenities, listingTypes} = require("../../constants/property.constants");
 const mongoose = require("mongoose");
 const bookingModel = require("../booking/booking.model");
+const {s3Url} = require("../../helpers/mongooseGetters");
 
 const LocationSchema = new mongoose.Schema({
     unit: String,
@@ -36,6 +37,11 @@ const LocationSchema = new mongoose.Schema({
 })
 
 const PropertySchema = new mongoose.Schema({
+    host: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     title: {
         type: String,
         required: true
@@ -49,7 +55,6 @@ const PropertySchema = new mongoose.Schema({
         type: String,
         enum: propertyTypes,
         required: true,
-        minlength: 3,
         default: propertyTypes[0] || "Apartment"
     },
     bedrooms: {
@@ -83,15 +88,14 @@ const PropertySchema = new mongoose.Schema({
         default: false,
         required: true
     },
-    thumbnail: {
-        type: String,
-        default: 'https://placeimg.com/200/300/arch'
+    photos: {
+        type: [String],
+        get: s3Url,
     },
-    photos: [String],
     listingType: {
         type: String,
         enum: listingTypes,
-        default: listingTypes[0]
+        default: listingTypes[0],
     },
     guests: {
         type: Number,
@@ -131,4 +135,5 @@ PropertySchema.virtual('rating').get(function () {
     return rating;
 });
 
-module.exports = mongoose.model("Property", PropertySchema);
+const model = mongoose.model("Property", PropertySchema);
+module.exports = model;
