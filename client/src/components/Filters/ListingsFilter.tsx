@@ -20,7 +20,7 @@ export default function ListingsFilter({filters, setFiltersHandler}: FilterBarPr
     const {listingTypes, types, amenities} = useSelector((state: any ) => state.meta);
 
     return (
-        <Stack direction={'row'} gap={'1rem'} width={'100%'} alignItems={'center'} justifyContent={'center'} padding={'0.5rem 0'}>
+        <Stack direction={'row'} gap={'1rem'} width={'100%'} alignItems={'center'} justifyContent={'flex-start'} padding={'0.5rem 0'}>
             <RangeFilterInput title={"Price"} minValue={0} icon={<AttachMoneyOutlined fontSize={'small'}/>} fields={[
                 { name: 'priceMin', label: 'Minimum Price' },
                 { name: 'priceMax', label: 'Maximum Price' }

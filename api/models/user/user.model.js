@@ -95,7 +95,6 @@ UserSchema.pre('save', async function (next) {
         // 2. Generate new refresh token
         jsonwebtoken.sign({id: this.id, username: this.username}, process.env.SECRET, {}, (err, token) => {
             if (err) {
-                console.log(err);
                 return next(err);
             }
             this.refreshToken = token;

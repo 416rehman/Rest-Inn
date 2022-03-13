@@ -23,20 +23,16 @@ const {update, getById} = require("../models/property/property.methods");
 const {deleteFromS3} = require("../middleware/multer.middleware");
 
 module.exports.getAll = async (req, res) => {
-    console.log('getAll');
+
     let {page, limit} = req.query;
     const sort = sortFilter(req.query)
-    console.log('sort')
     const filter = await buildPropertyFilter(req.query);
-    console.log('filter');
     property.getAll(filter, limit, page, sort).then(async properties => {
-        console.log(properties)
         if (properties.length === 0) {
             res.status(404).json({
                 message: 'No properties found',
             });
         } else {
-            console.log(properties.map(p => p.title))
             const count = await property.count(filter);
             res.json({
                 message: 'Retrieved all properties',
@@ -399,7 +395,6 @@ module.exports.updateById = (req, res) => {
 module.exports.deleteById = (req, res) => {
     idCondition.validateAsync(req.params.id).then(id => {
         property.delete({id, host: req.user.id}).then((d) => {
-            console.log(d);
             if (d.deletedCount === 0) {
                 res.status(404).json({
                     message: 'No property found or deleted',
@@ -413,7 +408,6 @@ module.exports.deleteById = (req, res) => {
                 })
             }
         }).catch(err => {
-            console.log(err);
             res.status(500).json({
                 message: 'Error when deleting property by id',
                 error: err.message

@@ -17,7 +17,6 @@ const User = require("../models/user/user.methods");
  */
 module.exports.authRefreshToken = async (req, res, next) => {
     try {
-        console.log(req.header("Authorization"));
         // Get rid of the 'Bearer ' part of the token
         const token = req.header("Authorization")?.replace("Bearer ", "");
 

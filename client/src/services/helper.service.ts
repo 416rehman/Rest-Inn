@@ -13,7 +13,7 @@ enum API_GATEWAY {
  */
 const apiURL = (path: string, query?: string) => {
     if (!validateTokenAndGetInfo()) {
-        tryRenewSessionUsingRefreshToken().then(()=>console.log("Renewed session")).catch(()=>console.log("Failed to renew session"));
+        tryRenewSessionUsingRefreshToken().then(()=>console.log("Renewed session")).catch(()=>{});
     }
     return `${process.env.REACT_APP_API_URL}${path || ''}${query ? '?' + query : ''}`;
 }
@@ -25,7 +25,6 @@ const securedPOST = (path: string, body: any, useRefreshToken: boolean = false) 
     return axios.post(path, body, {headers: {Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || ''}});
 }
 const securedPUT = (path: string, body: any, useRefreshToken: boolean = false, headers?: {}) => {
-    console.log('securedPUT');
     const config = {
         headers: {
             Authorization: (useRefreshToken ? localStorage.getItem('refreshToken') : localStorage.getItem('accessToken')) || '',

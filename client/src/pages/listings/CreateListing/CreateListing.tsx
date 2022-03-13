@@ -97,10 +97,6 @@ function CreateListing() {
         const id = listingId || locationState?.listingId; //support url params and state
         if (id) {
             getListingById(id).then(data => {
-                console.log(data);
-                console.log(userInfo.id);
-                console.log(data.host?._id)
-                console.log(userInfo.id === data.host?._id)
                 if (userInfo && userInfo.id == data.host?._id) {
                     setNotificationMessage('Editing listing');
                     return setListingData({...listingData, ...data});
@@ -172,7 +168,6 @@ function CreateListing() {
     }
 
     const handlePhotosToAdd = (files: File[], undo: boolean) => {
-        console.log({files})
         if (files) {
             if (undo) { // undo adding new photos
                 if (listingData.photosToAdd) {

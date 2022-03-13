@@ -167,7 +167,6 @@ function addFavorite(req, res) {
         favoriteValidation.validateAsync(req.params.listingId).then(id => {
             Property.getById(id).then( () => {
                 User.getFavoriteProperties(username).then(({favorites}) => {
-                    console.log(favorites.properties)
                     if (favorites.properties && favorites.properties.find(fav => fav.listingId.toString() === id)) {
                         res.status(400).json({
                             message: 'Listing already in favorites',

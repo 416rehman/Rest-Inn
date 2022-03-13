@@ -52,12 +52,18 @@ function Hosting() {
                             }}>
                         Add a Listing</Button>
                 </Stack>
-                {user?._id && <ListingsPage host={user._id} hideOnEmpty hideFilter/>}
+                {user?._id && <ListingsPage host={user._id} hideOnEmpty hideFilter style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    alignItems: 'center'
+                }}/>}
             </Stack>
             <Divider/>
             <Stack padding={'1rem 0rem'} alignItems={'center'}>
                 <BookingsPage query={'forHosts=true'} title={'Your Guests'} width={'100%'} subtitle={
-                    'These are the guests that have booked your listings. You can review their reviews and respond to their requests. (TO DO)'
+                    'These are the guests that have booked your listings. You can review their reviews and respond to their requests (TO DO).'
                 } message={' '}/>
             </Stack>
         </Stack>

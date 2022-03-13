@@ -59,7 +59,6 @@ export default function Step7({listingData, handleChange}: any) {
                         onBlur={(e) => {
                             if (e.target.value) {
                                 if (e.target.value.length > 3 && e.target.value.length <= 50) {
-                                    console.log(e.target.value.length)
                                     handleChange('rules', [...listingData.rules, e.target.value])
                                 }
                             }

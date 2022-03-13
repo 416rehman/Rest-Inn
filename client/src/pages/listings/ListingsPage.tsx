@@ -2,14 +2,14 @@ import {Fragment, useEffect, useState} from 'react';
 import ListingCard from "../../components/ListingCard/ListingCard";
 import './ListingsPage.scss';
 import ErrorGeneric from "../../components/Errors/ErrorGeneric";
-import {CircularProgress, Pagination, Stack} from "@mui/material";
+import {CircularProgress, Fab, Pagination, Stack} from "@mui/material";
 import {ListingPartial} from "../../@typings/listings";
 import {useSearchParams} from "react-router-dom";
 import ListingsFilter from "../../components/Filters/ListingsFilter";
 import {getAllListings} from "../../services/listing.service";
 
 
-function ListingsPage({host, hideOnEmpty, hideFilter}: { host?: string, hideOnEmpty?: boolean, hideFilter?: boolean }) {
+function ListingsPage({host, hideOnEmpty, hideFilter, ...rest}: { host?: string, hideOnEmpty?: boolean, hideFilter?: boolean, [x:string] :any }) {
 
     const [searchParams] = useSearchParams();
     const [appliedFilters, setAppliedFilters] = useState<any>(Object.fromEntries(searchParams));
@@ -20,7 +20,6 @@ function ListingsPage({host, hideOnEmpty, hideFilter}: { host?: string, hideOnEm
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
         setLoading(true);
         // Creates a new URLSearchParams object from the applied filters, convert to query string, and update the URL
         const newFilter = new URLSearchParams(appliedFilters);
@@ -46,11 +45,15 @@ function ListingsPage({host, hideOnEmpty, hideFilter}: { host?: string, hideOnEm
             })
     }, [appliedFilters])
 
-    return hideOnEmpty && !listings.length ? null : (<div className={'listings-page page-content'}>
+    useEffect(()=>{
+        setAppliedFilters(Object.fromEntries(searchParams));
+    }, [searchParams])
+
+    return hideOnEmpty && !listings.length ? null : (<div className={'listings-page page-content'} {...rest}>
             {hideFilter ? null :
                 <Stack sx={{
                     width: '100%',
-                    overflowX: 'scroll',
+                    overflowX: 'auto',
                     '&::-webkit-scrollbar': {
                         height: '0.5em'
                     }
@@ -70,6 +73,20 @@ function ListingsPage({host, hideOnEmpty, hideFilter}: { host?: string, hideOnEm
                                         setAppliedFilters({...appliedFilters, page: value})
                                     }}
                         />
+                        {Object.keys(appliedFilters).length ?
+                            <Stack sx={{
+                                position: 'fixed',
+                                bottom: '5rem',
+                                right: '1rem',
+                                zIndex: 1,
+                            }}>
+                                <Fab variant={'extended'} onClick={()=>setAppliedFilters({})} sx={{
+                                    color : '#4b0000',
+                                    backgroundColor: '#fae7e7',
+                                }}>
+                                    Clear Filters
+                                </Fab>
+                            </Stack> : null}
                     </Fragment>)
                     :
                     <ErrorGeneric title={'No Listings Found'}

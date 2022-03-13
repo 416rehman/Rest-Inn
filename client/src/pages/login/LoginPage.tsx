@@ -26,7 +26,7 @@ function LoginPage() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
         event.preventDefault();
-        console.log(location.state?.redirect)
+
         login(formData.email, formData.password).then(() => {
             navigate(location.state?.redirect || '/', {state: {redirect: location.state}});
         }).catch((error) => {
@@ -69,7 +69,6 @@ function LoginPage() {
                         error={!!formError}
                         helperText={formError}
                         onChange={(event) => {
-                            console.log(event.target.value);
                             setFormData({...formData, password: event.target.value})
                         }}/>
 

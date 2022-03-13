@@ -1253,8 +1253,6 @@ const parseLocationFromPlace =(place: any) => {
     if (country) parsedLocation['country'] = country.long_name;
     if (postalCode) parsedLocation['postalCode'] = postalCode.long_name;
 
-    console.log(parsedLocation);
-
     return parsedLocation;
 };
 

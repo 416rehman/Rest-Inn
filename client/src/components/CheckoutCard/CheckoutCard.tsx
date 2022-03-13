@@ -51,7 +51,6 @@ function CheckoutCard({listing}: IProps) {
     }
 
     const handleCheckIn = (date: Date | null) => {
-        console.log(!!(bookingInfo.checkIn && bookingInfo.checkOut));
         setBookingInfo({
             ...bookingInfo,
             checkIn: date,

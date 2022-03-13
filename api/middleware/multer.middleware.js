@@ -10,7 +10,6 @@ const s3 = new aws.S3({
 const deleteFromS3 = (key) => {
     s3.deleteObject({Bucket: 'restinn', Key: key}, (err, data) => {
         console.error(err);
-        console.log(data);
     });
 }
 

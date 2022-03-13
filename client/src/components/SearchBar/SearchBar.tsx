@@ -5,6 +5,7 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import {useSelector} from "react-redux";
 import {titleCase} from "../../services/helper.service";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
     className?: string;
@@ -14,6 +15,8 @@ interface IProps {
 
 function SearchBar({className, ...props}: IProps) {
 
+    const navigate = useNavigate();
+
     const [checkIn, setCheckIn] = useState<any>(new Date());
     const [checkOut, setCheckOut] = useState<any>(new Date());
     const [guests, setGuests] = useState<number>(1);
@@ -22,14 +25,12 @@ function SearchBar({className, ...props}: IProps) {
     const {locations} = useSelector((state: any) => state.meta);
 
     const handleOnSubmit = (e: any) => {
-        const search = e.target.elements.location.value;
-        e.target.elements.location.value = search.split("-")[0]?.trim() || search.trim();
+        e.preventDefault();
+        navigate(`/listings?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}&guests=${guests}&location=${(destination.split("-")[0] || destination).trim()}`);
     };
 
     return (
-        <form action={'/listings'} onSubmit={handleOnSubmit} className={'search-bar' + (className || '')} {...props}>
-
-
+        <form onSubmit={handleOnSubmit} className={'search-bar' + (className || '')} {...props}>
             <Stack sx={{
                 flexBasis: {
                     xs: '100%',

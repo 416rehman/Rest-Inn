@@ -18,7 +18,7 @@ import {
     IconButton,
     ListItemIcon,
     Menu,
-    MenuItem,
+    MenuItem, Stack,
     Tooltip,
     useMediaQuery,
     useTheme
@@ -130,7 +130,7 @@ function Navbar() {
 
                 {
                     auth?.accessToken &&
-                    <>
+                    <Stack>
                         <MenuItem>
                             <ListItemIconStyled>
                                 <Avatar sx={{width: 32, height: 32}}>{
@@ -140,7 +140,8 @@ function Navbar() {
                             <span>{auth?.user?.username || 'Profile'}</span>
                         </MenuItem>
                         <Divider/>
-                    </>
+                    </Stack>
+
                 }
                 {auth?.accessToken &&
                     <Link to={'/bookings'}>

@@ -27,7 +27,6 @@ export default function Step5({listingData, handleChange}: stepProps) {
                             return <Grid key={a._id} item sm={8} xs={16}><FormControlLabel sx={{textTransform: 'capitalize'}} checked={
                                 listingData.amenities?.includes(a._id)
                             } onChange={(e:any)=>{
-                                console.log(listingData.amenities)
                                 handleChange(e.target.name, e.target.checked)
                             }} control={<Checkbox name={a._id}/>} label={a._id} /></Grid>
                         })}

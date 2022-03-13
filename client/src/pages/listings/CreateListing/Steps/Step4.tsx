@@ -15,7 +15,7 @@ export default function Step4({listingData, handleChange, setListingData}: stepP
         }, [listingData.location?.country]);
 
         const handlePlaceSelection = (place: any) => {
-            console.log('place')
+
             const parsedPlace = parseLocationFromPlace(place);
             setListingData({
                 ...listingData,

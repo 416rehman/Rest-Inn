@@ -4,7 +4,6 @@ import React from "react";
 import { stepProps } from "./@typings";
 
 export default function Step2({listingData, handleChange}: stepProps) {
-    console.log(listingData);
     const contentElement = <Stack gap={'1rem'}>
         <Stack gap={'2rem'} width={'fit-content'}>
             <Stack gap={'1rem'}>

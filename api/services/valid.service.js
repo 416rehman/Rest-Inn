@@ -17,7 +17,6 @@ const validateEmail = (req, res) => {
         userMethods.getAll({email: result})
             .then(user => {
                 if (user && user.length > 0) {
-                    console.log(user)
                     res.status(500).json({
                         message: 'Validation Failed',
                         error: 'Email is already in use'
@@ -43,12 +42,9 @@ const validateEmail = (req, res) => {
 }
 
 const validateUsername = (req, res) => {
-    console.log(req.body.username)
     usernameCondition.validateAsync(req.body.username).then(result => {
-        console.log(result)
         userMethods.getByUsername(result)
             .then(user => {
-                console.log(result)
                 if (user) {
                     res.status(500).json({
                         message: 'Validation Failed',
@@ -68,7 +64,6 @@ const validateUsername = (req, res) => {
             })
     }).catch(err => {
         let error = 'Invalid username'
-        console.log(err.details[0].context)
         if (err.details[0].type === 'string.min') {
             error = 'Min length: ' + err.details[0].context.limit + ' letters'
         }
@@ -110,7 +105,6 @@ const validatePassword = (req, res) => {
 
 const validateFirstName = (req, res) => {
     firstNameCondition.validateAsync(req.body.firstName).then(result => {
-        console.log(result)
         res.status(200).json({
             message: 'First Name is valid',
         })
@@ -134,7 +128,6 @@ const validateFirstName = (req, res) => {
 
 const validateLastName = (req, res) => {
     lastNameCondition.validateAsync(req.body.lastName).then(result => {
-        console.log(result)
         res.status(200).json({
             message: 'Last Name is valid',
         })
