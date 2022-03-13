@@ -32,14 +32,14 @@ const monthCondition = Joi.number().min(0).max(12).label('Month')
 const yearCondition = Joi.number().min(0).max(9999).label('Year')
 
 //Location Conditions
-const unitCondition = Joi.string().min(1).max(32).label('Unit').lowercase();
-const streetCondition = Joi.string().min(1).max(255).label('Street').lowercase();
-const cityCondition = Joi.string().min(1).max(255).label('City').lowercase();
-const provinceCondition = Joi.string().min(1).max(255).label('Province').lowercase();
-const countryCondition = Joi.string().min(1).max(255).label('Country').lowercase();
-const postalCodeCondition = Joi.string().min(1).max(32).label('Postal Code').lowercase()
+const unitCondition = Joi.string().min(0).max(16).label('Unit').lowercase();
+const streetCondition = Joi.string().min(1).max(64).label('Street').lowercase();
+const cityCondition = Joi.string().min(1).max(64).label('City').lowercase();
+const provinceCondition = Joi.string().min(1).max(64).label('Province').lowercase();
+const countryCondition = Joi.string().min(1).max(64).label('Country').lowercase();
+const postalCodeCondition = Joi.string().min(1).max(12).label('Postal Code').lowercase()
 const locationCondition = Joi.object().keys({
-    unit: unitCondition.required(),
+    unit: unitCondition,
     street: streetCondition.required(),
     city: cityCondition.required(),
     province: provinceCondition.required(),
@@ -68,7 +68,7 @@ const newPropertyValidation = Joi.object().keys({
     photos: photosCondition,
     listingType: listingTypeCondition,
     guests: guestCondition
-})
+}).unknown(true);
 
 // use this to validate a property in PUT
 const existingPropertyValidation = Joi.object().keys({
@@ -83,11 +83,10 @@ const existingPropertyValidation = Joi.object().keys({
     amenities: amenitiesCondition,
     location: locationCondition,
     bestSeller: bestSellerCondition,
-    thumbnail: photoCondition,
     photos: photosCondition,
     listingType: listingTypeCondition,
     guests: guestCondition
-})
+}).unknown(true);
 
 module.exports = {
     newPropertyValidation,

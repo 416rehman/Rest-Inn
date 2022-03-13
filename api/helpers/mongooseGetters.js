@@ -17,3 +17,7 @@ module.exports.obfuscate = (email) => {
         email.slice(2, separatorIndex).replace(/./g, '*') +
         email.slice(separatorIndex);
 }
+
+module.exports.s3Url = (photos) => {
+    return photos.map(photo => `https://restinn.s3.amazonaws.com/${photo}`)
+}
