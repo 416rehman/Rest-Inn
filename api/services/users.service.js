@@ -10,7 +10,7 @@
 
 const User = require('../models/user/user.methods');
 const Property = require('../models/property/property.methods');
-const {signupValidation, existingUserValidation, usernameCondition, favoriteValidation} = require('../helpers/user-validation');
+const {signupValidation, existingUserValidation, usernameCondition, favoriteValidation, usernameOrIdCondition} = require('../helpers/user-validation');
 const {userFilter} = require("../helpers/filters");
 
 /**
@@ -42,7 +42,7 @@ const getAllUsers = async function (req, res) {
  * Gets a user object with the given username.
  */
 const getUserByUsername = async function (req, res) {
-    usernameCondition.validateAsync(req.params.username).then(username => {
+    usernameOrIdCondition.validateAsync(req.params.username).then(username => {
         User.getByUsername(username).then(user => {
             if (user) {
                 res.json({
