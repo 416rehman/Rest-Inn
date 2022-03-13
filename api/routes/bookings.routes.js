@@ -1,5 +1,6 @@
 const express = require('express')
-const {getBookingsByUser, createBooking, approveBooking, rejectBooking, cancelBooking, getBooking} = require("../services/bookings.service");
+const {getUserBookings, createBooking, approveBooking, rejectBooking, cancelBooking, getBooking} = require("../services/bookings.service");
+const {authAccessToken} = require("../middleware/auth.middleware");
 const router = express.Router()
 
 /** Get all bookings of the logged-in user */
@@ -11,8 +12,10 @@ const router = express.Router()
  *      - Bookings
  *    description: Get all bookings of the logged-in user
  *    summary: Get all bookings of the logged-in user
+ *    security:
+ *      - accessToken: []
  *    parameters:
- *      - $ref: '#/components/bookingQueryParameters/user'
+ *      - $ref: '#/components/bookingQueryParameters/forHosts'
  *      - $ref: '#/components/bookingQueryParameters/property'
  *      - $ref: '#/components/bookingQueryParameters/status'
  *      - $ref: '#/components/bookingQueryParameters/checkIn'
@@ -50,7 +53,7 @@ const router = express.Router()
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.get('/', getBookingsByUser)
+router.get('/', authAccessToken(), getUserBookings)
 
 /** Get a booking by id */
 /**
@@ -61,6 +64,8 @@ router.get('/', getBookingsByUser)
  *      - Bookings
  *    description: Get a booking by id
  *    summary: Get a booking by id
+ *    security:
+ *      - accessToken: []
  *    parameters:
  *      - $ref: '#/components/bookingPathParameters/id'
  *    responses:
@@ -81,7 +86,7 @@ router.get('/', getBookingsByUser)
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.get('/:id', getBooking)
+router.get('/:id', authAccessToken(), getBooking)
 
 /** Create a booking for the logged-in user */
 /**
@@ -91,6 +96,8 @@ router.get('/:id', getBooking)
  *     tags:
  *       - Bookings
  *     description: Create a booking for the logged-in user
+ *     security:
+ *       - accessToken: []
  *     summary: Create a booking for the logged-in user
  *     requestBody:
  *       description: The booking to create
@@ -121,7 +128,7 @@ router.get('/:id', getBooking)
  *         $ref: '#/components/responses/InternalServerError'
  *
  */
-router.post('/', createBooking)
+router.post('/', authAccessToken(), createBooking)
 
 /** Approves a booking for the logged-in user */
 /**
@@ -131,6 +138,8 @@ router.post('/', createBooking)
  *     tags:
  *       - Bookings
  *     description: Sets the booking status to approved - indicates that the reservation has been accepted by the host
+ *     security:
+ *       - accessToken: []
  *     summary: Approves a booking for the logged-in user
  *     parameters:
  *       - $ref: '#/components/bookingPathParameters/id'
@@ -153,7 +162,7 @@ router.post('/', createBooking)
  *         $ref: '#/components/responses/InternalServerError'
  *
  */
-router.put('/:id/approve', approveBooking)
+router.put('/:id/approve', authAccessToken(), approveBooking)
 
 /**
  * @swagger
@@ -162,6 +171,8 @@ router.put('/:id/approve', approveBooking)
  *     tags:
  *       - Bookings
  *     description: Sets the booking status to rejected - indicates that the reservation has been rejected by the host
+ *     security:
+ *       - accessToken: []
  *     summary: Rejects a booking for the logged-in user
  *     parameters:
  *       - $ref: '#/components/bookingPathParameters/id'
@@ -184,7 +195,7 @@ router.put('/:id/approve', approveBooking)
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.put('/:id/reject', rejectBooking)
+router.put('/:id/reject', authAccessToken(), rejectBooking)
 
 /** Reject a booking for the logged-in user */
 /**
@@ -194,6 +205,8 @@ router.put('/:id/reject', rejectBooking)
  *     tags:
  *       - Bookings
  *     description: Sets the booking status to cancelled - indicates that the reservation has been cancelled by the guest after it was approved
+ *     security:
+ *       - accessToken: []
  *     summary: Cancels a booking for the logged-in user
  *     parameters:
  *       - $ref: '#/components/bookingPathParameters/id'
@@ -217,6 +230,6 @@ router.put('/:id/reject', rejectBooking)
  *
  *
  */
-router.put('/:id/cancel', cancelBooking)
+router.put('/:id/cancel', authAccessToken(), cancelBooking)
 
 module.exports = router

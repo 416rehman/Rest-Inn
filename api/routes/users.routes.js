@@ -11,6 +11,7 @@ const router = require('express').Router();
 const user = require('../services/users.service');
 const {authAccessToken} = require("../middleware/auth.middleware");
 
+/** TODO: Expose the admin-only routes to users */
 
 /** Get all users */
 /**
@@ -21,6 +22,8 @@ const {authAccessToken} = require("../middleware/auth.middleware");
  *       - Users
  *     summary: Get all users
  *     description: Returns all users and accepts a filter through query params
+ *     security:
+ *       - accessToken: []
  *     produces:
  *       - application/json
  *     parameters:
@@ -51,7 +54,7 @@ const {authAccessToken} = require("../middleware/auth.middleware");
  *         $ref: '#/components/responses/InternalServerError'
  *
  */
-router.get('/', user.getAllUsers);
+router.get('/', authAccessToken('admin'), user.getAllUsers);
 
 /** Get user's favorites */
 /**
@@ -63,6 +66,8 @@ router.get('/', user.getAllUsers);
  *      - Favorites
  *    summary: Get user's favorites
  *    description: Gets a user's favorites
+ *    security:
+ *      - accessToken: []
  *    produces:
  *      - application/json
  *    parameters:
@@ -88,7 +93,7 @@ router.get('/', user.getAllUsers);
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.get('/:username/favorites', user.getFavorites);
+router.get('/:username/favorites', authAccessToken('admin'), user.getFavorites);
 
 /** Get user by username */
 /**
@@ -98,6 +103,8 @@ router.get('/:username/favorites', user.getFavorites);
  *    tags:
  *      - Users
  *    summary: Get user by username
+ *    security:
+ *      - accessToken: []
  *    description: Returns a user by username
  *    produces:
  *      - application/json
@@ -126,7 +133,7 @@ router.get('/:username/favorites', user.getFavorites);
  *      400:
  *        $ref: '#/components/responses/BadRequest'
  */
-router.get('/:username', user.getUserByUsername);
+router.get('/:username', authAccessToken('admin'), user.getUserByUsername);
 
 /** Create a new user */
 /**
@@ -203,7 +210,7 @@ router.post('/', user.createUser);
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.post('/:username/favorites/:listingId', authAccessToken, user.addFavorite);
+router.post('/:username/favorites/:listingId', authAccessToken('admin'), user.addFavorite);
 
 /** Update user by username */
 /**
@@ -213,6 +220,8 @@ router.post('/:username/favorites/:listingId', authAccessToken, user.addFavorite
  *    tags:
  *      - Users
  *    summary: Update user by username
+ *    security:
+ *      - accessToken: []
  *    description: Updates a user by username. Refresh token is automatically regenerated when password is changed.
  *    produces:
  *      - application/json
@@ -241,7 +250,7 @@ router.post('/:username/favorites/:listingId', authAccessToken, user.addFavorite
  *      404:
  *        $ref: '#/components/responses/BadRequest'
  */
-router.put('/:username', user.updateUser);
+router.put('/:username', authAccessToken('admin'), user.updateUser);
 
 /** Remove from user's favorites */
 /**
@@ -252,6 +261,8 @@ router.put('/:username', user.updateUser);
  *      - Favorites
  *    summary: Remove a favorite from a user's favorites
  *    description: Remove a favorite from a user's favorites
+ *    security:
+ *      - accessToken: []
  *    produces:
  *      - application/json
  *    parameters:
@@ -282,7 +293,7 @@ router.put('/:username', user.updateUser);
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.delete('/:username/favorites/:listingId', user.removeFavorite);
+router.delete('/:username/favorites/:listingId', authAccessToken('admin'), user.removeFavorite);
 
 /** Delete user by username */
 /**
@@ -292,6 +303,8 @@ router.delete('/:username/favorites/:listingId', user.removeFavorite);
  *    tags:
  *      - Users
  *    summary: Delete user by username
+ *    security:
+ *      - accessToken: []
  *    description: Deletes a user by username
  *    produces:
  *      - application/json
@@ -318,6 +331,6 @@ router.delete('/:username/favorites/:listingId', user.removeFavorite);
  *      500:
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.delete('/:username', user.deleteUser);
+router.delete('/:username', authAccessToken('admin'), user.deleteUser);
 
 module.exports = router;

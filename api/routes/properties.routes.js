@@ -9,6 +9,7 @@
  */
 const router = require('express').Router();
 const propertiesService = require('../services/properties.service')
+const {authAccessToken} = require("../middleware/auth.middleware");
 
 /** Retrieves all properties */
 /**
@@ -39,6 +40,8 @@ const propertiesService = require('../services/properties.service')
  *          - $ref: '#/components/propertyQueryParameters/bedroomsMax'
  *          - $ref: '#/components/propertyQueryParameters/guestsMin'
  *          - $ref: '#/components/propertyQueryParameters/guestsMax'
+ *          - $ref: '#/components/propertyQueryParameters/checkIn'
+ *          - $ref: '#/components/propertyQueryParameters/checkOut'
  *          - $ref: '#/components/paginationParameters/page'
  *          - $ref: '#/components/paginationParameters/limit'
  *
@@ -361,6 +364,8 @@ router.get('/bestselling', propertiesService.getAllBestSellers);
  *      - Properties
  *    summary: Creates a new property in the database
  *    description: Creates a new property in the database using the body of the request
+ *    security:
+ *      - accessToken: []
  *    requestBody:
  *      required: true
  *      content:
@@ -388,7 +393,7 @@ router.get('/bestselling', propertiesService.getAllBestSellers);
  *      '500':
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.post('/', propertiesService.add);
+router.post('/', authAccessToken(), propertiesService.add);
 
 /** Updates a property in the database */
 /**
@@ -397,7 +402,9 @@ router.post('/', propertiesService.add);
  *  put:
  *    tags:
  *      - Properties
- *    summary: Updates a property in the database
+ *    summary: Updates a property in the database - handles image uploads too
+ *    security:
+ *      - accessToken: []
  *    description: Updates a property in the database using the body of the request. If changing any location attributes, an entire location object must be provided to avoid replacing the entire location.
  *    parameters:
  *      - allOf:
@@ -433,7 +440,7 @@ router.post('/', propertiesService.add);
  *      '500':
  *        $ref: '#/components/responses/InternalServerError'
  */
-router.put('/:id', propertiesService.updateById);
+router.put('/:id', authAccessToken(), propertiesService.updateById);
 
 /** Deletes a property from the database */
 /**
@@ -444,6 +451,8 @@ router.put('/:id', propertiesService.updateById);
  *      - Properties
  *    summary: Deletes a property from the database
  *    description: Deletes a property from the database
+ *    security:
+ *      - accessToken: []
  *    parameters:
  *      - $ref: '#/components/propertyPathParameters/id'
  *    responses:
@@ -466,7 +475,7 @@ router.put('/:id', propertiesService.updateById);
  *         $ref: '#/components/responses/BadRequest'
  *
  */
-router.delete('/:id', propertiesService.deleteById);
+router.delete('/:id', authAccessToken(), propertiesService.deleteById);
 
 /** Retrieves a single property from the database */
 /**
