@@ -1,4 +1,4 @@
-import React, from 'react';
+import React from 'react';
 import {Button, Stack, TextField, Typography} from "@mui/material";
 import {Add, Remove} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
