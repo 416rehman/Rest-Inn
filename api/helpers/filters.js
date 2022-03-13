@@ -37,60 +37,66 @@ module.exports.sortFilter = (query) => {
  * This function creates a user filter object from the given query object
  *
  * @param query
- * @return {Object} ready to use filter object for mongoose
+ * @return {Object} ready to use pipeline object for mongoose
  */
-module.exports.propertyFilter = (query) => {
-    let filter = {};
+module.exports.propertyAggreggatePipeline = (query) => {
+    let $match = {};
+    let $lookup = {};
+    let $unwind = {};
+
+    if (query.host?.length) {
+        $match.host = query.host;
+    }
 
     if (query.bestSeller) {
-        filter.bestSeller = JSON.parse(query.bestSeller || false);
+        $match.bestSeller = JSON.parse(query.bestSeller || false);
     }
 
     if (query.priceMin || query.priceMax) {
-        filter.price = {};
+        $match.price = {};
         if (query.priceMin) {
-            filter.price.$gte = query.priceMin;
+            $match.price.$gte = query.priceMin;
         }
         if (query.priceMax) {
-            filter.price.$lte = query.priceMax;
+            $match.price.$lte = query.priceMax;
         }
     }
 
     if (query.type) {
-        filter.type = {$in: multiValueQuery(query.type)};
+        $match.type = {$in: multiValueQuery(query.type)};
     }
 
     if (query.bedroomsMin || query.bedroomsMax) {
-        filter.bedrooms = {};
+        $match.bedrooms = {};
         if (query.bedroomsMin) {
-            filter.bedrooms.$gte = query.bedroomsMin;
+            $match.bedrooms.$gte = parseInt(query.bedroomsMin);
         }
         if (query.bedroomsMax) {
-            filter.bedrooms.$lte = query.bedroomsMax;
+            $match.bedrooms.$lte = parseInt(query.bedroomsMax);
         }
     }
 
     if (query.bedsMin || query.bedsMax) {
-        filter.beds = {};
+        $match.beds = {};
         if (query.bedsMin) {
-            filter.beds.$gte = query.bedsMin;
+            $match.beds.$gte = parseInt(query.bedsMin);
         }
         if (query.bedsMax) {
-            filter.beds.$lte = query.bedsMax;
+            $match.beds.$lte = parseInt(query.bedsMax);
         }
     }
 
     if (query.bathsMin || query.bathsMax) {
-        filter.baths = {};
+        $match.baths = {};
         if (query.bathsMin) {
-            filter.baths.$gte = query.bathsMin;
+            $match.baths.$gte = parseInt(query.bathsMin);
         }
         if (query.bathsMax) {
-            filter.baths.$lte = query.bathsMax;
+            $match.baths.$lte = parseInt(query.bathsMax);
         }
     }
     if (query.location) {
-        filter.$or = [{
+        $match.$or = [{
             "location.city": query.location
         }, {
             "location.province": query.location
@@ -99,47 +105,89 @@ module.exports.propertyFilter = (query) => {
         }];
     }
     if (query.city || query.province || query.country) {
-        filter.location = {};
+        $match.location = {};
         if (query.city) {
-            filter.location.city = query.city;
+            $match.location.city = query.city;
         }
         if (query.province) {
-            filter.location.province = query.province;
+            $match.location.province = query.province;
         }
         if (query.country) {
-            filter.location.country = query.country;
+            $match.location.country = query.country;
         }
     }
 
     //Example: ?amenities=wifi&amenities=pool&amenities=gym
     if (query.amenities) {
-        filter.amenities = {};
-        filter.amenities.$all = Array.isArray(query.amenities) ? query.amenities : [query.amenities];
+        $match.amenities = {};
+        $match.amenities.$all = Array.isArray(query.amenities) ? query.amenities : [query.amenities];
     }
 
     if (query.bestSeller) {
-        if (query.bestSeller?.toLowerCase() === 'true'|| query.bestSeller === true) {
-            filter.bestSeller = true;
-        } else if (query.bestSeller?.toLowerCase() === 'false'|| query.bestSeller === false) {
-            filter.bestSeller = false;
+        if (query.bestSeller?.toLowerCase() === 'true' || query.bestSeller === true) {
+            $match.bestSeller = true;
+        } else if (query.bestSeller?.toLowerCase() === 'false' || query.bestSeller === false) {
+            $match.bestSeller = false;
         }
     }
 
     if (query.listingType) {
-        filter.listingType = {$in: multiValueQuery(query.listingType)};
+        $match.listingType = {$in: multiValueQuery(query.listingType)};
     }
 
     if (query.guestsMin || query.guestsMax) {
-        filter.guests = {};
+        $match.guests = {};
         if (query.guestsMin) {
-            filter.guests.$gte = query.guestsMin;
+            $match.guests.$gte = parseInt(query.guestsMin);
         }
         if (query.guestsMax) {
-            filter.guests.$lte = query.guestsMax;
+            $match.guests.$lte = parseInt(query.guestsMax);
         }
     }
 
-    return filter;
+    // if checkin and checkout are set, we need to use $lookup the dates in the booking collection
+    if (query.checkIn || query.checkOut) {
+        $lookup = {
+            from: 'bookings',
+            localField: '_id',
+            foreignField: 'property',
+            as: 'bookings'
+        };
+
+        $unwind = '$bookings';
+
+        if (query.checkIn && query.checkOut) {
+            $match.$and = [{
+                'bookings.checkIn': {
+                    $gte: new Date(query.checkIn)
+                },
+                'bookings.checkOut': {
+                    $lte: new Date(query.checkOut)
+                }
+            }];
+        } else {
+            if (query.checkIn) {
+                $match['bookings.checkIn'] = {
+                    $gte: new Date(query.checkIn) || new Date()
+                    }
+            } else if (query.checkOut) {
+                $match['bookings.checkOut'] = {
+                    $lte: new Date(query.checkOut) || new Date()
+                    }
+            }
+        }
+    }
+    const pipeline = []
+    if (Object.keys($lookup).length) {
+        pipeline.push({$lookup});
+    }
+    if (Object.keys($unwind).length) {
+        pipeline.push({$unwind});
+    }
+    if (Object.keys($match).length) {
+        pipeline.push({$match});
+    }
+    return pipeline;
 };
 
 /**
@@ -193,8 +241,7 @@ module.exports.bookingFilter = (query) => {
         filter.checkIn.$gte = query.checkIn;
         filter.checkOut = {};
         filter.checkOut.$lte = query.checkOut;
-    }
-    else {
+    } else {
         if (query.checkIn) {
             filter.checkIn = {};
             filter.checkIn.$gte = query.checkIn;
