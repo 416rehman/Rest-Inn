@@ -1,8 +1,8 @@
 import axios from "axios";
 import {CompleteUser, NewUser} from "../@typings/users";
 import store from "../redux/store";
-import {AuthAction, AuthActionEnum} from "../@typings/auth";
-import {apiURL} from "./helper.service";
+import {AuthAction, AuthActionEnum, AuthState} from "../@typings/auth";
+import {apiURL, securedPOST} from "./helper.service";
 import jwtDecode from "jwt-decode";
 
 let TOKEN_RENEWAL_IN_PROGRESS = false;
@@ -11,7 +11,11 @@ const createUser = async (user: NewUser): Promise<CompleteUser> => {
     return new Promise<CompleteUser>((resolve, reject) => {
         axios.post(apiURL('/users'), user).then(res => {
             if (res.data.data) {
-                resolve(res.data.data);
+                renewAccessToken(res.data.data.refreshToken).then(() => {
+                    resolve(res.data.data);
+                }).catch(err => {
+                    reject(err);
+                });
             } else {
                 reject(res.data.error);
             }
@@ -25,23 +29,8 @@ const login = async (email: string, password: string) => {
     return new Promise<CompleteUser>((resolve, reject) => {
         axios.post(apiURL('/auth/login'), {email, password}).then(res => {
             if (res.data.data) {
-                const payload = {
-                    user: res.data.data,
-                }
-                const action: AuthAction = {
-                    type: AuthActionEnum.LOGIN,
-                    payload: payload
-                }
                 localStorage.setItem('refreshToken', res.data.data.refreshToken);
-                store.dispatch(action)
-
-                const refresh_token = store.getState().auth.user?.refreshToken || null;
-                if (refresh_token) renewAccessToken(refresh_token).then(() => {
-                    resolve(res.data.data);
-                }).catch(err => {
-                    reject(err);
-                });
-                else reject('No refresh token');
+                tryRenewSessionUsingRefreshToken();
             } else {
                 reject(res.data.error);
             }
@@ -68,15 +57,21 @@ const renewAccessToken = (refresh_token: string): Promise<any> => {
         if (!refresh_token?.length) {
             reject('Please provide a refresh token');
         }
-        axios.post(apiURL('/auth/token'), {}, {headers: {'Authorization': refresh_token}}).then(res => {
-            if (res.data.data) {
-                const action: AuthAction = {
-                    type: AuthActionEnum.RENEW_ACCESS_TOKEN,
-                    payload: res.data.data
-                }
+
+        securedPOST(apiURL('/auth/token'), {}, true).then(res => {
+            try {
                 localStorage.setItem('accessToken', res.data.data.accessToken);
-                store.dispatch(action)
+                store.dispatch({
+                    type: AuthActionEnum.SET_ACCESS_TOKEN,
+                    payload: res.data.data.accessToken
+                })
+                store.dispatch({
+                    type: AuthActionEnum.SET_USER,
+                    payload: res.data.data.user
+                })
                 resolve(res.data.data);
+            } catch (err) {
+                reject(err);
             }
         }).catch(err => {
             reject(err);
@@ -86,36 +81,45 @@ const renewAccessToken = (refresh_token: string): Promise<any> => {
     });
 };
 
-const logout = async () => {
-        const action: AuthAction = {
-            type: AuthActionEnum.LOGOUT,
-            payload: {}
-        }
-        store.dispatch(action)
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('accessToken');
-        return Promise.resolve();
+/** Clears the user's session from memory and localstorage **/
+const tryLogout = async () => {
+    const action: AuthAction = {
+        type: AuthActionEnum.CLEAR_ALL,
+        payload: {}
+    }
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('lastListing');
+    store.dispatch(action)
 };
 
 /**
- * If refreshToken is in memory or localStorage, uses it to renew access token
+ * If refreshToken is in localStorage, uses it to renew access token
+ * @returns {Boolean} true if renewal was successful, false otherwise
  */
-const renewSessionUsingRefreshToken = () => {
-    const refresh_token = store.getState().auth.user?.refreshToken || localStorage.getItem('refreshToken') || null;
-    if (refresh_token) return renewAccessToken(refresh_token)
-    else return Promise.reject();
+const tryRenewSessionUsingRefreshToken = () => {
+    const refresh_token = localStorage.getItem('refreshToken') || null;
+    if (refresh_token) renewAccessToken(refresh_token).then(() => {
+        return true;
+    }).catch(() => {
+        return false;
+    });
 };
 
-const isAccessExpired = () => {
-    const accessToken = store.getState().auth.user?.accessToken || localStorage.getItem('accessToken') || null;
+/** Check if the accessToken in the memory or localStorage is valid **/
+const validateTokenAndGetInfo = () => {
+    const authState: AuthState = store.getState().auth
+    const accessToken = authState.accessToken || localStorage.getItem('accessToken') || null;
+
     if (accessToken) {
-        const decoded:any = jwtDecode(''+accessToken);
-        if (decoded.exp < Date.now() / 1000) {
-            return true;
+        const decoded: any = jwtDecode('' + accessToken);
+
+        if (decoded.exp > Date.now() / 1000) {
+            return decoded;
         }
     }
     return false;
-};
+}
 
 
-export {createUser, login, logout, renewSessionUsingRefreshToken, isAccessExpired};
+export {createUser, login, tryLogout, tryRenewSessionUsingRefreshToken, validateTokenAndGetInfo};

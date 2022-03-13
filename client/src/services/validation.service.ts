@@ -35,10 +35,16 @@ const APIValidate = (field: SUPPORTED_FIELDS, value: string, required: boolean =
         let data: IAPIValidator = {}
         data[field] = value
 
-        let validationMessage = ''
+        let validationMessage;
         axios.post(apiURL('/valid'), data)
             .catch(err => validationMessage = err.response.data.error)
-            .finally(() => resolve(validationMessage));
+            .finally(() => {
+                if (typeof validationMessage === 'string')
+                    resolve(validationMessage)
+                else
+                    resolve('')
+                resolve(validationMessage)
+            });
     })
 };
 
