@@ -162,7 +162,21 @@ module.exports.update = function (filter, data) {
  * @param filter
  */
 module.exports.delete = function (filter) {
-    return propertyModel.findOneAndDelete(filter).exec();
+    return new Promise((resolve, reject) => {
+        propertyModel.findOneAndDelete(filter).exec().then(function (property) {
+            if (property) {
+                bookingModel.deleteMany({property: property._id}).exec().then(function () {
+                    resolve(property);
+                }).catch(function () {
+                    resolve(property);
+                });
+            } else {
+                resolve(property);
+            }
+        }).catch(function (err) {
+            reject(err);
+        });
+    });
 }
 
 /**
