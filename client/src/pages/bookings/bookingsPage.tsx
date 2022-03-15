@@ -32,7 +32,7 @@ function BookingsPage({query, title, subtitle, message, ...rest}:{query?: any, t
                     </Stack>
                 </Stack>
             <Stack gap={'1rem'} direction={'row'} flexWrap={'wrap'} padding={'1rem'} justifyContent={'center'}>
-                {bookings && bookings.map((booking: any) => {
+                {bookings?.length && bookings.map((booking: any) => {
                     return (
                         <Stack key={booking._id} sx={{
                             width: {
