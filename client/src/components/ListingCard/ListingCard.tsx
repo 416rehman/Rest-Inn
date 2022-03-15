@@ -16,6 +16,7 @@ interface IProps {
 }
 
 function ListingCard({listing, className, color, ...rest}: IProps) {
+    if (!listing || !listing._id) return null;
     return (
         <div className={'listing-card ' + (className || '')} {...rest}>
             <Link to={`/listings/${listing._id}`}>
